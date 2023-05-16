@@ -232,15 +232,15 @@ void GameState::updatePlayerGUI(const float & dt){
 }
 
 void GameState::updatePauseMenuButtons(){
-	std::ofstream saveFile;
-	if (this->pmenu->isButtonPressed("SAVE")) {
+	//std::ofstream saveFile;
+	/*if (this->pmenu->isButtonPressed("SAVE")) {
 		saveFile.open(this->savePath,std::ios::binary | std::ios::out);
 		if (saveFile.is_open()) {
 			saveFile.write((char*)&player, sizeof(Player));
 		}
 		else std::cout << "ERROR::CANT::OPEN::SAVE::FILE" << std::endl;
 		saveFile.close();
-	}
+	}*/
 	if (this->pmenu->isButtonPressed("QUIT"))
 		this->endState();
 }
