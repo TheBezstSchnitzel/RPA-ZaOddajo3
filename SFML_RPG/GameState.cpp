@@ -253,6 +253,8 @@ void GameState::updateTileMap(const float & dt){
 
 void GameState::updatePlayer(const float & dt){
 	this->player->update(dt, this->mousePosView, this->view);
+	if (this->player->getAttributeComponent()->isDead())
+		this->endState();
 }
 
 void GameState::updateCombatAndEnemies(const float & dt){
