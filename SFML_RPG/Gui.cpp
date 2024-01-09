@@ -48,6 +48,7 @@ gui::Button::Button(float x, float y, float width, float height,
 	short unsigned id){
 	this->buttonState = BTN_IDLE;
 	this->id = id;
+	this->lastMouseState = false;
 
 	this->shape.setPosition(sf::Vector2f(x, y));
 	this->shape.setSize(sf::Vector2f(width, height));
@@ -60,7 +61,7 @@ gui::Button::Button(float x, float y, float width, float height,
 	this->text.setString(text);
 	this->text.setFillColor(text_idle_color);
 	this->text.setCharacterSize(character_size);
-	//std::cout << this->text.getGlobalBounds().width << "\n";
+
 	this->text.setPosition(
 		this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text.getGlobalBounds().width / 2.f,
 		this->shape.getPosition().y
@@ -120,8 +121,10 @@ void gui::Button::update(const sf::Vector2i& mousePosWindow){
 		this->buttonState = BTN_HOVER;
 
 		//Pressed
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))this->lastMouseState = true;
+		else if (this->lastMouseState) {
 			this->buttonState = BTN_ACTIVE;
+			this->lastMouseState = false;
 		}
 	}
 

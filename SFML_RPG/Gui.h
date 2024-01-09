@@ -11,6 +11,7 @@ namespace gui{
 	private:
 		short unsigned buttonState;
 		short unsigned id;
+		bool lastMouseState;
 
 		sf::RectangleShape shape;
 		sf::Font* font;
