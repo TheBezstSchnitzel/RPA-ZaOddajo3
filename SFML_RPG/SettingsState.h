@@ -27,6 +27,9 @@ private:
 
 	std::vector<sf::VideoMode> modes;
 
+	//Settings
+	bool fullscreen;
+
 	//Privatne funkcije
 	void initVariables();
 	void initFonts();

@@ -33,6 +33,8 @@ void SettingsState::initKeybinds(){
 void SettingsState::initGui(){
 	const sf::VideoMode& vm = this->stateData->gfxSettings->resolution;
 
+	this->fullscreen = false;
+
 	//Ozadje
 	this->background.setSize(
 		sf::Vector2f(
@@ -79,6 +81,13 @@ void SettingsState::initGui(){
 		sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 150),
 		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0));
 
+	this->buttons["FULLSCREEN_SWITCH"] = new gui::Button(
+		gui::p2pX(42.f, vm), gui::p2pY(34.2f, vm),
+		gui::p2pX(10.4f, vm), gui::p2pY(4.5f, vm),
+		&this->font, "OFF", gui::calcCharSize(vm),
+		sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 150),
+		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0));
+
 	//Modi
 	std::vector<std::string> modes_str;
 	for (auto &i : this->modes){
@@ -87,7 +96,7 @@ void SettingsState::initGui(){
 
 	//Spustni seznam
 	this->dropDownLists["RESOLUTION"] = new gui::DropDownList(
-		gui::p2pX(42.f, vm), gui::p2pY(25.3f, vm),
+		gui::p2pX(42.f, vm), gui::p2pY(25.f, vm),
 		gui::p2pX(10.4f, vm), gui::p2pY(4.5f, vm),
 		font, modes_str.data(), modes_str.size()
 	);
@@ -173,14 +182,19 @@ void SettingsState::updateGui(const float & dt){
 			this->click.play();
 		}
 	}
+	if (this->buttons["FULLSCREEN_SWITCH"]->isPressed()) {
+		if (this->fullscreen)this->buttons["FULLSCREEN_SWITCH"]->setText("OFF");
+		else this->buttons["FULLSCREEN_SWITCH"]->setText("ON");
+		this->fullscreen = !this->fullscreen;
+	}
 	//Applya settinge
 	if (this->buttons["APPLY"]->isPressed()){
-		//TEST
 		this->click.play();
 		this->stateData->gfxSettings->resolution = this->modes[this->dropDownLists["RESOLUTION"]->getActiveElementId()];
 
-		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
+		this->stateData->gfxSettings->fullscreen = this->fullscreen;
 
+		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, this->stateData->gfxSettings->fullscreen ? sf::Style::Fullscreen : sf::Style::Default);
 		this->resetGui();
 	}
 
