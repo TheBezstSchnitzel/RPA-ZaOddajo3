@@ -75,7 +75,7 @@ void SettingsState::initGui(){
 	this->buttons["SOUND_SWITCH"] = new gui::Button(
 		gui::p2pX(68.5f, vm), gui::p2pY(10.f, vm),
 		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
-		&this->font, "Sound: on/off", gui::calcCharSize(vm),
+		&this->font, "Sound: ON", gui::calcCharSize(vm),
 		sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 150),
 		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0));
 
@@ -162,11 +162,13 @@ void SettingsState::updateGui(const float & dt){
 	if (this->buttons["SOUND_SWITCH"]->isPressed()) { // ne dela lih najbuls
 		if (sound) {
 			this->game->playTheme(false);
+			this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
 			sound = !sound;
 			this->click.play();
 		}
 		else {
 			this->game->playTheme(true);
+			this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
 			sound = !sound;
 			this->click.play();
 		}
