@@ -37,6 +37,8 @@ private:
 	void initGui();
 	void resetGui();
 
+	int findIndexOfCurrRes();
+
 public:
 	SettingsState(StateData* state_data, Game* game);
 	virtual ~SettingsState();

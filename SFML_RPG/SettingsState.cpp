@@ -30,6 +30,14 @@ void SettingsState::initKeybinds(){
 	ifs.close();
 }
 
+//najde index od resolucije ki se uporablja
+int SettingsState::findIndexOfCurrRes() {
+	for (int i = 0; i < this->modes.size(); ++i) {
+		if (this->modes[i] == this->stateData->gfxSettings->resolution)return i;
+	}
+	return 0;
+}
+
 void SettingsState::initGui(){
 	const sf::VideoMode& vm = this->stateData->gfxSettings->resolution;
 
@@ -98,7 +106,7 @@ void SettingsState::initGui(){
 	this->dropDownLists["RESOLUTION"] = new gui::DropDownList(
 		gui::p2pX(42.f, vm), gui::p2pY(25.f, vm),
 		gui::p2pX(10.4f, vm), gui::p2pY(4.5f, vm),
-		font, modes_str.data(), modes_str.size()
+		font, modes_str.data(), modes_str.size(), this->findIndexOfCurrRes()
 	);
 
 	//Inicializacija teksta
