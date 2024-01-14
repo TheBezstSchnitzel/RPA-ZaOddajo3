@@ -35,7 +35,6 @@ void Game::initWindow(){
 			this->gfxSettings.contextSettings);
 
 	this->window->setFramerateLimit(this->gfxSettings.frameRateLimit);
-	this->window->setVerticalSyncEnabled(this->gfxSettings.verticalSync);
 }
 
 void Game::initKeys(){

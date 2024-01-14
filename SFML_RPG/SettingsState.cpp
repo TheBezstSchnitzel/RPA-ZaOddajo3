@@ -118,7 +118,7 @@ void SettingsState::initGui(){
 	this->optionsText.setFillColor(sf::Color(255, 255, 255, 200));
 
 	this->optionsText.setString(
-		"Resolution \n\nFullscreen \n\nVsync \n\nAntialiasing \n\n "
+		"Resolution \n\nFullscreen \n\nAntialiasing"
 	);
 }
 

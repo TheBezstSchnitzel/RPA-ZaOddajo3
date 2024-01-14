@@ -7,7 +7,6 @@ public:
 	std::string title;
 	sf::VideoMode resolution;
 	bool fullscreen;
-	bool verticalSync;
 	unsigned frameRateLimit;
 	sf::ContextSettings contextSettings;
 	std::vector<sf::VideoMode> videoModes;
