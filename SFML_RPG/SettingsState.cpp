@@ -7,6 +7,8 @@ void SettingsState::initVariables(){
 		throw "ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_CLICK_SOUND";
 	}
 	this->click.setBuffer(this->buffer);
+	if (this->game->getThemeStatus() == 2)this->sound = true;
+	else this->sound = false;
 }
 
 void SettingsState::initFonts(){
@@ -85,14 +87,14 @@ void SettingsState::initGui(){
 	this->buttons["SOUND_SWITCH"] = new gui::Button(
 		gui::p2pX(68.5f, vm), gui::p2pY(10.f, vm),
 		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
-		&this->font, "Sound: ON", gui::calcCharSize(vm),
+		&this->font, this->sound ? "Sound: ON" : "Sound: OFF", gui::calcCharSize(vm),
 		sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 150),
 		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0));
 
 	this->buttons["FULLSCREEN_SWITCH"] = new gui::Button(
 		gui::p2pX(42.f, vm), gui::p2pY(34.2f, vm),
 		gui::p2pX(10.4f, vm), gui::p2pY(4.5f, vm),
-		&this->font, "OFF", gui::calcCharSize(vm),
+		&this->font, this->stateData->gfxSettings->fullscreen ? "ON" : "OFF", gui::calcCharSize(vm),
 		sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 150),
 		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0));
 
@@ -137,13 +139,11 @@ void SettingsState::resetGui(){
 }
 
 SettingsState::SettingsState(StateData* state_data, Game* game) : State(state_data){
+	this->game = game;
 	this->initVariables();
 	this->initFonts();
 	this->initKeybinds();
 	this->initGui();
-	this->sound = 1;
-	//this->rel = 1;
-	this->game=game;
 }
 
 SettingsState::~SettingsState(){
@@ -170,23 +170,23 @@ void SettingsState::updateGui(const float & dt){
 	}
 
 	//Delovanje gumbou
-	//Zapre game
+	//Zapre state
 	if (this->buttons["BACK"]->isPressed()){
 		this->click.play();
 		this->endState();
 	}
 	//Sound switch
-	if (this->buttons["SOUND_SWITCH"]->isPressed()) { // ne dela lih najbuls
-		if (sound) {
+	if (this->buttons["SOUND_SWITCH"]->isPressed()) {
+		if (this->sound) {
 			this->game->playTheme(false);
 			this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
-			sound = !sound;
+			this->sound = !this->sound;
 			this->click.play();
 		}
 		else {
 			this->game->playTheme(true);
 			this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
-			sound = !sound;
+			this->sound = !this->sound;
 			this->click.play();
 		}
 	}
@@ -239,14 +239,4 @@ void SettingsState::render(sf::RenderTarget* target){
 	this->renderGui(*target);
 
 	target->draw(this->optionsText);
-
-	/*  //SAM DEBUG ZA ODSTRANT POL
-	sf::Text mouseText;
-	mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 50);
-	mouseText.setFont(this->font);
-	mouseText.setCharacterSize(12);
-	std::stringstream ss;
-	ss << this->mousePosView.x << " " << this->mousePosView.y;
-	mouseText.setString(ss.str());
-	target->draw(mouseText);*/
 }

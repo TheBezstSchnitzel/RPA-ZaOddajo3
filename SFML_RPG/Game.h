@@ -47,6 +47,7 @@ public:
 	//Zvok
 	void playTheme(bool what=true);
 	void restartTheme(bool go=true);
+	int getThemeStatus();
 
 	//Render
 	void render();

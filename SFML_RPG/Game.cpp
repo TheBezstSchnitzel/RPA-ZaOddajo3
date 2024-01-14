@@ -147,6 +147,10 @@ void Game::restartTheme(bool go){
 		theme.stop();
 }
 
+int Game::getThemeStatus(){
+	return (int)this->theme.getStatus();
+}
+
 void Game::render(){
 	this->window->clear();
 
