@@ -7,6 +7,7 @@ void MainMenuState::initVariables(){
 		throw "ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_CLICK_SOUND";
 	}
 	this->click.setBuffer(this->buffer);
+	this->isTrueRes = true;
 }
 
 void MainMenuState::initFonts(){
@@ -98,6 +99,7 @@ void MainMenuState::resetGui(){
 	this->buttons.clear();
 
 	this->initGui();
+	this->isTrueRes = true;
 }
 //Konstruktor
 MainMenuState::MainMenuState(StateData* state_data,Game*game) : State(state_data),game(game){
@@ -105,7 +107,6 @@ MainMenuState::MainMenuState(StateData* state_data,Game*game) : State(state_data
 	this->initFonts();
 	this->initKeybinds();
 	this->initGui();
-	this->resetGui();
 }
 //Destruktor
 MainMenuState::~MainMenuState(){
@@ -141,7 +142,7 @@ void MainMenuState::updateButtons(){
 	if (this->buttons["SETTINGS_STATE"]->isPressed()){
 		this->click.play();
 		this->states->push(new SettingsState(stateData,game));
-		this->resetGui();
+		this->isTrueRes = false; //v vsakmu primeru preverja ko prides iz nastavitev
 	}
 
 	//Editor
@@ -171,6 +172,7 @@ void MainMenuState::renderButtons(sf::RenderTarget& target){
 }
 
 void MainMenuState::render(sf::RenderTarget* target){
+	if (!this->isTrueRes)this->resetGui();
 	if (!target)
 		target = this->window;
 

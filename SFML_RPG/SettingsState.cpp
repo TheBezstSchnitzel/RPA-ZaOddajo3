@@ -118,7 +118,7 @@ void SettingsState::initGui(){
 	this->optionsText.setFillColor(sf::Color(255, 255, 255, 200));
 
 	this->optionsText.setString(
-		"Resolution \n\nFullscreen \n\nAntialiasing"
+		"Resolution \n\nFullscreen"
 	);
 }
 
@@ -174,6 +174,7 @@ void SettingsState::updateGui(const float & dt){
 	if (this->buttons["BACK"]->isPressed()){
 		this->click.play();
 		this->endState();
+		std::cout << "zdej" << std::endl;//DEBUG
 	}
 	//Sound switch
 	if (this->buttons["SOUND_SWITCH"]->isPressed()) {
@@ -204,6 +205,7 @@ void SettingsState::updateGui(const float & dt){
 
 		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, this->stateData->gfxSettings->fullscreen ? sf::Style::Fullscreen : sf::Style::Default);
 		this->resetGui();
+		
 	}
 
 	//Spustni seznam

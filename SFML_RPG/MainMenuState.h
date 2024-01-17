@@ -23,6 +23,9 @@ private:
 	sf::SoundBuffer buffer;
 	sf::Sound click;
 
+	//refreshanje
+	bool isTrueRes;
+
 	//Privatne funkcije
 	void initVariables();
 	void initFonts();
