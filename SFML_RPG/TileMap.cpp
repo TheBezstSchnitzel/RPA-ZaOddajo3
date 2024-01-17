@@ -229,7 +229,7 @@ void TileMap::loadFromFile(const std::string file_name){
 
 		//nalozi use tile
 		while (in_file >> x >> y >> z >> type){
-			std::cout << type << "\n";
+			//::cout << type << "\n";
 			if (type == TileTypes::ENEMYSPAWNER){
 				int enemy_type = 0;
 				int	enemy_am = 0;

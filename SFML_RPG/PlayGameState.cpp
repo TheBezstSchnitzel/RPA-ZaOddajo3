@@ -100,7 +100,7 @@ void PlayGameState::initKeyTime() {
 std::string PlayGameState::whatTime(){
 	auto time = std::chrono::system_clock::now();
 	std::time_t end_time = std::chrono::system_clock::to_time_t(time);
-	std::cout << std::ctime(&end_time) << std::endl;
+	//std::cout << std::ctime(&end_time) << std::endl;
 	return std::string(std::ctime(&end_time));
 }
 

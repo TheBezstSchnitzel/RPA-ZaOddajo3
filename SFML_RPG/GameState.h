@@ -10,6 +10,13 @@
 
 class Game;
 
+enum letniCasi {
+	pomlad = 1,
+	poletje = 2,
+	jesen = 3,
+	zima = 4,
+};
+
 class GameState : public State{
 private:
 	Game* game;
@@ -27,6 +34,18 @@ private:
 
 	sf::Clock keyTimer;
 	float keyTimeMax;
+
+	//in game time
+	sf::Clock dayTimer;
+	float dayTimerMax;
+
+	sf::Clock nightTimer;
+	float nightTimerMax;
+
+	bool isDay;
+	
+	int gameDaysElapsed;
+	letniCasi currentSeason;
 
 	sf::Text debugText;
 
@@ -63,6 +82,8 @@ private:
 	void initTileMap();
 	void initSystems();
 
+	void initInGameTime();
+
 public:
 	GameState(StateData* state_data, Game* game, unsigned short save);
 	virtual ~GameState();
@@ -81,6 +102,7 @@ public:
 	void updateCombatAndEnemies(const float& dt);
 	void updateCombat(Enemy* enemy, const int index, const float& dt);
 	void updateDebugText(const float& dt);
+	void updateInGameTime();
 	void update(const float& dt);
 
 	void render(sf::RenderTarget* target = NULL);

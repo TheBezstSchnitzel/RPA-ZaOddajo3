@@ -123,6 +123,16 @@ void GameState::initSystems(){
 	this->tts = new TextTagSystem("Fonts/PixellettersFull.ttf");
 }
 
+void GameState::initInGameTime(){
+	this->dayTimerMax = 1.f;
+	this->nightTimerMax = 0.5f;
+	this->dayTimer.restart();
+	this->nightTimer.restart();
+	this->isDay = true;
+	this->gameDaysElapsed = 0;
+	this->currentSeason = pomlad;
+}
+
 //Konstruktor / destruktor
 GameState::GameState(StateData* state_data,Game*game, unsigned short save) : State(state_data){
 	this->initDeferredRender();
@@ -131,7 +141,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->initFonts();
 	this->initTextures();
 	this->initPauseMenu();
-	this->initShaders();
+	//this->initShaders();
 	this->initKeyTime();
 	this->initDebugText();
 	this->initPlayers();
@@ -141,11 +151,13 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->initSystems();
 	this->savePath = "Saves/save" + std::to_string(save) + ".txt";
 	this->game = game;
+	/*
 	this->theme.openFromFile("Resources/Audio/themeSong2.wav");
 	this->theme.setPitch(1.f);
 	this->theme.setVolume(40.f);
 	this->theme.setLoop(true);
-	this->theme.play();
+	this->theme.play();*/
+	this->initInGameTime();
 }
 
 GameState::~GameState(){
@@ -300,11 +312,12 @@ void GameState::updateCombat(Enemy* enemy, const int index, const float & dt){
 	}
 
 	//Checka za enmy damage
+	/*
 	if (enemy->getGlobalBounds().intersects(this->player->getGlobalBounds()) && this->player->getDamageTimer()){
 		int dmg = enemy->getAttributeComp()->damageMax;
 		this->player->loseHP(dmg);
 		this->tts->addTextTag(NEGATIVE_TAG, player->getPosition().x - 30.f, player->getPosition().y, dmg, "-", "HP");
-	}
+	}*/
 }
 
 void GameState::updateDebugText(const float& dt){
@@ -314,6 +327,31 @@ void GameState::updateDebugText(const float& dt){
 	<< "Active Enemies: " << this->activeEnemies.size() << "\n";
 
 	this->debugText.setString(ss.str());
+}
+
+void GameState::updateInGameTime(){
+	if (this->isDay) { //ce je dan
+		if (floor(this->dayTimer.getElapsedTime().asSeconds()*100/60)/100 >= this->dayTimerMax) {
+			//cas za dan je pretuku je treba spremenit v noc
+			this->isDay = false;
+			this->nightTimer.restart();
+			std::cout << "spreminjam v noc" << std::endl; //DEBUG
+		}
+	}
+	else { // ce je noc
+		if (floor(this->nightTimer.getElapsedTime().asSeconds()*100/60)/100 >= this->nightTimerMax) {
+			//cas za noc je poteku je treba sprement v dan
+			this->isDay = true;
+			this->dayTimer.restart();
+			this->gameDaysElapsed++;
+			std::cout << "spreminjam v dan, to je dan : " << this->gameDaysElapsed+1 << std::endl; //DEBUG
+			if (this->gameDaysElapsed % 20 == 0 && this->gameDaysElapsed != 0) {
+				if (static_cast<int>(this->currentSeason) == 4)this->currentSeason = pomlad;
+				else this->currentSeason = static_cast<letniCasi>(static_cast<int>(this->currentSeason) + 1);
+				std::cout << "Spreminjam letni cas v : " << this->currentSeason << std::endl;
+			}
+		}
+	}
 }
 
 void GameState::update(const float& dt){
@@ -339,6 +377,9 @@ void GameState::update(const float& dt){
 
 		//Updata systeme
 		this->tts->update(dt);
+
+		//updata inGametime
+		this->updateInGameTime();
 	}
 	else{ //Pausan update
 		this->pmenu->update(this->mousePosWindow);
