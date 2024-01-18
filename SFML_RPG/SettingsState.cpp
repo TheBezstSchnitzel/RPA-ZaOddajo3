@@ -173,8 +173,8 @@ void SettingsState::updateGui(const float & dt){
 	//Zapre state
 	if (this->buttons["BACK"]->isPressed()){
 		this->click.play();
-		this->endState();
-		std::cout << "zdej" << std::endl;//DEBUG
+		while (true)if (this->click.getStatus() == 0)break;
+		this->endState();	
 	}
 	//Sound switch
 	if (this->buttons["SOUND_SWITCH"]->isPressed()) {

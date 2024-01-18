@@ -17,7 +17,7 @@ enum letniCasi {
 	zima = 4,
 };
 
-class GameState : public State{
+class GameState : public State {
 private:
 	Game* game;
 	std::string savePath;
@@ -43,7 +43,7 @@ private:
 	float nightTimerMax;
 
 	bool isDay;
-	
+
 	int gameDaysElapsed;
 	letniCasi currentSeason;
 
@@ -52,9 +52,9 @@ private:
 	Player* player;
 	PlayerGUI* playerGUI;
 	sf::Texture texture;
-	
+
 	std::vector<Enemy*> activeEnemies;
-	EnemySystem *enemySystem;
+	EnemySystem* enemySystem;
 
 	TileMap* tileMap;
 
@@ -83,6 +83,12 @@ private:
 	void initSystems();
 
 	void initInGameTime();
+
+	//funkcije za nalaganje iz shrambe
+	void loadFromSave();
+
+	//funkcije za shranjevanje
+	void save();
 
 public:
 	GameState(StateData* state_data, Game* game, unsigned short save);

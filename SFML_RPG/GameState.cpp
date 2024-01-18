@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameState.h"
 #include "Game.h"
+#include <filesystem>
 
 //Inicializacija
 void GameState::initDeferredRender(){
@@ -98,13 +99,24 @@ void GameState::initDebugText(){
 }
 
 void GameState::initPlayers(){
-	this->player = new Player(300, 220, this->textures["PLAYER_SHEET"]);
-	std::ifstream saveFile;
-	saveFile.open(this->savePath, std::ios::in);
-	if (saveFile.is_open()) {
-		saveFile.read((char*)&this->player, sizeof(Player));
+	//novo shranjevanje ================================================
+	std::filesystem::path savefilePathPlayer = this->savePath + "/player/player.txt";
+	//preveri ce ze sploh obstaja save
+	if (std::filesystem::exists(savefilePathPlayer)) {
+		/* //DEBUG
+		//save ze obstaja
+		std::ifstream saveFile;
+		saveFile.open(this->savePath, std::ios::in);
+		if (saveFile.is_open()) {
+			saveFile.read((char*)&this->player, sizeof(Player));
+		}
+		else std::cout << "Nalaganje iz save ne dela" << std::endl; */
 	}
-	else std::cout << "Nalaganje iz save ne dela" << std::endl;
+	else {
+		//save se ne obstaja
+		this->player = new Player(300, 220, this->textures["PLAYER_SHEET"]);
+		std::cout << "File does not exist." << std::endl;
+	}
 }
 
 void GameState::initPlayerGUI(){
@@ -133,31 +145,52 @@ void GameState::initInGameTime(){
 	this->currentSeason = pomlad;
 }
 
+void GameState::save(){
+	//klièe vse funkcije za shranjevanje
+}
+
 //Konstruktor / destruktor
 GameState::GameState(StateData* state_data,Game*game, unsigned short save) : State(state_data){
-	this->initDeferredRender();
-	this->initView();
-	this->initKeybinds();
-	this->initFonts();
-	this->initTextures();
-	this->initPauseMenu();
-	//this->initShaders();
-	this->initKeyTime();
-	this->initDebugText();
-	this->initPlayers();
-	this->initPlayerGUI();
-	this->initEnemySystem();
-	this->initTileMap();
-	this->initSystems();
-	this->savePath = "Saves/save" + std::to_string(save) + ".txt";
-	this->game = game;
-	/*
-	this->theme.openFromFile("Resources/Audio/themeSong2.wav");
-	this->theme.setPitch(1.f);
-	this->theme.setVolume(40.f);
-	this->theme.setLoop(true);
-	this->theme.play();*/
-	this->initInGameTime();
+	//novo shranjevanje ================================================
+	std::filesystem::path savefilePathPlayer = this->savePath + "/player/player.txt";
+	//preveri ce ze sploh obstaja save
+	if (std::filesystem::exists(savefilePathPlayer)) {
+		/* //DEBUG
+		//save ze obstaja
+		std::ifstream saveFile;
+		saveFile.open(this->savePath, std::ios::in);
+		if (saveFile.is_open()) {
+			saveFile.read((char*)&this->player, sizeof(Player));
+		}
+		else std::cout << "Nalaganje iz save ne dela" << std::endl; */
+	}
+	else {
+		//save se ne obstaja
+		std::cout << "File does not exist." << std::endl;
+		this->initDeferredRender();
+		this->initView();
+		this->initKeybinds();
+		this->initFonts();
+		this->initTextures();
+		this->initPauseMenu();
+		//this->initShaders();
+		this->initKeyTime();
+		this->initDebugText();
+		this->initPlayers();
+		this->initPlayerGUI();
+		this->initEnemySystem();
+		this->initTileMap();
+		this->initSystems();
+		this->savePath = "Saves/save" + std::to_string(save);
+		this->game = game;
+		/*
+		this->theme.openFromFile("Resources/Audio/themeSong2.wav");
+		this->theme.setPitch(1.f);
+		this->theme.setVolume(40.f);
+		this->theme.setLoop(true);
+		this->theme.play();*/
+		this->initInGameTime();
+	}
 }
 
 GameState::~GameState(){
@@ -244,17 +277,13 @@ void GameState::updatePlayerGUI(const float & dt){
 }
 
 void GameState::updatePauseMenuButtons(){
-	//std::ofstream saveFile;
-	/*if (this->pmenu->isButtonPressed("SAVE")) {
-		saveFile.open(this->savePath,std::ios::binary | std::ios::out);
-		if (saveFile.is_open()) {
-			saveFile.write((char*)&player, sizeof(Player));
-		}
-		else std::cout << "ERROR::CANT::OPEN::SAVE::FILE" << std::endl;
-		saveFile.close();
-	}*/
-	if (this->pmenu->isButtonPressed("QUIT"))
+	if (this->pmenu->isButtonPressed("SAVE")) {
+		this->save();
+	}
+	if (this->pmenu->isButtonPressed("QUIT")) {
+		this->save();
 		this->endState();
+	}
 }
 
 void GameState::updateTileMap(const float & dt){

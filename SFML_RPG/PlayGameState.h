@@ -33,6 +33,8 @@ private:
 	std::string whatTime();
 	void resetGui();
 
+	void deleteSave(short saveNum);
+
 public:
 	PlayGameState(StateData* state_data,Game* game);
 	virtual ~PlayGameState();
