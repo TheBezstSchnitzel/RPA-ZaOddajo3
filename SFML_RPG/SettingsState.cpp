@@ -3,10 +3,6 @@
 
 void SettingsState::initVariables(){
 	this->modes = sf::VideoMode::getFullscreenModes();
-	if (!this->buffer.loadFromFile("Resources/Audio/click.wav")) {
-		throw "ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_CLICK_SOUND";
-	}
-	this->click.setBuffer(this->buffer);
 	if (this->game->getThemeStatus() == 2)this->sound = true;
 	else this->sound = false;
 }
@@ -172,8 +168,8 @@ void SettingsState::updateGui(const float & dt){
 	//Delovanje gumbou
 	//Zapre state
 	if (this->buttons["BACK"]->isPressed()){
-		this->click.play();
-		while (true)if (this->click.getStatus() == 0)break;
+		this->buttons["BACK"]->makeSound();
+		while (true)if (this->buttons["BACK"]->getStatus() == 0)break;
 		this->endState();	
 	}
 	//Sound switch
@@ -182,23 +178,28 @@ void SettingsState::updateGui(const float & dt){
 			this->game->playTheme(false);
 			this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
 			this->sound = !this->sound;
-			this->click.play();
+			this->buttons["SOUND_SWITCH"]->makeSound();
 		}
 		else {
 			this->game->playTheme(true);
 			this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
 			this->sound = !this->sound;
-			this->click.play();
+			this->buttons["SOUND_SWITCH"]->makeSound();;
 		}
 	}
 	if (this->buttons["FULLSCREEN_SWITCH"]->isPressed()) {
-		if (this->fullscreen)this->buttons["FULLSCREEN_SWITCH"]->setText("OFF");
-		else this->buttons["FULLSCREEN_SWITCH"]->setText("ON");
+		if (this->fullscreen) {
+			this->buttons["FULLSCREEN_SWITCH"]->setText("OFF");
+		}
+		else {
+			this->buttons["FULLSCREEN_SWITCH"]->setText("ON");
+		}
 		this->fullscreen = !this->fullscreen;
+		this->buttons["FULLSCREEN_SWITCH"]->makeSound();
 	}
 	//Applya settinge
 	if (this->buttons["APPLY"]->isPressed()){
-		this->click.play();
+		this->buttons["APPLY"]->makeSound();
 		this->stateData->gfxSettings->resolution = this->modes[this->dropDownLists["RESOLUTION"]->getActiveElementId()];
 
 		this->stateData->gfxSettings->fullscreen = this->fullscreen;

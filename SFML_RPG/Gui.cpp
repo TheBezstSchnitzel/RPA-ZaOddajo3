@@ -78,6 +78,11 @@ gui::Button::Button(float x, float y, float width, float height,
 	this->outlineIdleColor = outline_idle_color;
 	this->outlineHoverColor = outline_hover_color;
 	this->outlineActiveColor = outline_active_color;
+
+	if (!this->buffer.loadFromFile("Resources/Audio/click.wav")) {
+		throw "ERROR::GUI::FAILED_TO_LOAD_CLICK_SOUND";
+	}
+	else this->click.setBuffer(this->buffer);
 }
 
 gui::Button::~Button(){
@@ -158,6 +163,14 @@ void gui::Button::update(const sf::Vector2i& mousePosWindow){
 void gui::Button::render(sf::RenderTarget& target){
 	target.draw(this->shape);
 	target.draw(this->text);
+}
+
+void gui::Button::makeSound() {
+	this->click.play();
+}
+
+short gui::Button::getStatus(){
+	return this->click.getStatus();
 }
 
 //DROP DOWN LIST =============================================

@@ -98,11 +98,11 @@ void GameState::initDebugText(){
 	this->debugText.setPosition(15.f, this->window->getSize().y / 2.f);
 }
 
-void GameState::initPlayers(){
+void GameState::initPlayers() {
 	//novo shranjevanje ================================================
-	std::filesystem::path savefilePathPlayer = this->savePath + "/player/player.txt";
+	//std::filesystem::path savefilePathPlayer = this->savePath + "/player/player.txt";
 	//preveri ce ze sploh obstaja save
-	if (std::filesystem::exists(savefilePathPlayer)) {
+	if (false){//std::filesystem::exists(savefilePathPlayer)) {
 		/* //DEBUG
 		//save ze obstaja
 		std::ifstream saveFile;
@@ -136,13 +136,20 @@ void GameState::initSystems(){
 }
 
 void GameState::initInGameTime(){
+	this->isDay = true;
+	this->gameDaysElapsed = 0;
+	this->currentSeason = pomlad;
+}
+
+void GameState::initInGameTimers(){
 	this->dayTimerMax = 1.f;
 	this->nightTimerMax = 0.5f;
 	this->dayTimer.restart();
 	this->nightTimer.restart();
-	this->isDay = true;
-	this->gameDaysElapsed = 0;
-	this->currentSeason = pomlad;
+}
+
+void GameState::loadFromSave(){
+	//klièe vse funkcije za loudanje iz save
 }
 
 void GameState::save(){
@@ -152,9 +159,11 @@ void GameState::save(){
 //Konstruktor / destruktor
 GameState::GameState(StateData* state_data,Game*game, unsigned short save) : State(state_data){
 	//novo shranjevanje ================================================
+	this->savePath = "Saves/save" + std::to_string(save);
+	this->game = game;
 	std::filesystem::path savefilePathPlayer = this->savePath + "/player/player.txt";
 	//preveri ce ze sploh obstaja save
-	if (std::filesystem::exists(savefilePathPlayer)) {
+	if (false){//std::filesystem::exists(savefilePathPlayer)) {
 		/* //DEBUG
 		//save ze obstaja
 		std::ifstream saveFile;
@@ -163,34 +172,36 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 			saveFile.read((char*)&this->player, sizeof(Player));
 		}
 		else std::cout << "Nalaganje iz save ne dela" << std::endl; */
+		std::cout << "File exists" << std::endl;
+		this->loadFromSave();
 	}
 	else {
 		//save se ne obstaja
 		std::cout << "File does not exist." << std::endl;
-		this->initDeferredRender();
-		this->initView();
-		this->initKeybinds();
-		this->initFonts();
-		this->initTextures();
-		this->initPauseMenu();
-		//this->initShaders();
-		this->initKeyTime();
-		this->initDebugText();
 		this->initPlayers();
-		this->initPlayerGUI();
-		this->initEnemySystem();
-		this->initTileMap();
-		this->initSystems();
-		this->savePath = "Saves/save" + std::to_string(save);
-		this->game = game;
-		/*
-		this->theme.openFromFile("Resources/Audio/themeSong2.wav");
-		this->theme.setPitch(1.f);
-		this->theme.setVolume(40.f);
-		this->theme.setLoop(true);
-		this->theme.play();*/
 		this->initInGameTime();
 	}
+	//te se u sakmu primeru na novo kreairajo
+	this->initDeferredRender();
+	this->initView();
+	this->initKeybinds();
+	this->initFonts();
+	this->initTextures();
+	this->initPauseMenu();
+	//this->initShaders();
+	//this->initDebugText(); // DEBUG
+	this->initKeyTime();
+	this->initPlayerGUI();
+	this->initEnemySystem();
+	this->initTileMap();
+	this->initInGameTimers();
+	this->initSystems();
+	/*
+	this->theme.openFromFile("Resources/Audio/themeSong2.wav");
+	this->theme.setPitch(1.f);
+	this->theme.setVolume(40.f);
+	this->theme.setLoop(true);
+	this->theme.play();*/
 }
 
 GameState::~GameState(){
@@ -388,7 +399,7 @@ void GameState::update(const float& dt){
 	this->updateKeytime(dt);
 	this->updateInput(dt);
 
-	this->updateDebugText(dt);
+	//this->updateDebugText(dt); //DEBUG
 	
 	if (!this->paused){ //Unpausan update
 		this->updateView(dt);

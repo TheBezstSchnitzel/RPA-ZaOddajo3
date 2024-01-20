@@ -17,8 +17,6 @@ private:
 
 	//Zvok
 	bool sound;
-	sf::SoundBuffer buffer;
-	sf::Sound click;
 
 	std::map<std::string, gui::Button*> buttons;
 	std::map<std::string, gui::DropDownList*> dropDownLists;

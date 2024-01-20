@@ -164,14 +164,15 @@ void EditorState::updateGui(const float& dt){
 }
 
 void EditorState::updatePauseMenuButtons(){
-	if (this->pmenu->isButtonPressed("QUIT"))
+	if (this->pmenu->isButtonPressed("QUIT")) {
 		this->endState();
-
-	if (this->pmenu->isButtonPressed("SAVE"))
+	}
+	if (this->pmenu->isButtonPressed("SAVE")) {
 		this->tileMap->saveToFile("text.slmp");
-
-	if (this->pmenu->isButtonPressed("LOAD"))
+	}
+	if (this->pmenu->isButtonPressed("LOAD")) {
 		this->tileMap->loadFromFile("text.slmp");
+	}
 }
 
 void EditorState::updateModes(const float & dt){

@@ -163,10 +163,6 @@ void PlayGameState::initGui(){
 	this->initTexts(vm);
 	this->initBackgrounds(vm);
 
-	if (!this->buffer.loadFromFile("Resources/Audio/click.wav")) {
-		throw "ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_CLICK_SOUND";
-	}
-	this->click.setBuffer(this->buffer);
 	//Gumbi
 	this->buttons["GAME_SAVE_1"] = new gui::Button(
 		gui::p2pX(28.3f, vm), gui::p2pY(10.3f, vm),
@@ -331,49 +327,49 @@ void PlayGameState::updateButtons() {
 
 	//Nou game
 	if (this->buttons["GAME_SAVE_1"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_SAVE_1"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,1));
 		this->updateTexts(1);
 	}
 	if (this->buttons["GAME_SAVE_2"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_SAVE_2"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,2));
 		this->updateTexts(2);
 	}
 	if (this->buttons["GAME_SAVE_3"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_SAVE_3"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,3));
 		this->updateTexts(3);
 	}
 	if (this->buttons["GAME_SAVE_4"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_SAVE_4"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,4));
 		this->updateTexts(4);
 	}
 	if (this->buttons["GAME_DELETE_SAVE_1"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_DELETE_SAVE_1"]->makeSound();
 		this->deleteSave(1);
 	}
 	if (this->buttons["GAME_DELETE_SAVE_2"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_DELETE_SAVE_2"]->makeSound();
 		this->deleteSave(2);
 	}
 	if (this->buttons["GAME_DELETE_SAVE_3"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_DELETE_SAVE_3"]->makeSound();
 		this->deleteSave(3);
 	}
 	if (this->buttons["GAME_DELETE_SAVE_4"]->isPressed()) {
-		this->click.play();
+		this->buttons["GAME_DELETE_SAVE_4"]->makeSound();
 		this->deleteSave(4);
 	}
 	//Exit
 	if (this->buttons["EXIT"]->isPressed()) {
-		this->click.play();
-		while (true)if (this->click.getStatus() == 0)break;
+		this->buttons["EXIT"]->makeSound();
+		while (true)if (this->buttons["EXIT"]->getStatus() == 0)break;
 		this->endState();
 	}
 }

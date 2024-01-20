@@ -29,6 +29,10 @@ namespace gui{
 		sf::Color outlineHoverColor;
 		sf::Color outlineActiveColor;
 
+		//klik sound
+		sf::SoundBuffer buffer;
+		sf::Sound click;
+
 	public:
 		Button(float x, float y, float width, float height,
 			sf::Font* font, std::string text, unsigned character_size,
@@ -50,6 +54,9 @@ namespace gui{
 		//Funkcije
 		void update(const sf::Vector2i& mousePosWindow);
 		void render(sf::RenderTarget& target);
+		//zvok
+		void makeSound();
+		short getStatus();
 	};
 
 	class DropDownList{

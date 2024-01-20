@@ -83,6 +83,7 @@ private:
 	void initSystems();
 
 	void initInGameTime();
+	void initInGameTimers();
 
 	//funkcije za nalaganje iz shrambe
 	void loadFromSave();
