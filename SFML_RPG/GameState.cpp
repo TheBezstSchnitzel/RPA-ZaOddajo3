@@ -306,11 +306,18 @@ GameState::~GameState(){
 	delete this->enemySystem;
 	delete this->tileMap;
 	delete this->tts;
-	this->game->playTheme(true);
 	for (size_t i = 0; i < this->activeEnemies.size(); i++){
 		delete this->activeEnemies[i];
 	}
 	this->theme.stop();
+	//preverjanje za audio izven gamea
+	std::ifstream saveIFile("Config/audio.ini");
+	bool isPlaying = false;
+	if (saveIFile.is_open()) {
+		saveIFile >> isPlaying;
+		saveIFile.close();
+	}
+	if (isPlaying)this->game->playTheme();
 }
 
 const bool GameState::getKeyTime(){	
