@@ -25,7 +25,7 @@ private:
 	void initInventory();
 
 public:
-	Player(float x, float y, sf::Texture& texture_sheet);
+	Player(float x, float y, sf::Texture& texture_sheet,bool fromSave);
 	virtual ~Player();
 	
 	//Dostop

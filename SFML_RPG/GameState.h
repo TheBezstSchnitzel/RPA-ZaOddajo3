@@ -20,7 +20,10 @@ enum letniCasi {
 class GameState : public State {
 private:
 	Game* game;
+
 	std::string savePath;
+
+	std::string creationDate;
 
 	sf::View view;
 	sf::Vector2i viewGridPosition;
@@ -86,9 +89,15 @@ private:
 	void initInGameTimers();
 
 	//funkcije za nalaganje iz shrambe
+	void loadFromSave_misc();
+	void loadFromSave_inGameTime();
+	void loadFromSave_player();
 	void loadFromSave();
 
 	//funkcije za shranjevanje
+	void save_misc();
+	void save_inGameTime();
+	void save_player();
 	void save();
 
 public:

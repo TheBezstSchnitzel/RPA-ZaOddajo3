@@ -33,7 +33,7 @@ void Player::initInventory(){
 }
 
 //Konstruktor / Destruktor
-Player::Player(float x, float y, sf::Texture& texture_sheet){
+Player::Player(float x, float y, sf::Texture& texture_sheet,bool fromSave){
 	this->initVariables();
 
 	this->initComponents(texture_sheet);

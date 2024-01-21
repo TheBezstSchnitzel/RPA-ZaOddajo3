@@ -118,7 +118,8 @@ void PlayGameState::initTexts(const sf::VideoMode& vm) {
 	this->texts["SAVE_1"].setPosition(sf::Vector2f(gui::p2pX(24.5f, vm), gui::p2pY(22.f, vm)));
 	this->texts["SAVE_1"].setCharacterSize(gui::calcCharSize(vm, 70));
 	this->texts["SAVE_1"].setFillColor(sf::Color(0, 0, 0, 255));
-	this->texts["SAVE_1"].setString("                0-0-0-0");
+	if (std::filesystem::exists("Saves/save1/game")) this->texts["SAVE_1"].setString(this->readFromSave("Saves/save1/misc.txt"));
+	else this->texts["SAVE_1"].setString("                0-0-0-0");
 	// Save2
 	this->texts["SAVE2"].setFont(this->font);
 	this->texts["SAVE2"].setPosition(sf::Vector2f(gui::p2pX(62.f, vm), gui::p2pY(17.f, vm)));
@@ -130,7 +131,8 @@ void PlayGameState::initTexts(const sf::VideoMode& vm) {
 	this->texts["SAVE_2"].setPosition(sf::Vector2f(gui::p2pX(55.5f, vm), gui::p2pY(22.f, vm)));
 	this->texts["SAVE_2"].setCharacterSize(gui::calcCharSize(vm, 70));
 	this->texts["SAVE_2"].setFillColor(sf::Color(0, 0, 0, 255));
-	this->texts["SAVE_2"].setString("                0-0-0-0");
+	if (std::filesystem::exists("Saves/save2/game")) this->texts["SAVE_2"].setString(this->readFromSave("Saves/save2/misc.txt"));
+	else this->texts["SAVE_2"].setString("                0-0-0-0");
 	// Save3
 	this->texts["SAVE3"].setFont(this->font);
 	this->texts["SAVE3"].setPosition(sf::Vector2f(gui::p2pX(31.f, vm), gui::p2pY(51.f, vm)));
@@ -142,7 +144,8 @@ void PlayGameState::initTexts(const sf::VideoMode& vm) {
 	this->texts["SAVE_3"].setPosition(sf::Vector2f(gui::p2pX(24.5f, vm), gui::p2pY(56.f, vm)));
 	this->texts["SAVE_3"].setCharacterSize(gui::calcCharSize(vm, 70));
 	this->texts["SAVE_3"].setFillColor(sf::Color(0, 0, 0, 255));
-	this->texts["SAVE_3"].setString("                0-0-0-0");
+	if (std::filesystem::exists("Saves/save3/game")) this->texts["SAVE_3"].setString(this->readFromSave("Saves/save3/misc.txt"));
+	else this->texts["SAVE_3"].setString("                0-0-0-0");
 	// Save4
 	this->texts["SAVE4"].setFont(this->font);
 	this->texts["SAVE4"].setPosition(sf::Vector2f(gui::p2pX(62.f, vm), gui::p2pY(51.f, vm)));
@@ -154,7 +157,8 @@ void PlayGameState::initTexts(const sf::VideoMode& vm) {
 	this->texts["SAVE_4"].setPosition(sf::Vector2f(gui::p2pX(55.5f, vm), gui::p2pY(56.f, vm)));
 	this->texts["SAVE_4"].setCharacterSize(gui::calcCharSize(vm, 70));
 	this->texts["SAVE_4"].setFillColor(sf::Color(0, 0, 0, 255));
-	this->texts["SAVE_4"].setString("                0-0-0-0");
+	if (std::filesystem::exists("Saves/save4/game")) this->texts["SAVE_4"].setString(this->readFromSave("Saves/save4/misc.txt"));
+	else this->texts["SAVE_4"].setString("                0-0-0-0");
 }
 
 void PlayGameState::initGui(){
@@ -286,6 +290,17 @@ void PlayGameState::deleteSave(short saveNum){
 	}
 }
 
+std::string PlayGameState::readFromSave(std::string path){
+	std::ifstream saveIFile(path);
+	std::string tmp;
+	if (saveIFile.is_open()) {
+		std::getline(saveIFile, tmp);
+		saveIFile.close();
+	}
+	else throw("ERROR::PlayGameState::readFromSave::FILE_NOT_OPEN");
+	return tmp;
+}
+
 PlayGameState::PlayGameState(StateData* state_data,Game* game) : State(state_data) {
 	this->initFonts();
 	this->initKeyTime();
@@ -330,25 +345,25 @@ void PlayGameState::updateButtons() {
 		this->buttons["GAME_SAVE_1"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,1));
-		this->updateTexts(1);
+		if(!std::filesystem::exists("Saves/save4/game"))this->updateTexts(1);
 	}
 	if (this->buttons["GAME_SAVE_2"]->isPressed()) {
 		this->buttons["GAME_SAVE_2"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,2));
-		this->updateTexts(2);
+		if (!std::filesystem::exists("Saves/save4/game"))this->updateTexts(2);
 	}
 	if (this->buttons["GAME_SAVE_3"]->isPressed()) {
 		this->buttons["GAME_SAVE_3"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,3));
-		this->updateTexts(3);
+		if (!std::filesystem::exists("Saves/save4/game"))this->updateTexts(3);
 	}
 	if (this->buttons["GAME_SAVE_4"]->isPressed()) {
 		this->buttons["GAME_SAVE_4"]->makeSound();
 		this->game->playTheme(false);
 		this->states->push(new GameState(this->stateData,this->game,4));
-		this->updateTexts(4);
+		if (!std::filesystem::exists("Saves/save4/game"))this->updateTexts(4);
 	}
 	if (this->buttons["GAME_DELETE_SAVE_1"]->isPressed()) {
 		this->buttons["GAME_DELETE_SAVE_1"]->makeSound();

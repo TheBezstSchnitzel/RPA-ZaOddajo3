@@ -31,6 +31,8 @@ private:
 
 	void deleteSave(short saveNum);
 
+	std::string readFromSave(std::string path);
+
 public:
 	PlayGameState(StateData* state_data,Game* game);
 	virtual ~PlayGameState();

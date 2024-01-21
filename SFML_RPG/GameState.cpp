@@ -99,24 +99,7 @@ void GameState::initDebugText(){
 }
 
 void GameState::initPlayers() {
-	//novo shranjevanje ================================================
-	//std::filesystem::path savefilePathPlayer = this->savePath + "/player/player.txt";
-	//preveri ce ze sploh obstaja save
-	if (false){//std::filesystem::exists(savefilePathPlayer)) {
-		/* //DEBUG
-		//save ze obstaja
-		std::ifstream saveFile;
-		saveFile.open(this->savePath, std::ios::in);
-		if (saveFile.is_open()) {
-			saveFile.read((char*)&this->player, sizeof(Player));
-		}
-		else std::cout << "Nalaganje iz save ne dela" << std::endl; */
-	}
-	else {
-		//save se ne obstaja
-		this->player = new Player(300, 220, this->textures["PLAYER_SHEET"]);
-		std::cout << "File does not exist." << std::endl;
-	}
+	this->player = new Player(300, 220, this->textures["PLAYER_SHEET"],false);
 }
 
 void GameState::initPlayerGUI(){
@@ -148,12 +131,134 @@ void GameState::initInGameTimers(){
 	this->nightTimer.restart();
 }
 
+//funkcije za branje shranjenih podatkov
+void GameState::loadFromSave_misc(){
+	std::string miscPath = this->savePath + "/misc.txt";
+	std::ifstream saveIFile(miscPath);
+
+	//prebere podatke
+	if (saveIFile.is_open()) {
+		//Zapisovanje podatkov
+		std::getline(saveIFile, this->creationDate);
+
+		saveIFile.close();
+	}
+	else {
+		throw("ERROR::GameState::loadFromSave_misc::FILE_NOT_OPEN");
+	}
+}
+
+void GameState::loadFromSave_inGameTime(){
+	std::string timePath = this->savePath + "/game/time.txt";
+	std::ifstream saveIFile(timePath);
+
+	//prebere podatke
+	if (saveIFile.is_open()) {
+		//Zapisovanje podatkov
+		std::string seasonTmp = "";
+		saveIFile >> this->isDay >> this->gameDaysElapsed >> seasonTmp;
+		this->currentSeason = static_cast<letniCasi>(std::stoi(seasonTmp));
+		
+		saveIFile.close();
+	}
+	else {
+		throw("ERROR::GameState::loadFromSave_inGameTime::FILE_NOT_OPEN");
+	}
+}
+
+void GameState::loadFromSave_player(){
+	std::string playerPath = this->savePath + "/game/player.txt";
+	std::ifstream saveIFile(playerPath);
+
+	//prebere podatke
+	if (saveIFile.is_open()) {
+		//Branje podatkov
+		float x, y;
+		saveIFile >> x >> y;
+
+		saveIFile.close();
+		//zapisovanje podatkov
+		this->player = new Player(x, y, this->textures["PLAYER_SHEET"],true);
+	}
+	else {
+		throw("ERROR::GameState::loadFromSave_inGameTime::FILE_NOT_OPEN");
+	}
+}
+
 void GameState::loadFromSave(){
 	//klièe vse funkcije za loudanje iz save
+	this->loadFromSave_inGameTime();
+	this->loadFromSave_misc();
+	this->loadFromSave_player();
+}
+
+//funkcije za shranjevanje
+void GameState::save_misc(){
+	std::string miscPath = this->savePath + "/misc.txt";
+	std::ofstream saveOFile(miscPath);
+	//shrani podatke
+	if (saveOFile.is_open()) {
+		//shranjevanje
+		saveOFile << this->creationDate << std::endl;
+
+		saveOFile.close();
+	}
+	else {
+		throw("ERROR::GameState::save_misc::FILE_NOT_OPEN");
+	}
+}
+
+void GameState::save_inGameTime(){
+	//prever ce mapa obstaja (da ni prvoi shranjevanj)
+	std::string path = this->savePath + "/game";
+	if (!std::filesystem::is_directory(path)) {
+		//ustvari novo mapo ce je prvo shranjevanje
+		std::filesystem::create_directory(path);
+	}
+
+	//shrani podatke
+	std::string timePath = path+"/time.txt";
+	std::ofstream saveOFile(timePath);
+	if (saveOFile.is_open()) {
+		//Shranjevanje
+		saveOFile << this->isDay << std::endl;
+		saveOFile << this->gameDaysElapsed << std::endl;
+		saveOFile << this->currentSeason << std::endl;
+
+		saveOFile.close();
+	}
+	else {
+		throw("ERROR::GameState::save_inGameTime::FILE_NOT_OPEN");
+	}
+}
+
+void GameState::save_player(){
+	sf::Vector2f playerPosition = this->player->getPosition();
+	std::string playerPath = this->savePath + "/game/player.txt";
+	std::ofstream saveOFile(playerPath);
+	if (saveOFile.is_open()) {
+		//shranjevanje
+		saveOFile << playerPosition.x << std::endl;
+		saveOFile << playerPosition.y << std::endl;
+
+		saveOFile.close();
+	}
+	else {
+		throw("ERROR::GameState::save_player::FILE_NOT_OPEN");
+	}
 }
 
 void GameState::save(){
 	//klièe vse funkcije za shranjevanje
+	this->save_inGameTime();
+	this->save_misc();
+	this->save_player();
+}
+
+std::string whatTime() {
+	auto time = std::chrono::system_clock::now();
+	std::time_t end_time = std::chrono::system_clock::to_time_t(time);
+	return std::string(std::ctime(&end_time));
 }
 
 //Konstruktor / destruktor
@@ -161,24 +266,13 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	//novo shranjevanje ================================================
 	this->savePath = "Saves/save" + std::to_string(save);
 	this->game = game;
-	std::filesystem::path savefilePathPlayer = this->savePath + "/player/player.txt";
+	std::filesystem::path savefilePath = this->savePath + "/game";
 	//preveri ce ze sploh obstaja save
-	if (false){//std::filesystem::exists(savefilePathPlayer)) {
-		/* //DEBUG
-		//save ze obstaja
-		std::ifstream saveFile;
-		saveFile.open(this->savePath, std::ios::in);
-		if (saveFile.is_open()) {
-			saveFile.read((char*)&this->player, sizeof(Player));
-		}
-		else std::cout << "Nalaganje iz save ne dela" << std::endl; */
-		std::cout << "File exists" << std::endl;
-		this->loadFromSave();
-	}
+	if (std::filesystem::exists(savefilePath))this->loadFromSave();
 	else {
 		//save se ne obstaja
-		std::cout << "File does not exist." << std::endl;
 		this->initPlayers();
+		this->creationDate = whatTime();
 		this->initInGameTime();
 	}
 	//te se u sakmu primeru na novo kreairajo
