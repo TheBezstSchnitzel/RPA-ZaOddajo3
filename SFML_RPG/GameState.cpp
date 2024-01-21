@@ -246,6 +246,7 @@ void GameState::save_player(){
 	else {
 		throw("ERROR::GameState::save_player::FILE_NOT_OPEN");
 	}
+	this->player->save(this->savePath);
 }
 
 void GameState::save(){

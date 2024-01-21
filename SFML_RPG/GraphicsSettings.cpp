@@ -15,11 +15,11 @@ void GraphicsSettings::saveToFile(const std::string path){
 	std::ofstream ofs(path);
 
 	if (ofs.is_open()){
-		ofs << this->title;
-		ofs << this->resolution.width << " " << this->resolution.height;
-		ofs << this->fullscreen;
-		ofs << this->frameRateLimit;
-		ofs << this->contextSettings.antialiasingLevel;
+		ofs << this->title << std::endl;
+		ofs << this->resolution.width << " " << this->resolution.height << std::endl;
+		ofs << this->fullscreen << std::endl;
+		ofs << this->frameRateLimit << std::endl;
+		ofs << this->contextSettings.antialiasingLevel << std::endl;
 	}
 
 	ofs.close();

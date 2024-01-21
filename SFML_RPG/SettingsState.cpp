@@ -168,6 +168,7 @@ void SettingsState::updateGui(const float & dt){
 	//Delovanje gumbou
 	//Zapre state
 	if (this->buttons["BACK"]->isPressed()){
+		this->game->saveAudio();
 		this->buttons["BACK"]->makeSound();
 		while (true)if (this->buttons["BACK"]->getStatus() == 0)break;
 		this->endState();	
@@ -207,6 +208,7 @@ void SettingsState::updateGui(const float & dt){
 		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, this->stateData->gfxSettings->fullscreen ? sf::Style::Fullscreen : sf::Style::Default);
 		this->resetGui();
 		
+		this->stateData->gfxSettings->saveToFile("Config/graphics.ini");
 	}
 
 	//Spustni seznam
