@@ -164,6 +164,11 @@ int Game::getThemeStatus(){
 
 void Game::setThemeVolume(float newVolume){
 	this->theme.setVolume(newVolume);
+	this->volume = newVolume;
+}
+
+float Game::getThemeVolume(){
+	return this->volume;
 }
 
 void Game::saveAudio(){

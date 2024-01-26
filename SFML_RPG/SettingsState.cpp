@@ -37,6 +37,7 @@ int SettingsState::findIndexOfCurrRes() {
 }
 
 void SettingsState::initGui(){
+
 	const sf::VideoMode& vm = this->stateData->gfxSettings->resolution;
 
 	this->fullscreen = false;
@@ -124,7 +125,8 @@ void SettingsState::initGui(){
 		&this->font, gui::calcCharSize(vm),
 		sf::Color(0, 0, 0, 250), sf::Color(69, 65, 64, 250), sf::Color(255, 255, 255, 200),
 		sf::Color(255, 255, 255, 200));
-	//this->volumeSlider->setValue(12.f);
+
+	this->volumeSlider->setValue(this->game->getThemeVolume());
 }
 
 void SettingsState::resetGui(){
@@ -213,8 +215,6 @@ void SettingsState::updateGui(const float & dt){
 	if (this->buttons["APPLY"]->isPressed()){
 		this->buttons["APPLY"]->makeSound();
 
-		this->game->setThemeVolume(this->volumeSlider->getValue());
-
 		this->stateData->gfxSettings->resolution = this->modes[this->dropDownLists["RESOLUTION"]->getActiveElementId()];
 
 		this->stateData->gfxSettings->fullscreen = this->fullscreen;
@@ -232,6 +232,12 @@ void SettingsState::updateGui(const float & dt){
 
 	//volume slider
 	this->volumeSlider->update(this->mousePosWindow);
+	this->game->setThemeVolume(this->volumeSlider->getValue());
+	if (this->game->getThemeVolume() == 0) {
+		this->sound = false;
+		this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
+	}
+	else this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
 }
 
 void SettingsState::update(const float& dt){
