@@ -168,9 +168,11 @@ void EditorState::updatePauseMenuButtons(){
 		this->endState();
 	}
 	if (this->pmenu->isButtonPressed("SAVE")) {
+		this->pmenu->makeSound("SAVE");
 		this->tileMap->saveToFile("text.slmp");
 	}
 	if (this->pmenu->isButtonPressed("LOAD")) {
+		this->pmenu->makeSound("LOAD");
 		this->tileMap->loadFromFile("text.slmp");
 	}
 }

@@ -394,9 +394,11 @@ void GameState::updatePlayerGUI(const float & dt){
 
 void GameState::updatePauseMenuButtons(){
 	if (this->pmenu->isButtonPressed("SAVE")) {
+		this->pmenu->makeSound("SAVE");
 		this->save();
 	}
 	if (this->pmenu->isButtonPressed("QUIT")) {
+		this->pmenu->makeSound("SAVE");
 		this->save();
 		this->endState();
 	}

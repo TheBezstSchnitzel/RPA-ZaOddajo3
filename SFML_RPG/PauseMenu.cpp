@@ -43,6 +43,10 @@ std::map<std::string, gui::Button*>& PauseMenu::getButtons(){
 	return this->buttons;
 }
 
+void PauseMenu::makeSound(const std::string key){
+	this->buttons[key]->makeSound();
+}
+
 //Funkcije
 const bool PauseMenu::isButtonPressed(const std::string key){
 	return this->buttons[key]->isPressed();
