@@ -105,7 +105,7 @@ void SettingsState::initGui(){
 	this->dropDownLists["RESOLUTION"] = new gui::DropDownList(
 		gui::p2pX(42.f, vm), gui::p2pY(25.f, vm),
 		gui::p2pX(10.4f, vm), gui::p2pY(4.5f, vm),
-		font, modes_str.data(), modes_str.size(), this->findIndexOfCurrRes()
+		font, modes_str.data(), modes_str.size(), 6//->findIndexOfCurrRes()
 	);
 
 	//Inicializacija teksta
