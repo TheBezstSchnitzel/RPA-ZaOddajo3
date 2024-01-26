@@ -156,7 +156,8 @@ void GameState::loadFromSave_inGameTime(){
 	if (saveIFile.is_open()) {
 		//Zapisovanje podatkov
 		std::string seasonTmp = "";
-		saveIFile >> this->isDay >> this->gameDaysElapsed >> seasonTmp;
+		saveIFile >> this->isDay >> this->dayTimerOff >> this->nightTimerOff;
+		saveIFile >> this->gameDaysElapsed >> seasonTmp;
 		this->currentSeason = static_cast<letniCasi>(std::stoi(seasonTmp));
 		
 		saveIFile.close();
@@ -222,6 +223,8 @@ void GameState::save_inGameTime(){
 	if (saveOFile.is_open()) {
 		//Shranjevanje
 		saveOFile << this->isDay << std::endl;
+		saveOFile << this->dayTimer.getElapsedTime().asSeconds() << std::endl;
+		saveOFile << this->nightTimer.getElapsedTime().asSeconds() << std::endl;
 		saveOFile << this->gameDaysElapsed << std::endl;
 		saveOFile << this->currentSeason << std::endl;
 
@@ -473,16 +476,18 @@ void GameState::updateDebugText(const float& dt){
 
 void GameState::updateInGameTime(){
 	if (this->isDay) { //ce je dan
-		if (floor(this->dayTimer.getElapsedTime().asSeconds()*100/60)/100 >= this->dayTimerMax) {
+		if (floor((this->dayTimer.getElapsedTime().asSeconds()+this->dayTimerOff)*100/60)/100 >= this->dayTimerMax) {
 			//cas za dan je pretuku je treba spremenit v noc
+			if (this->dayTimerOff != 0)this->dayTimerOff = 0;
 			this->isDay = false;
 			this->nightTimer.restart();
 			std::cout << "spreminjam v noc" << std::endl; //DEBUG
 		}
 	}
 	else { // ce je noc
-		if (floor(this->nightTimer.getElapsedTime().asSeconds()*100/60)/100 >= this->nightTimerMax) {
+		if (floor((this->nightTimer.getElapsedTime().asSeconds()+this->nightTimerOff)*100/60)/100 >= this->nightTimerMax) {
 			//cas za noc je poteku je treba sprement v dan
+			if (this->nightTimerOff != 0)this->nightTimerOff = 0;
 			this->isDay = true;
 			this->dayTimer.restart();
 			this->gameDaysElapsed++;

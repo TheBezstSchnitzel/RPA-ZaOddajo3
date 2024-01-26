@@ -17,6 +17,7 @@ private:
 
 	//Zvok
 	bool sound;
+	bool sliderStop;
 
 	std::map<std::string, gui::Button*> buttons;
 	std::map<std::string, gui::DropDownList*> dropDownLists;

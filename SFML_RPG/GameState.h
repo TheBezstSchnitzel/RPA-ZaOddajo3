@@ -40,9 +40,11 @@ private:
 
 	//in game time
 	sf::Clock dayTimer;
+	float dayTimerOff; //kdr nalozis iz savea
 	float dayTimerMax;
 
 	sf::Clock nightTimer;
+	float nightTimerOff; //kdr nalozis iz savea
 	float nightTimerMax;
 
 	bool isDay;

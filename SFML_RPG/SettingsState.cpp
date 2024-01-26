@@ -233,11 +233,17 @@ void SettingsState::updateGui(const float & dt){
 	//volume slider
 	this->volumeSlider->update(this->mousePosWindow);
 	this->game->setThemeVolume(this->volumeSlider->getValue());
-	if (this->game->getThemeVolume() == 0) {
-		this->sound = false;
-		this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
+	if (this->sound || this->sliderStop) {
+		if (this->game->getThemeVolume() == 0) {
+			this->sound = false;
+			this->sliderStop = true;
+			this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
+		}
+		else {
+			this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
+			this->sliderStop = false;
+		}
 	}
-	else this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
 }
 
 void SettingsState::update(const float& dt){
