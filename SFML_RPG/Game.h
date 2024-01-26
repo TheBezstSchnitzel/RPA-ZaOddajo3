@@ -50,6 +50,7 @@ public:
 	void playTheme(bool what=true);
 	void restartTheme(bool go=true);
 	int getThemeStatus();
+	void setThemeVolume(float newVolume);
 		//shranjevanje
 	void saveAudio();
 

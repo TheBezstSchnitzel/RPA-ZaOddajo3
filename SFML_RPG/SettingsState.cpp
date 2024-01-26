@@ -114,8 +114,17 @@ void SettingsState::initGui(){
 	this->optionsText.setFillColor(sf::Color(255, 255, 255, 200));
 
 	this->optionsText.setString(
-		"Resolution \n\nFullscreen"
+		"Resolution \n\nFullscreen \n\nVolume"
 	);
+
+	//incicializacija sliderja za zvok
+	this->volumeSlider = new gui::Slider(
+		gui::p2pX(42.f, vm), gui::p2pY(46.7f, vm),
+		gui::p2pX(25.f, vm), gui::p2pY(1.5f, vm),
+		&this->font, gui::calcCharSize(vm),
+		sf::Color(0, 0, 0, 250), sf::Color(69, 65, 64, 250), sf::Color(255, 255, 255, 200),
+		sf::Color(255, 255, 255, 200));
+	//this->volumeSlider->setValue(12.f);
 }
 
 void SettingsState::resetGui(){
@@ -131,6 +140,7 @@ void SettingsState::resetGui(){
 		delete it2->second;
 	}
 	this->dropDownLists.clear();
+	delete this->volumeSlider;
 	this->initGui();
 }
 
@@ -152,6 +162,7 @@ SettingsState::~SettingsState(){
 	for (it2 = this->dropDownLists.begin(); it2 != this->dropDownLists.end(); ++it2){
 		delete it2->second;
 	}
+	delete this->volumeSlider;
 }
 
 //Funkcije
@@ -201,6 +212,9 @@ void SettingsState::updateGui(const float & dt){
 	//Applya settinge
 	if (this->buttons["APPLY"]->isPressed()){
 		this->buttons["APPLY"]->makeSound();
+
+		this->game->setThemeVolume(this->volumeSlider->getValue());
+
 		this->stateData->gfxSettings->resolution = this->modes[this->dropDownLists["RESOLUTION"]->getActiveElementId()];
 
 		this->stateData->gfxSettings->fullscreen = this->fullscreen;
@@ -215,6 +229,9 @@ void SettingsState::updateGui(const float & dt){
 	for (auto &it : this->dropDownLists){
 		it.second->update(this->mousePosWindow, dt);
 	}
+
+	//volume slider
+	this->volumeSlider->update(this->mousePosWindow);
 }
 
 void SettingsState::update(const float& dt){
@@ -225,6 +242,7 @@ void SettingsState::update(const float& dt){
 }
 
 void SettingsState::renderGui(sf::RenderTarget& target){
+	this->volumeSlider->render(target);
 	for (auto &it : this->buttons){
 		it.second->render(target);
 	}

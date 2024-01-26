@@ -50,7 +50,7 @@ gui::Button::Button(float x, float y, float width, float height,
 	this->id = id;
 	this->lastMouseState = false;
 
-	this->shape.setPosition(sf::Vector2f(x, y));
+	this->shape.setPosition(sf::Vector2f(x, y));	
 	this->shape.setSize(sf::Vector2f(width, height));
 	this->shape.setFillColor(idle_color);
 	this->shape.setOutlineThickness(1.f);
@@ -430,4 +430,116 @@ void gui::ProgressBar::render(sf::RenderTarget & target){
 	target.draw(this->back);
 	target.draw(this->inner);
 	target.draw(this->text);
+}
+
+//SLIDER =====================================================
+
+void gui::Slider::initSliderBar(float x, float y, float width, float height, sf::Color outline, sf::Color fill){
+	this->sliderBar.setPosition(sf::Vector2f(x, y));
+	this->sliderBar.setSize(sf::Vector2f(width, height));
+	this->sliderBar.setFillColor(fill);
+	this->sliderBar.setOutlineThickness(height/6.f);
+	this->sliderBar.setOutlineColor(outline);
+}
+
+void gui::Slider::initSliderButton(float x, float y, float width, float height, sf::Color fill){
+	this->sliderButton.setPointCount(100);
+	this->sliderButton.setPosition(sf::Vector2f(x - (height), y - (height/2.f)));
+	this->sliderButton.setRadius(height);
+	this->sliderButton.setFillColor(fill);
+	this->sliderButton.setOutlineThickness(2.f);
+	this->sliderButton.setOutlineColor(sf::Color(0, 0, 0, 250));
+}
+
+void gui::Slider::initTexts(sf::Font* font, unsigned character_size, sf::Color text_color){
+	this->textCurrentValue.setCharacterSize(character_size);
+	this->textCurrentValue.setString("0");
+	this->textCurrentValue.setFont(*font);
+	this->textCurrentValue.setColor(text_color);
+	this->textCurrentValue.setPosition(sf::Vector2f(this->sliderBar.getPosition().x + this->sliderBar.getSize().x + character_size, this->sliderBar.getPosition().y - character_size/2.2));
+}
+
+void gui::Slider::initVariables(){
+	this->value = 0;
+}
+
+gui::Slider::Slider(float x, float y, float width, float height, sf::Font* font, unsigned character_size, sf::Color slider_bar_outline_color, sf::Color slider_bar_color, sf::Color slider_button_color, sf::Color text_color) {
+	this->initSliderBar(x,y,width,height,slider_bar_outline_color,slider_bar_color);
+	this->initSliderButton(x,y,width,height,slider_button_color);
+	this->initTexts(font, character_size, text_color);
+	this->initVariables();
+	this->lastButtonState = BTN_IDLE;
+}
+
+gui::Slider::~Slider(){
+}
+
+void gui::Slider::setValue(float newValue){
+	this->value = newValue;
+	this->sliderButton.setPosition(this->calculatePos(), this->sliderButton.getPosition().y);
+}
+
+float gui::Slider::getValue(){
+	return this->value;
+}
+
+void gui::Slider::moveButton(const sf::Vector2i& mousePosWindow){
+	float minX = this->sliderBar.getPosition().x - this->sliderButton.getRadius();
+	float maxX = minX + this->sliderBar.getSize().x;
+	float x = this->sliderButton.getPosition().x;
+	float mousX = static_cast<float>(mousePosWindow.x);
+	//premik na levo
+	if (mousX < this->startmousePosX) {
+		if (x > minX) {
+			if ((this->startmousePosX - mousX) > (x - minX))this->sliderButton.move(-(x - minX),0);
+			else this->sliderButton.move(-(this->startmousePosX - mousX), 0);
+		}
+	}
+	//premik na desno
+	if (mousX > this->startmousePosX) {
+		if (x < maxX) {
+			if ((mousX - this->startmousePosX) > (maxX - x))this->sliderButton.move(maxX-x,0);
+			else this->sliderButton.move(mousX-this->startmousePosX, 0);
+		}
+	}
+}
+
+float gui::Slider::calucalateValue(){
+	float x = this->sliderButton.getPosition().x;
+	float minX = this->sliderBar.getPosition().x - this->sliderButton.getRadius();
+	float maxX = minX + this->sliderBar.getSize().x;
+	return (100 * (x - minX)) / (maxX - minX);
+}
+
+float gui::Slider::calculatePos(){
+	float minX = this->sliderBar.getPosition().x - this->sliderButton.getRadius();
+	float maxX = minX + this->sliderBar.getSize().x;
+	return minX + this->value*((maxX-minX)/100);
+}
+
+void gui::Slider::update(const sf::Vector2i& mousePosWindow) {
+	//updata button
+	//Idle
+	this->buttonState = BTN_IDLE;
+	//Hover
+	if (this->sliderButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))) {
+		this->buttonState = BTN_HOVER;
+		//Pressed
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			this->buttonState = BTN_ACTIVE;
+			if (this->lastButtonState != BTN_ACTIVE) {
+				this->startmousePosX = static_cast<float>(mousePosWindow.x);
+			}
+			this->moveButton(mousePosWindow);
+		}
+	}
+	this->lastButtonState = this->buttonState;
+	this->textCurrentValue.setString(std::to_string(static_cast<int>(this->calucalateValue())));
+	this->value = this->calucalateValue();
+}
+
+void gui::Slider::render(sf::RenderTarget& target){
+	target.draw(this->sliderBar);
+	target.draw(this->sliderButton);
+	target.draw(this->textCurrentValue);
 }

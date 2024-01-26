@@ -71,6 +71,13 @@ void MainMenuState::initGui(){
 		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));
 
+	/*this->buttons["TUTORIAL_STATE"] = new gui::Button(
+		gui::p2pX(15.6f, vm), gui::p2pY(50.f, vm),
+		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
+		&this->font, "Tutorial", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));*/
+
 	this->buttons["EDITOR_STATE"] = new gui::Button(
 		gui::p2pX(15.6f, vm), gui::p2pY(50.f, vm),
 		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
@@ -141,6 +148,12 @@ void MainMenuState::updateButtons(){
 		this->isTrueRes = false; //v vsakmu primeru preverja ko prides iz nastavitev
 	}
 
+	//Tutorial
+	/*
+	if (this->buttons["TUTORIAL_STATE"]->isPressed()) {
+		this->buttons["TUTORIAL_STATE"]->makeSound();
+	}*/
+	
 	//Editor
 	if (this->buttons["EDITOR_STATE"]->isPressed()){
 		this->buttons["EDITOR_STATE"]->makeSound();

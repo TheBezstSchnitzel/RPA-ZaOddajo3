@@ -20,6 +20,7 @@ private:
 
 	std::map<std::string, gui::Button*> buttons;
 	std::map<std::string, gui::DropDownList*> dropDownLists;
+	gui::Slider* volumeSlider;
 
 	sf::Text optionsText;
 

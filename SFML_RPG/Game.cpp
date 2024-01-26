@@ -162,6 +162,10 @@ int Game::getThemeStatus(){
 	return (int)this->theme.getStatus();
 }
 
+void Game::setThemeVolume(float newVolume){
+	this->theme.setVolume(newVolume);
+}
+
 void Game::saveAudio(){
 	std::string savePath = "Config/audio.ini";
 	std::ofstream saveOFile(savePath);
