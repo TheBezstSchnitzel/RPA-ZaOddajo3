@@ -127,6 +127,8 @@ void SettingsState::initGui(){
 		sf::Color(255, 255, 255, 200));
 
 	this->volumeSlider->setValue(this->game->getThemeVolume());
+	if (this->volumeSlider->getValue() == 0)this->sliderStop = true;
+	else this->sliderStop = false;
 }
 
 void SettingsState::resetGui(){

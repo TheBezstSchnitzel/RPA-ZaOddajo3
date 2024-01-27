@@ -122,6 +122,7 @@ void GameState::initInGameTime(){
 	this->isDay = true;
 	this->gameDaysElapsed = 0;
 	this->currentSeason = pomlad;
+	this->dayTimerOff = this->nightTimerOff = 0;
 }
 
 void GameState::initInGameTimers(){
@@ -220,11 +221,13 @@ void GameState::save_inGameTime(){
 	//shrani podatke
 	std::string timePath = path+"/time.txt";
 	std::ofstream saveOFile(timePath);
+	float tempDayTime = this->isDay ? this->dayTimer.getElapsedTime().asSeconds() : 0.f;
+	float tempNightTime = this->isDay ? 0.f : this->nightTimer.getElapsedTime().asSeconds();
 	if (saveOFile.is_open()) {
 		//Shranjevanje
 		saveOFile << this->isDay << std::endl;
-		saveOFile << this->dayTimer.getElapsedTime().asSeconds() << std::endl;
-		saveOFile << this->nightTimer.getElapsedTime().asSeconds() << std::endl;
+		saveOFile << tempDayTime << std::endl;
+		saveOFile << tempNightTime << std::endl;
 		saveOFile << this->gameDaysElapsed << std::endl;
 		saveOFile << this->currentSeason << std::endl;
 
@@ -286,7 +289,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->initFonts();
 	this->initTextures();
 	this->initPauseMenu();
-	//this->initShaders();
+	this->initShaders();
 	//this->initDebugText(); // DEBUG
 	this->initKeyTime();
 	this->initPlayerGUI();
@@ -294,6 +297,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->initTileMap();
 	this->initInGameTimers();
 	this->initSystems();
+	std::cout << this->dayTimerOff << std::endl;
 	/*
 	this->theme.openFromFile("Resources/Audio/themeSong2.wav");
 	this->theme.setPitch(1.f);
@@ -547,18 +551,18 @@ void GameState::render(sf::RenderTarget* target){
 	this->tileMap->render(
 		this->renderTexture, 
 		this->viewGridPosition, 
-		&this->core_shader,
+		this->isDay ? &this->temp : &this->core_shader,
 		this->player->getCenter(),
 		false
 	);
 
 	for (auto *enemy : this->activeEnemies){
-		enemy->render(this->renderTexture, &this->core_shader, this->player->getCenter(), true);
+		enemy->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
 	}
 
-	this->player->render(this->renderTexture, &this->core_shader, this->player->getCenter(), true);
+	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
 
-	this->tileMap->renderDeferred(this->renderTexture, &this->core_shader, this->player->getCenter());
+	this->tileMap->renderDeferred(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter());
 
 	this->tts->render(this->renderTexture);
 
@@ -566,7 +570,7 @@ void GameState::render(sf::RenderTarget* target){
 	this->renderTexture.setView(this->renderTexture.getDefaultView());
 	this->playerGUI->render(this->renderTexture);
 
-	if (this->paused){ 
+	if (this->paused){
 		//this->renderTexture.setView(this->renderTexture.getDefaultView());
 		this->pmenu->render(this->renderTexture);
 	}

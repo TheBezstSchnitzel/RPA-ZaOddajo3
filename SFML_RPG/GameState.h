@@ -34,6 +34,7 @@ private:
 	PauseMenu* pmenu;
 
 	sf::Shader core_shader;
+	sf::Shader temp;
 
 	sf::Clock keyTimer;
 	float keyTimeMax;
