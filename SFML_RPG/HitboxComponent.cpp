@@ -8,13 +8,18 @@ HitboxComponent::HitboxComponent(sf::Sprite& sprite,
 	this->nextPosition.top = 0.f;
 	this->nextPosition.width = width;
 	this->nextPosition.height = height;
-
+	/*
 	this->hitbox.setPosition(this->sprite.getPosition().x + offset_x, this->sprite.getPosition().y + offset_y);
 	this->hitbox.setSize(sf::Vector2f(width, height));
 	this->hitbox.setFillColor(sf::Color::Transparent);
-	this->hitbox.setOutlineThickness(-1.f);
-	this->hitbox.setOutlineColor(sf::Color::Green);
+	this->hitbox.setOutlineThickness(1.f);
+	this->hitbox.setOutlineColor(sf::Color::Green);*/
 
+	this->hitbox.setPosition(this->sprite.getPosition().x + offset_x, this->sprite.getPosition().y + offset_y);
+	this->hitbox.setRadius(sf::Vector2f(width, height));
+	this->hitbox.setFillColor(sf::Color::Transparent);
+	this->hitbox.setOutlineThickness(1.f);
+	this->hitbox.setOutlineColor(sf::Color::Green); 
 }
 
 HitboxComponent::~HitboxComponent(){
@@ -58,5 +63,5 @@ void HitboxComponent::update(){
 
 void HitboxComponent::render(sf::RenderTarget & target){
 	//DEBUG!!//
-	//target.draw(this->hitbox);
+	target.draw(this->hitbox);
 }

@@ -353,6 +353,9 @@
     <ClInclude Include="TutorialState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EllipseShape.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_shader.frag">
