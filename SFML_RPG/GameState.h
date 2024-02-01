@@ -59,8 +59,8 @@ private:
 	PlayerGUI* playerGUI;
 	sf::Texture texture;
 
-	std::vector<Enemy*> activeEnemies;
-	EnemySystem* enemySystem;
+	//std::vector<Enemy*> activeEnemies;
+	//EnemySystem* enemySystem;
 
 	TileMap* tileMap;
 

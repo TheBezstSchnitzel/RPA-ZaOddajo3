@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "EditorState.h"
 #include "SettingsState.h"
+#include "TutorialState.h"
 #include "Gui.h"
 #include "PlayGameState.h"
 

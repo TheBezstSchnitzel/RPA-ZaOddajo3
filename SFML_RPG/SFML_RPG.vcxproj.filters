@@ -205,7 +205,7 @@
       <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="TutorialState.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,11 +350,11 @@
     <ClInclude Include="PlayGameState.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EllipseShape.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

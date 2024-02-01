@@ -165,6 +165,8 @@ void EditorState::updateGui(const float& dt){
 
 void EditorState::updatePauseMenuButtons(){
 	if (this->pmenu->isButtonPressed("QUIT")) {
+		this->pmenu->makeSound("QUIT");
+		while (true)if (this->pmenu->getStatus("QUIT") == 0)break;
 		this->endState();
 	}
 	if (this->pmenu->isButtonPressed("SAVE")) {

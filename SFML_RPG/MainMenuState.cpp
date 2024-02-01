@@ -71,22 +71,22 @@ void MainMenuState::initGui(){
 		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));
 
-	/*this->buttons["TUTORIAL_STATE"] = new gui::Button(
+	this->buttons["TUTORIAL_STATE"] = new gui::Button(
 		gui::p2pX(15.6f, vm), gui::p2pY(50.f, vm),
 		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
 		&this->font, "Tutorial", gui::calcCharSize(vm),
 		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
-		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));*/
+		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));
 
 	this->buttons["EDITOR_STATE"] = new gui::Button(
-		gui::p2pX(15.6f, vm), gui::p2pY(50.f, vm),
+		gui::p2pX(15.6f, vm), gui::p2pY(60.f, vm),
 		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
 		&this->font, "Editor", gui::calcCharSize(vm),
 		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));
 
 	this->buttons["EXIT_STATE"] = new gui::Button(
-		gui::p2pX(15.6f, vm), gui::p2pY(65.f, vm),
+		gui::p2pX(15.6f, vm), gui::p2pY(75.f, vm),
 		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
 		&this->font, "Quit", gui::calcCharSize(vm),
 		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
@@ -149,10 +149,10 @@ void MainMenuState::updateButtons(){
 	}
 
 	//Tutorial
-	/*
 	if (this->buttons["TUTORIAL_STATE"]->isPressed()) {
 		this->buttons["TUTORIAL_STATE"]->makeSound();
-	}*/
+		this->states->push(new TutorialState(stateData, game));
+	}
 	
 	//Editor
 	if (this->buttons["EDITOR_STATE"]->isPressed()){
@@ -163,6 +163,7 @@ void MainMenuState::updateButtons(){
 	//Exit
 	if (this->buttons["EXIT_STATE"]->isPressed()){
 		this->buttons["EXIT_STATE"]->makeSound();
+		while (true)if (this->buttons["EXIT_STATE"]->getStatus() == 0)break;
 		this->endState();
 	}
 }

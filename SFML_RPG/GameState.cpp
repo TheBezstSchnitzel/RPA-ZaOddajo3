@@ -107,7 +107,7 @@ void GameState::initPlayerGUI(){
 }
 
 void GameState::initEnemySystem(){
-	this->enemySystem = new EnemySystem(this->activeEnemies, this->textures, *this->player);
+	//this->enemySystem = new EnemySystem(this->activeEnemies, this->textures, *this->player);
 }
 
 void GameState::initTileMap(){
@@ -293,11 +293,10 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	//this->initDebugText(); // DEBUG
 	this->initKeyTime();
 	this->initPlayerGUI();
-	this->initEnemySystem();
+	//this->initEnemySystem();
 	this->initTileMap();
 	this->initInGameTimers();
 	this->initSystems();
-	std::cout << this->dayTimerOff << std::endl;
 	/*
 	this->theme.openFromFile("Resources/Audio/themeSong2.wav");
 	this->theme.setPitch(1.f);
@@ -310,12 +309,12 @@ GameState::~GameState(){
 	delete this->pmenu;
 	delete this->player;
 	delete this->playerGUI;
-	delete this->enemySystem;
+	//delete this->enemySystem;
 	delete this->tileMap;
 	delete this->tts;
-	for (size_t i = 0; i < this->activeEnemies.size(); i++){
+	/*for (size_t i = 0; i < this->activeEnemies.size(); i++) {
 		delete this->activeEnemies[i];
-	}
+	}*/
 	this->theme.stop();
 	//preverjanje za audio izven gamea
 	std::ifstream saveIFile("Config/audio.ini");
@@ -402,8 +401,9 @@ void GameState::updatePauseMenuButtons(){
 		this->save();
 	}
 	if (this->pmenu->isButtonPressed("QUIT")) {
-		this->pmenu->makeSound("SAVE");
+		this->pmenu->makeSound("QUIT");
 		this->save();
+		while (true)if (this->pmenu->getStatus("QUIT") == 0)break;
 		this->endState();
 	}
 }
@@ -411,7 +411,7 @@ void GameState::updatePauseMenuButtons(){
 void GameState::updateTileMap(const float & dt){
 	this->tileMap->updateWorldBoundsCollision(this->player, dt); 
 	this->tileMap->updateTileCollision(this->player, dt);
-	this->tileMap->updateTiles(this->player, dt, *this->enemySystem);
+	//this->tileMap->updateTiles(this->player, dt, *this->enemySystem);
 }
 
 void GameState::updatePlayer(const float & dt){
@@ -421,6 +421,7 @@ void GameState::updatePlayer(const float & dt){
 }
 
 void GameState::updateCombatAndEnemies(const float & dt){
+	/* //NE TGA ZBRISAT ==============================================
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->getWeapon()->getAttackTimer())
 		this->player->setInitAttack(true);
 
@@ -448,7 +449,7 @@ void GameState::updateCombatAndEnemies(const float & dt){
 		++index;
 	}
 
-	this->player->setInitAttack(false);
+	this->player->setInitAttack(false);*/
 }
 
 void GameState::updateCombat(Enemy* enemy, const int index, const float & dt){
@@ -475,7 +476,7 @@ void GameState::updateDebugText(const float& dt){
 	std::stringstream ss;
 
 	ss << "Mouse Pos View: " << this->mousePosView.x << " " << this->mousePosView.y << "\n"
-	<< "Active Enemies: " << this->activeEnemies.size() << "\n";
+	<< "Active Enemies: " << 0 << "\n";//this->activeEnemies.size() << "\n";
 
 	this->debugText.setString(ss.str());
 }
@@ -487,7 +488,6 @@ void GameState::updateInGameTime(){
 			if (this->dayTimerOff != 0)this->dayTimerOff = 0;
 			this->isDay = false;
 			this->nightTimer.restart();
-			std::cout << "spreminjam v noc" << std::endl; //DEBUG
 		}
 	}
 	else { // ce je noc
@@ -497,7 +497,6 @@ void GameState::updateInGameTime(){
 			this->isDay = true;
 			this->dayTimer.restart();
 			this->gameDaysElapsed++;
-			std::cout << "spreminjam v dan, to je dan : " << this->gameDaysElapsed+1 << std::endl; //DEBUG
 			if (this->gameDaysElapsed % 20 == 0 && this->gameDaysElapsed != 0) {
 				if (static_cast<int>(this->currentSeason) == 4)this->currentSeason = pomlad;
 				else this->currentSeason = static_cast<letniCasi>(static_cast<int>(this->currentSeason) + 1);
@@ -526,7 +525,7 @@ void GameState::update(const float& dt){
 		this->updatePlayerGUI(dt);
 
 		//Updata vse enemye
-		this->updateCombatAndEnemies(dt);
+		//this->updateCombatAndEnemies(dt);
 
 		//Updata systeme
 		this->tts->update(dt);
@@ -556,9 +555,9 @@ void GameState::render(sf::RenderTarget* target){
 		false
 	);
 
-	for (auto *enemy : this->activeEnemies){
+	/*for (auto* enemy : this->activeEnemies) {
 		enemy->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
-	}
+	}*/
 
 	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
 
@@ -569,7 +568,7 @@ void GameState::render(sf::RenderTarget* target){
 	//Rendera GUI
 	this->renderTexture.setView(this->renderTexture.getDefaultView());
 	this->playerGUI->render(this->renderTexture);
-
+	 
 	if (this->paused){
 		//this->renderTexture.setView(this->renderTexture.getDefaultView());
 		this->pmenu->render(this->renderTexture);

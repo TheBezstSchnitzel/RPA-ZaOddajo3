@@ -116,53 +116,68 @@ void gui::Button::setId(const short unsigned id){
 
 //Funkcije
 void gui::Button::update(const sf::Vector2i& mousePosWindow){
-	//updata boole od hover pa active
+	if (this->buttonState != BTN_DISABLED) {
+		//updata boole od hover pa active
 
-	//Idle
-	this->buttonState = BTN_IDLE;
+		//Idle
+		this->buttonState = BTN_IDLE;
 
-	//Hover
-	if (this->shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))){
-		this->buttonState = BTN_HOVER;
+		//Hover
+		if (this->shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))) {
+			this->buttonState = BTN_HOVER;
 
-		//Pressed
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))this->lastMouseState = true;
-		else if (this->lastMouseState) {
-			this->buttonState = BTN_ACTIVE;
-			this->lastMouseState = false;
+			//Pressed
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))this->lastMouseState = true;
+			else if (this->lastMouseState) {
+				this->buttonState = BTN_ACTIVE;
+				this->lastMouseState = false;
+			}
+		}
+
+		switch (this->buttonState) {
+		case BTN_IDLE:
+			this->shape.setFillColor(this->idleColor);
+			this->text.setFillColor(this->textIdleColor);
+			this->shape.setOutlineColor(this->outlineIdleColor);
+			break;
+
+		case BTN_HOVER:
+			this->shape.setFillColor(this->hoverColor);
+			this->text.setFillColor(this->textHoverColor);
+			this->shape.setOutlineColor(this->outlineHoverColor);
+			break;
+
+		case BTN_ACTIVE:
+			this->shape.setFillColor(this->activeColor);
+			this->text.setFillColor(this->textActiveColor);
+			this->shape.setOutlineColor(this->outlineActiveColor);
+			break;
+
+		default:
+			this->shape.setFillColor(sf::Color::Red);
+			this->text.setFillColor(sf::Color::Blue);
+			this->shape.setOutlineColor(sf::Color::Green);
+			break;
 		}
 	}
-
-	switch (this->buttonState){
-	case BTN_IDLE:
+	else {
 		this->shape.setFillColor(this->idleColor);
 		this->text.setFillColor(this->textIdleColor);
 		this->shape.setOutlineColor(this->outlineIdleColor);
-		break;
-
-	case BTN_HOVER:
-		this->shape.setFillColor(this->hoverColor);
-		this->text.setFillColor(this->textHoverColor);
-		this->shape.setOutlineColor(this->outlineHoverColor);
-		break;
-
-	case BTN_ACTIVE:
-		this->shape.setFillColor(this->activeColor);
-		this->text.setFillColor(this->textActiveColor);
-		this->shape.setOutlineColor(this->outlineActiveColor);
-		break;
-
-	default:
-		this->shape.setFillColor(sf::Color::Red);
-		this->text.setFillColor(sf::Color::Blue);
-		this->shape.setOutlineColor(sf::Color::Green);
-		break;
 	}
 }
 
 void gui::Button::render(sf::RenderTarget& target){
 	target.draw(this->shape);
 	target.draw(this->text);
+}
+
+void gui::Button::disable(){
+	this->buttonState = BTN_DISABLED;
+}
+
+void gui::Button::enable(){
+	this->buttonState = BTN_IDLE;
 }
 
 void gui::Button::makeSound() {

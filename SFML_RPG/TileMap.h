@@ -3,6 +3,7 @@
 #include "EnemySpawnerTile.h"
 #include "RegularTile.h"
 #include "EnemySystem.h"
+#include "EllipseShape.h"
 
 class TileMap{
 private:

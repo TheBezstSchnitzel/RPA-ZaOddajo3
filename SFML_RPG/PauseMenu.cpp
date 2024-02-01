@@ -47,6 +47,10 @@ void PauseMenu::makeSound(const std::string key){
 	this->buttons[key]->makeSound();
 }
 
+unsigned short PauseMenu::getStatus(const std::string key){
+	return this->buttons[key]->getStatus();
+}
+
 //Funkcije
 const bool PauseMenu::isButtonPressed(const std::string key){
 	return this->buttons[key]->isPressed();

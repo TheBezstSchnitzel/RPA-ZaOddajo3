@@ -1,6 +1,6 @@
 #pragma once
 
-enum button_states{BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE};
+enum button_states{BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE, BTN_DISABLED};
 
 namespace gui{
 	const float p2pX(const float perc, const sf::VideoMode& vm);
@@ -54,6 +54,10 @@ namespace gui{
 		//Funkcije
 		void update(const sf::Vector2i& mousePosWindow);
 		void render(sf::RenderTarget& target);
+
+		void disable();
+		void enable();
+
 		//zvok
 		void makeSound();
 		short getStatus();
