@@ -331,10 +331,9 @@ void TileMap::updateTileCollision(Entity * entity, const float & dt){
 				sf::FloatRect playerBounds = entity->getGlobalBounds();
 				sf::FloatRect wallBounds = this->map[x][y][this->layer][k]->getGlobalBounds();
 				sf::FloatRect nextPositionBounds = entity->getNextPositionBounds(dt);
-
 				if (this->map[x][y][this->layer][k]->getCollision() &&
-					this->map[x][y][this->layer][k]->intersects(nextPositionBounds)
-					) { //player dol collision ,,,,, zgorna stran tila
+					this->map[x][y][this->layer][k]->intersects(nextPositionBounds)){
+					//player dol collision ,,,,, zgorna stran tila
 					if (nextPositionBounds.top < wallBounds.top
 						&& nextPositionBounds.top + nextPositionBounds.height < wallBounds.top + wallBounds.height
 						&& nextPositionBounds.left < wallBounds.left + wallBounds.width

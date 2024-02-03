@@ -559,9 +559,9 @@ void GameState::render(sf::RenderTarget* target){
 		enemy->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
 	}*/
 
-	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
-
 	this->tileMap->renderDeferred(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter());
+
+	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true); // ta zadna je za rendiranje hitboxa k je debug sam
 
 	this->tts->render(this->renderTexture);
 

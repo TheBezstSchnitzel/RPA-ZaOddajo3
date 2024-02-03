@@ -5,6 +5,7 @@
 #include "AnimationComponent.h"
 #include "AttributeComponent.h"
 #include "SkillComponent.h"
+#include "EllipseShape.h"
 
 class HitboxComponent;
 class MovementComponent;
@@ -34,7 +35,7 @@ public:
 	void setTexture(sf::Texture& texture);
 	void createHitboxComponent(sf::Sprite& sprite,
 		float offset_x, float offset_y,
-		float width, float height, bool hasBetterHitbox = false);
+		float width, float height);
 	void createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration);
 	void createAnimationComponent(sf::Texture& texture_sheet);
 	void createAttributeComponent(const unsigned level, int startHP, int maxHP);

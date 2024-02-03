@@ -12,12 +12,13 @@ void Player::initVariables(){
 }
 
 void Player::initComponents(sf::Texture& texture_sheet){
-	//this->createHitboxComponent(this->sprite, 16.f, 26.f, 32.f, 38.f, false);
-	this->createHitboxComponent(this->sprite, 9.f, 47.f, 23.f, 10.f, false);
+	//this->createHitboxComponent(this->sprite, 16.f, 26.f, 32.f, 38.f, true, 9.f, 47.f, 23.f, 10.f);
+	//this->createHitboxComponent(this->sprite, 9.f, 47.f, 23.f, 10.f, false);
+	this->createHitboxComponent(this->sprite, 17.f, 49.f, 30.f, 15.f);
 	this->createMovementComponent(140.f, 1400.f, 1000.f);
 	this->createAnimationComponent(texture_sheet);
 	this->createAttributeComponent(1,15,20);
-	this->createSkillComponent();
+	//this->createSkillComponent();
 }
 
 void Player::initAnimations(){

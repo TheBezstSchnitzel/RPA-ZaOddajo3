@@ -3,7 +3,8 @@
 
 HitboxComponent::HitboxComponent(sf::Sprite& sprite,
 	float offset_x, float offset_y, 
-	float width, float height, bool hasBetterHitbox) : sprite(sprite), offsetX(offset_x), offsetY(offset_y), hasBetterHitbox(hasBetterHitbox){
+	float width, float height):	
+	sprite(sprite), offsetX(offset_x), offsetY(offset_y){
 	this->nextPosition.left = 0.f;
 	this->nextPosition.top = 0.f;
 	this->nextPosition.width = width;
@@ -42,6 +43,7 @@ const sf::FloatRect & HitboxComponent::getNextPosition(const sf::Vector2f & velo
 
 	return this->nextPosition;
 }
+
 
 void HitboxComponent::setPosition(const sf::Vector2f& position){
 	this->hitbox.setPosition(position);
