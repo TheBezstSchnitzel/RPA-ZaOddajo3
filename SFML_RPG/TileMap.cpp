@@ -201,6 +201,7 @@ void TileMap::loadFromFile(const std::string file_name){
 		short type = 0;
 
 		in_file >> size.x >> size.y >> gridSize >> layers >> texture_file;
+		//Resources/Images/Tiles/tilesheet3.png
 
 		this->gridSizeF = static_cast<float>(gridSize);
 		this->gridSizeI = gridSize;
@@ -437,25 +438,25 @@ void TileMap::render
 ){
 	this->layer = 0;
 
-	this->fromX = gridPosition.x - 15;
+	this->fromX = gridPosition.x - 21;
 	if (this->fromX < 0)
 		this->fromX = 0;
 	else if (this->fromX > this->maxSizeWorldGrid.x)
 		this->fromX = this->maxSizeWorldGrid.x;
 
-	this->toX = gridPosition.x + 16;
+	this->toX = gridPosition.x + 22;
 	if (this->toX < 0)
 		this->toX = 0;
 	else if (this->toX > this->maxSizeWorldGrid.x)
 		this->toX = this->maxSizeWorldGrid.x;
 
-	this->fromY = gridPosition.y - 8;
+	this->fromY = gridPosition.y - 12;
 	if (this->fromY < 0)
 		this->fromY = 0;
 	else if (this->fromY > this->maxSizeWorldGrid.y)
 		this->fromY = this->maxSizeWorldGrid.y;
 
-	this->toY = gridPosition.y + 9;
+	this->toY = gridPosition.y + 13;
 	if (this->toY < 0)
 		this->toY = 0;
 	else if (this->toY > this->maxSizeWorldGrid.y)

@@ -71,12 +71,25 @@ void EditorState::initGui(){
 }
 
 void EditorState::initTileMap(){
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/tilesheet3.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Test/full_version/tiles/floorTiles.png");
+	//Resources/Images/Tiles/tilesheet3.png
+	//SAM DEBUG 
+	/*std::ofstream oFile("Config/text.slmp");
+	if (oFile.is_open()) {
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				for (int t = 0; t < 7; t++) {
+					oFile << i << " " << j << " 0 0 16 16 0 ";
+				}
+			}
+		}
+		oFile.close();
+	}	*/
 }
 
 void EditorState::initModes(){
 	this->modes.push_back(new DefaultEditorMode(this->stateData, this->tileMap, &this->editorStateData));
-	this->modes.push_back(new EnemyEditorMode(this->stateData, this->tileMap, &this->editorStateData));
+	//this->modes.push_back(new EnemyEditorMode(this->stateData, this->tileMap, &this->editorStateData));
 
 	this->activeMode = EditorModes::DEFAULT_EDITOR_MODE;
 }
@@ -171,11 +184,11 @@ void EditorState::updatePauseMenuButtons(){
 	}
 	if (this->pmenu->isButtonPressed("SAVE")) {
 		this->pmenu->makeSound("SAVE");
-		this->tileMap->saveToFile("text.slmp");
+		this->tileMap->saveToFile("Config/text.slmp");
 	}
 	if (this->pmenu->isButtonPressed("LOAD")) {
 		this->pmenu->makeSound("LOAD");
-		this->tileMap->loadFromFile("text.slmp");
+		this->tileMap->loadFromFile("Config/text.slmp");
 	}
 }
 
