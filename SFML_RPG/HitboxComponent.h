@@ -5,18 +5,20 @@
 class HitboxComponent{
 private:
 	sf::Sprite& sprite;
-	//sf::RectangleShape hitbox;
+	sf::RectangleShape hitbox;
 	sf::FloatRect nextPosition;
 	float offsetX;
 	float offsetY;
 
+	bool hasBetterHitbox;
+
 	//test
-	EllipseShape hitbox;
+	//EllipseShape hitbox;
 
 public:
 	HitboxComponent(sf::Sprite& sprite, 
 		float offset_x, float offset_y, 
-		float width, float height);
+		float width, float height, bool hasBetterHitbox = false);
 	virtual ~HitboxComponent();
 
 	//Dostop

@@ -28,8 +28,8 @@ void Entity::setTexture(sf::Texture& texture){
 
 void Entity::createHitboxComponent(sf::Sprite & sprite, 
 	float offset_x, float offset_y,
-	float width, float height){
-	this->hitboxComponent = new HitboxComponent(sprite, offset_x, offset_y, width, height);
+	float width, float height, bool hasBetterHitbox){
+	this->hitboxComponent = new HitboxComponent(sprite, offset_x, offset_y, width, height, hasBetterHitbox);
 }
 
 void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration){

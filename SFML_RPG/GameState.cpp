@@ -111,7 +111,7 @@ void GameState::initEnemySystem(){
 }
 
 void GameState::initTileMap(){
-	this->tileMap = new TileMap("text.slmp");
+	this->tileMap = new TileMap("Config/text.slmp");
 }
 
 void GameState::initSystems(){
