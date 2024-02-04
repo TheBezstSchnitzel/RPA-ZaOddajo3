@@ -30,6 +30,8 @@ void EditorState::initView(){
 		static_cast<float>(this->stateData->gfxSettings->resolution.width) / 2.f,
 		static_cast<float>(this->stateData->gfxSettings->resolution.height) / 2.f
 	);
+
+	this->view.zoom(0.5f);
 }
 
 void EditorState::initFonts(){

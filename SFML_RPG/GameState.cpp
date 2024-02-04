@@ -135,7 +135,7 @@ void GameState::initInGameTimers(){
 	//this->dayTimerMax = 5.f; // v minutah
 	//this->nightTimerMax = 5.f;//v minutah
 	switch (this->currentSeason) {
-	case pomlad:this->dayTimerMax = 1.f; this->nightTimerMax = 1.f; break;
+	case pomlad:this->dayTimerMax = 10.f; this->nightTimerMax = 10.f; break;
 	case poletje:this->dayTimerMax = 11.6f; this->nightTimerMax = 8.4f; break;
 	case jesen:this->dayTimerMax = 10.f; this->nightTimerMax = 10.f; break;
 	case zima:this->dayTimerMax = 8.4f; this->nightTimerMax = 11.6f; break;
