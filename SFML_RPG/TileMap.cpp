@@ -434,29 +434,33 @@ void TileMap::render
 	const sf::Vector2i& gridPosition, 
 	sf::Shader* shader, 
 	const sf::Vector2f playerPosition, 
-	const bool show_collision
+	const bool show_collision,
+	const bool isZoomedOut
 ){
 	this->layer = 0;
 
-	this->fromX = gridPosition.x - 21;
+	int tempX = (isZoomedOut) ? 22 : 11;
+	int tempY = (isZoomedOut) ? 12 : 6;
+
+	this->fromX = gridPosition.x - tempX;
 	if (this->fromX < 0)
 		this->fromX = 0;
 	else if (this->fromX > this->maxSizeWorldGrid.x)
 		this->fromX = this->maxSizeWorldGrid.x;
 
-	this->toX = gridPosition.x + 22;
+	this->toX = gridPosition.x + tempX + 1;
 	if (this->toX < 0)
 		this->toX = 0;
 	else if (this->toX > this->maxSizeWorldGrid.x)
 		this->toX = this->maxSizeWorldGrid.x;
 
-	this->fromY = gridPosition.y - 12;
+	this->fromY = gridPosition.y - tempY;
 	if (this->fromY < 0)
 		this->fromY = 0;
 	else if (this->fromY > this->maxSizeWorldGrid.y)
 		this->fromY = this->maxSizeWorldGrid.y;
 
-	this->toY = gridPosition.y + 13;
+	this->toY = gridPosition.y + tempY + 1;
 	if (this->toY < 0)
 		this->toY = 0;
 	else if (this->toY > this->maxSizeWorldGrid.y)

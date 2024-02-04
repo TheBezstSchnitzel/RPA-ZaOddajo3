@@ -30,6 +30,8 @@ private:
 	sf::RenderTexture renderTexture;
 	sf::Sprite renderSprite;
 
+	bool isZoomedOut;
+
 	sf::Font font;
 	PauseMenu* pmenu;
 
@@ -38,6 +40,8 @@ private:
 
 	sf::Clock keyTimer;
 	float keyTimeMax;
+
+	std::map<std::string, sf::Clock> keybindsTimes;
 
 	//in game time
 	sf::Clock dayTimer;
@@ -72,6 +76,7 @@ private:
 
 	//Privatne funkcije
 	//inicializacija
+	void initVariables();
 	void initDeferredRender();
 	void initView();
 	void initKeybinds();

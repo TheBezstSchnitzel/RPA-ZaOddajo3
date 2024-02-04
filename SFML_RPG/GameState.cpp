@@ -3,6 +3,10 @@
 #include "Game.h"
 #include <filesystem>
 
+void GameState::initVariables(){
+	this->isZoomedOut = false;
+}
+
 //Inicializacija
 void GameState::initDeferredRender(){
 	this->renderTexture.create(
@@ -35,6 +39,7 @@ void GameState::initView(){
 			static_cast<float>(this->stateData->gfxSettings->resolution.height) / 2.f
 		)
 	);
+	if(!this->isZoomedOut)this->view.zoom(0.5f);
 }
 
 void GameState::initKeybinds(){
@@ -46,6 +51,7 @@ void GameState::initKeybinds(){
 
 		while (ifs >> key >> key2){
 			this->keybinds[key] = this->supportedKeys->at(key2);
+			if(key == "ZOOM")this->keybindsTimes[key] = sf::Clock();
 		}
 	}
 
@@ -141,7 +147,7 @@ void GameState::loadFromSave_misc(){
 	if (saveIFile.is_open()) {
 		//Zapisovanje podatkov
 		std::getline(saveIFile, this->creationDate);
-
+		saveIFile >> this->isZoomedOut;
 		saveIFile.close();
 	}
 	else {
@@ -202,7 +208,7 @@ void GameState::save_misc(){
 	if (saveOFile.is_open()) {
 		//shranjevanje
 		saveOFile << this->creationDate << std::endl;
-
+		saveOFile << this->isZoomedOut << std::endl;
 		saveOFile.close();
 	}
 	else {
@@ -278,6 +284,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	if (std::filesystem::exists(savefilePath))this->loadFromSave();
 	else {
 		//save se ne obstaja
+		this->initVariables();
 		this->initPlayers();
 		this->creationDate = whatTime();
 		this->initInGameTime();
@@ -384,6 +391,18 @@ void GameState::updatePlayerInput(const float & dt){
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN")))){
 		this->player->move(0.f, 1.f, dt);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("ZOOM"))) && 
+		this->keybindsTimes.at("ZOOM").getElapsedTime().asSeconds() >= this->keyTimeMax) {
+		//ta drug pogoj sam preverja da ne spemas zooma
+		this->keybindsTimes.at("ZOOM").restart();
+		if (this->isZoomedOut) {
+			this->view.zoom(0.5f);
+		}
+		else {
+			this->view.zoom(2.f);
+		}
+		this->isZoomedOut = !this->isZoomedOut;
 	}
 }
 
@@ -552,7 +571,7 @@ void GameState::render(sf::RenderTarget* target){
 		this->viewGridPosition, 
 		this->isDay ? &this->temp : &this->core_shader,
 		this->player->getCenter(),
-		false
+		false, this->isZoomedOut
 	);
 
 	/*for (auto* enemy : this->activeEnemies) {
