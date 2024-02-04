@@ -65,7 +65,10 @@ void GameState::initFonts(){
 }
 
 void GameState::initTextures(){
-	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET2.png")){
+	/*if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET2.png")) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
+	}*/
+	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Test/new_playerSpriteSheet_Osnova_beu.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
 	}
 

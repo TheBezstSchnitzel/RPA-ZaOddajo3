@@ -23,12 +23,12 @@ void Player::initComponents(sf::Texture& texture_sheet){
 }
 
 void Player::initAnimations(){
-	this->animationComponent->addAnimation("IDLE", 15.f, 0, 0, 8, 0, 64, 64);
-	this->animationComponent->addAnimation("WALK_DOWN", 11.f, 0, 1, 3, 1, 64, 64);
-	this->animationComponent->addAnimation("WALK_LEFT", 11.f, 4, 1, 7, 1, 64, 64);
-	this->animationComponent->addAnimation("WALK_RIGHT", 11.f, 8, 1, 11, 1, 64, 64);
-	this->animationComponent->addAnimation("WALK_UP", 11.f, 12, 1, 15, 1, 64, 64);
-	this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 64, 64);
+	this->animationComponent->addAnimation("IDLE", 15.f, 0, 2, 0, 2, 64, 64);
+	this->animationComponent->addAnimation("WALK_DOWN", 5.0f, 0, 6, 8, 6, 64, 64);
+	this->animationComponent->addAnimation("WALK_LEFT", 5.0f, 0, 5, 8, 5, 64, 64);
+	this->animationComponent->addAnimation("WALK_RIGHT", 5.0f, 0, 7, 8, 7, 64, 64);
+	this->animationComponent->addAnimation("WALK_UP", 5.0f, 0, 4, 8, 4, 64, 64);
+	//this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 64, 64);
 }
 
 void Player::initInventory(){
