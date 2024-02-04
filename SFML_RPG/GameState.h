@@ -11,10 +11,10 @@
 class Game;
 
 enum letniCasi {
-	pomlad = 1,
-	poletje = 2,
-	jesen = 3,
-	zima = 4,
+	pomlad = 1, // 12 ur dneva
+	poletje = 2, // 14 ur dneva
+	jesen = 3, // 12 ur dneva
+	zima = 4, // 10 ur dneva
 };
 
 class GameState : public State {
@@ -107,6 +107,10 @@ private:
 	void save_inGameTime();
 	void save_player();
 	void save();
+
+	//Game time
+	int calculateHour();
+	int calculateMinute();
 
 public:
 	GameState(StateData* state_data, Game* game, unsigned short save);

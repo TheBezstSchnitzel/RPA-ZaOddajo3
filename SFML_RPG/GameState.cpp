@@ -128,12 +128,18 @@ void GameState::initInGameTime(){
 	this->isDay = true;
 	this->gameDaysElapsed = 0;
 	this->currentSeason = pomlad;
-	this->dayTimerOff = this->nightTimerOff = 0;
+	this->dayTimerOff = this->nightTimerOff = 0; //offseti za gledanje iz shranjevanja
 }
 
 void GameState::initInGameTimers(){
-	this->dayTimerMax = 1.f;
-	this->nightTimerMax = 0.5f;
+	//this->dayTimerMax = 5.f; // v minutah
+	//this->nightTimerMax = 5.f;//v minutah
+	switch (this->currentSeason) {
+	case pomlad:this->dayTimerMax = 1.f; this->nightTimerMax = 1.f; break;
+	case poletje:this->dayTimerMax = 11.6f; this->nightTimerMax = 8.4f; break;
+	case jesen:this->dayTimerMax = 10.f; this->nightTimerMax = 10.f; break;
+	case zima:this->dayTimerMax = 8.4f; this->nightTimerMax = 11.6f; break;
+	}
 	this->dayTimer.restart();
 	this->nightTimer.restart();
 }
@@ -266,6 +272,53 @@ void GameState::save(){
 	this->save_inGameTime();
 	this->save_misc();
 	this->save_player();
+}
+
+int GameState::calculateHour(){
+	int minutesInDay = 720;
+	int hours = 0;
+	switch (this->currentSeason) {
+	case pomlad:break;
+	case poletje:minutesInDay = 840;break;
+	case jesen:break;
+	case zima:minutesInDay = 600;break;
+	}
+	int minutesInNight = 1440 - minutesInDay;
+	if (this->isDay) {
+		float minutsElapsed = floor(this->dayTimer.getElapsedTime().asSeconds()) / 60.f;
+		minutsElapsed += floor(this->dayTimerOff) / 60.f;
+		float realMinutes = minutsElapsed * minutesInDay / this->dayTimerMax;
+		hours = floor(realMinutes / 60);
+	}
+	else {
+		float minutsElapsed = floor(this->nightTimer.getElapsedTime().asSeconds() + this->nightTimerOff) / 60.f;
+		float realMinutes = minutsElapsed * minutesInNight / this->nightTimerMax;
+		hours = floor(realMinutes / 60);
+	}
+	return hours;
+}
+
+int GameState::calculateMinute(){
+	int minutesInDay = 720;
+	int minutes = 0;
+	switch (this->currentSeason) {
+	case pomlad:break;
+	case poletje:minutesInDay = 840; break;
+	case jesen:break;
+	case zima:minutesInDay = 600; break;
+	}
+	int minutesInNight = 1440 - minutesInDay;
+	if (this->isDay) {
+		float minutsElapsed = floor(this->dayTimer.getElapsedTime().asSeconds()) / 60.f;
+		int realMinutes = minutsElapsed * minutesInDay / this->dayTimerMax;
+		minutes = realMinutes % 60;
+	}
+	else {
+		float minutsElapsed = floor(this->nightTimer.getElapsedTime().asSeconds()) / 60.f;
+		int realMinutes = minutsElapsed * minutesInNight / this->nightTimerMax;
+		minutes = realMinutes % 60;
+	}
+	return minutes;
 }
 
 std::string whatTime() {
@@ -495,8 +548,7 @@ void GameState::updateDebugText(const float& dt){
 	std::stringstream ss;
 
 	ss << "Mouse Pos View: " << this->mousePosView.x << " " << this->mousePosView.y << "\n"
-	<< "Active Enemies: " << 0 << "\n";//this->activeEnemies.size() << "\n";
-
+		<< "Active Enemies: " << 0 << "\n";//this->activeEnemies.size() << "\n";
 	this->debugText.setString(ss.str());
 }
 
@@ -519,10 +571,20 @@ void GameState::updateInGameTime(){
 			if (this->gameDaysElapsed % 20 == 0 && this->gameDaysElapsed != 0) {
 				if (static_cast<int>(this->currentSeason) == 4)this->currentSeason = pomlad;
 				else this->currentSeason = static_cast<letniCasi>(static_cast<int>(this->currentSeason) + 1);
-				std::cout << "Spreminjam letni cas v : " << this->currentSeason << std::endl;
+				//std::cout << "Spreminjam letni cas v : " << this->currentSeason << std::endl;
+				switch (this->currentSeason) {
+					case pomlad:this->dayTimerMax = 5.f; this->nightTimerMax = 5.f; break;
+					case poletje:this->dayTimerMax = 5.8f; this->nightTimerMax = 4.2f; break;
+					case jesen:this->dayTimerMax = 5.f; this->nightTimerMax = 5.f; break;
+					case zima:this->dayTimerMax = 4.2f; this->nightTimerMax = 5.8f; break;
+				}
 			}
 		}
 	}
+	std::cout << calculateHour() << ":" << calculateMinute() << std::endl; //DEBUG
+	//std::cout << this->dayTimerOff << "  " << this->nightTimerOff << std::endl;
+	//this->calculateHour();
+	//this->calculateMinute();
 }
 
 void GameState::update(const float& dt){
