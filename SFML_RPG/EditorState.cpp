@@ -60,8 +60,16 @@ void EditorState::initPauseMenu(){
 	this->pmenu = new PauseMenu(this->stateData->gfxSettings->resolution, this->font);
 
 	this->pmenu->addButton("QUIT", gui::p2pY(74.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Quit");
-	this->pmenu->addButton("SAVE", gui::p2pY(46.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Save");
-	this->pmenu->addButton("LOAD", gui::p2pY(37.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Load");
+	this->pmenu->addButton("SAVE", gui::p2pY(36.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Save");
+	this->pmenu->addButton("LOAD", gui::p2pY(27.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Load");
+
+	std::vector<std::string> modes_str;
+	modes_str.push_back("POMLAD");
+	modes_str.push_back("POLETJE");
+	modes_str.push_back("JESEN");
+	modes_str.push_back("ZIMA");
+
+	this->pmenu->addDropDownList("SEASON", gui::p2pY(45.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),modes_str.data(), modes_str.size());
 }
 
 void EditorState::initButtons(){
@@ -73,7 +81,7 @@ void EditorState::initGui(){
 }
 
 void EditorState::initTileMap(){
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Test/full_version/tiles/floorTiles.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/newFloorTiles_Pomlad.png");
 	//Resources/Images/Tiles/tilesheet3.png
 	//SAM DEBUG 
 	/*std::ofstream oFile("Config/text.slmp");
@@ -190,7 +198,23 @@ void EditorState::updatePauseMenuButtons(){
 	}
 	if (this->pmenu->isButtonPressed("LOAD")) {
 		this->pmenu->makeSound("LOAD");
-		this->tileMap->loadFromFile("Config/text.slmp");
+		std::string textureFile;
+		switch (this->pmenu->getDropDownList("SEASON")->getActiveElementId()) {
+		case 0:
+			textureFile = "Resources/Images/Tiles/newFloorTiles_Pomlad.png";
+			break;
+		case 1:
+			textureFile = "Resources/Images/Tiles/newFloorTiles_Poletje.png";
+			break;
+		case 2:
+			textureFile = "Resources/Images/Tiles/newFloorTiles_Jesen.png";
+			break;
+		case 3:
+			textureFile = "Resources/Images/Tiles/newFloorTiles_Zima.png";
+			break;
+		default:textureFile = "Resources/Images/Tiles/newFloorTiles_Pomlad.png";
+		}
+		this->tileMap->loadFromFile("Config/text.slmp",textureFile);
 	}
 }
 
@@ -210,7 +234,7 @@ void EditorState::update(const float& dt){
 		this->updateModes(dt);		
 	}
 	else{
-		this->pmenu->update(this->mousePosWindow);
+		this->pmenu->update(this->mousePosWindow,dt);
 		this->updatePauseMenuButtons();
 	}
 }

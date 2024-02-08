@@ -67,9 +67,21 @@ void PauseMenu::addButton(const std::string key, const float y,	const float widt
 	);
 }
 
-void PauseMenu::update(const sf::Vector2i& mousePosWindow){
+void PauseMenu::addDropDownList(const std::string key, float y, float width, float height, std::string list[], unsigned nrOfElements, unsigned default_index){
+	float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
+	this->dropDownLists[key] = new gui::DropDownList(x,y,width,height,this->font,list,nrOfElements,default_index);
+}
+
+gui::DropDownList* PauseMenu::getDropDownList(std::string key){
+	return this->dropDownLists[key];
+}
+
+void PauseMenu::update(const sf::Vector2i& mousePosWindow, const float& dt){
 	for (auto &i : this->buttons){
 		i.second->update(mousePosWindow);
+	}
+	for (auto& i : this->dropDownLists) {
+		i.second->update(mousePosWindow,dt);
 	}
 }
 
@@ -78,6 +90,9 @@ void PauseMenu::render(sf::RenderTarget & target){
 	target.draw(this->container);
 
 	for (auto &i : this->buttons){
+		i.second->render(target);
+	}
+	for (auto& i : this->dropDownLists) {
 		i.second->render(target);
 	}
 
