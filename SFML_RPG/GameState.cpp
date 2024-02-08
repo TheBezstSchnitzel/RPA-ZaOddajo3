@@ -529,35 +529,6 @@ void GameState::updateDebugText(const float& dt){
 }
 
 void GameState::updateInGameTime(){
-	/*
-	if (this->isDay) { //ce je dan
-		if (floor((this->dayTimer.getElapsedTime().asSeconds()+this->dayTimerOff)*100/60)/100 >= this->dayTimerMax) {
-			//cas za dan je pretuku je treba spremenit v noc
-			if (this->dayTimerOff != 0)this->dayTimerOff = 0;
-			this->isDay = false;
-			this->nightTimer.restart();
-		}
-	}
-	else { // ce je noc
-		if (floor((this->nightTimer.getElapsedTime().asSeconds()+this->nightTimerOff)*100/60)/100 >= this->nightTimerMax) {
-			//cas za noc je poteku je treba sprement v dan
-			if (this->nightTimerOff != 0)this->nightTimerOff = 0;
-			this->isDay = true;
-			this->dayTimer.restart();
-			this->gameDaysElapsed++;
-			if (this->gameDaysElapsed % 20 == 0 && this->gameDaysElapsed != 0) {
-				if (static_cast<int>(this->currentSeason) == 4)this->currentSeason = pomlad;
-				else this->currentSeason = static_cast<letniCasi>(static_cast<int>(this->currentSeason) + 1);
-				//std::cout << "Spreminjam letni cas v : " << this->currentSeason << std::endl;
-				switch (this->currentSeason) {
-					case pomlad:this->dayTimerMax = 5.f; this->nightTimerMax = 5.f; break;
-					case poletje:this->dayTimerMax = 5.8f; this->nightTimerMax = 4.2f; break;
-					case jesen:this->dayTimerMax = 5.f; this->nightTimerMax = 5.f; break;
-					case zima:this->dayTimerMax = 4.2f; this->nightTimerMax = 5.8f; break;
-				}
-			}
-		}
-	}*/
 	this->updateHours_Minutes();
 	if (this->isDay && this->inGameTime_Hours == this->whenIsNightHour) {
 		//dan se je koncau torej bo zdej noc
@@ -578,10 +549,7 @@ void GameState::updateInGameTime(){
 		case zima:this->whenIsNightHour = 17; this->whenIsDayHour = 7; break;
 		}
 	}
-	//std::cout << calculateHour() << ":" << calculateMinute() << std::endl; //DEBUG
-	//std::cout << this->dayTimerOff << "  " << this->nightTimerOff << std::endl;
-	//this->calculateHour();
-	//this->calculateMinute();
+	this->playerGUI->updateClockDisplay(this->inGameTime_Hours, this->inGameTime_Minutes);
 }
 
 void GameState::update(const float& dt){
