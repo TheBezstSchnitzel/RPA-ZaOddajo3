@@ -16,7 +16,7 @@ void Player::initComponents(sf::Texture& texture_sheet){
 	//this->createHitboxComponent(this->sprite, 9.f, 47.f, 23.f, 10.f, false);
 	this->createHitboxComponent(this->sprite, 8.5f, 24.5f, 15.f, 7.5f);
 	//this->createMovementComponent(140.f, 1400.f, 1000.f);
-	this->createMovementComponent(100.f, 1400.f, 1000.f);
+	this->createMovementComponent(100.f, 1400.f, 1000.f); //150.f
 	this->createAnimationComponent(texture_sheet);
 	this->createAttributeComponent(1,15,20);
 	//this->createSkillComponent();
@@ -104,6 +104,10 @@ const unsigned Player::getDamage() const{
 	(this->attributeComponent->damageMax + this->weapon->getDamageMax()) 
 	- (this->attributeComponent->damageMin + this->weapon->getDamageMin()) + 1)
 	+ (this->attributeComponent->damageMin + this->weapon->getDamageMin());
+}
+
+void Player::setNewMaxVelocity(float newMaxVelocity){
+	this->getMovementComponent()->setNewMaxVelocity(newMaxVelocity);
 }
 
 void Player::setInitAttack(const bool initAttack){

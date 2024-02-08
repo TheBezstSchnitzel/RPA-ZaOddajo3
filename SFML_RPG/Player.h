@@ -42,6 +42,8 @@ public:
 
 	const unsigned getDamage() const;
 
+	void setNewMaxVelocity(float newMaxVelocity);
+
 	//Interface
 	void setInitAttack(const bool initAttack);
 

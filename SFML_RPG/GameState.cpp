@@ -39,7 +39,12 @@ void GameState::initView(){
 			static_cast<float>(this->stateData->gfxSettings->resolution.height) / 2.f
 		)
 	);
-	if(!this->isZoomedOut)this->view.zoom(0.5f);
+	if (!this->isZoomedOut) {
+		this->view.zoom(0.5f);
+	}
+	else {
+		this->player->setNewMaxVelocity(140.f);
+	}
 }
 
 void GameState::initKeybinds(){
@@ -426,10 +431,14 @@ void GameState::updatePlayerInput(const float & dt){
 		//ta drug pogoj sam preverja da ne spemas zooma
 		this->keybindsTimes.at("ZOOM").restart();
 		if (this->isZoomedOut) {
+			//zoom in
 			this->view.zoom(0.5f);
+			this->player->setNewMaxVelocity(100.f);
 		}
 		else {
+			//zoom out
 			this->view.zoom(2.f);
+			this->player->setNewMaxVelocity(140.f);
 		}
 		this->isZoomedOut = !this->isZoomedOut;
 	}

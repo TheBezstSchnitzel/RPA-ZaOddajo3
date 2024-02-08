@@ -19,6 +19,10 @@ const sf::Vector2f & MovementComponent::getVelocity() const{
 	return this->velocity;
 }
 
+void MovementComponent::setNewMaxVelocity(float newMaxVelocity){
+	this->maxVelocity = newMaxVelocity;
+}
+
 //Funkcije
 const bool MovementComponent::getState(const short unsigned state) const{
 	switch (state){
