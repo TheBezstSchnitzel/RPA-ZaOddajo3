@@ -44,13 +44,11 @@ private:
 	std::map<std::string, sf::Clock> keybindsTimes;
 
 	//in game time
-	sf::Clock dayTimer;
-	float dayTimerOff; //kdr nalozis iz savea
-	float dayTimerMax;
+	int whenIsNightHour; //kdaj se dan spremeni u noc
+	int whenIsDayHour; //kdaj se noc spremeni u dan
 
-	sf::Clock nightTimer;
-	float nightTimerOff; //kdr nalozis iz savea
-	float nightTimerMax;
+	int inGameTime_Hours;
+	int inGameTime_Minutes;
 
 	bool isDay;
 
@@ -109,8 +107,9 @@ private:
 	void save();
 
 	//Game time
-	int calculateHour();
-	int calculateMinute();
+	sf::Clock minutesTimer;
+	float minutesTimerMax;
+	void updateHours_Minutes();
 
 public:
 	GameState(StateData* state_data, Game* game, unsigned short save);

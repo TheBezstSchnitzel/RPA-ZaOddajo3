@@ -128,23 +128,27 @@ void GameState::initSystems(){
 }
 
 void GameState::initInGameTime(){
+	//ce ni prejsnega progressa se klice ta funkcija
 	this->isDay = true;
 	this->gameDaysElapsed = 0;
 	this->currentSeason = pomlad;
-	this->dayTimerOff = this->nightTimerOff = 0; //offseti za gledanje iz shranjevanja
+	
+	this->inGameTime_Hours = 6;
+	this->inGameTime_Minutes = 0;
 }
 
 void GameState::initInGameTimers(){
 	//this->dayTimerMax = 5.f; // v minutah
 	//this->nightTimerMax = 5.f;//v minutah
 	switch (this->currentSeason) {
-	case pomlad:this->dayTimerMax = 10.f; this->nightTimerMax = 10.f; break;
-	case poletje:this->dayTimerMax = 11.6f; this->nightTimerMax = 8.4f; break;
-	case jesen:this->dayTimerMax = 10.f; this->nightTimerMax = 10.f; break;
-	case zima:this->dayTimerMax = 8.4f; this->nightTimerMax = 11.6f; break;
+	case pomlad:this->whenIsNightHour = 18; this->whenIsDayHour = 6; break;
+	case poletje:this->whenIsNightHour = 19; this->whenIsDayHour = 5; break;
+	case jesen:this->whenIsNightHour = 18; this->whenIsDayHour = 6; break;
+	case zima:this->whenIsNightHour = 17; this->whenIsDayHour = 7; break;
 	}
-	this->dayTimer.restart();
-	this->nightTimer.restart();
+
+	this->minutesTimer.restart();
+	this->minutesTimerMax = 1.f; //1s = 1min; 1min = 1h
 }
 
 //funkcije za branje shranjenih podatkov
@@ -172,7 +176,8 @@ void GameState::loadFromSave_inGameTime(){
 	if (saveIFile.is_open()) {
 		//Zapisovanje podatkov
 		std::string seasonTmp = "";
-		saveIFile >> this->isDay >> this->dayTimerOff >> this->nightTimerOff;
+		saveIFile >> this->isDay;
+		saveIFile >> this->inGameTime_Hours >> this->inGameTime_Minutes;
 		saveIFile >> this->gameDaysElapsed >> seasonTmp;
 		this->currentSeason = static_cast<letniCasi>(std::stoi(seasonTmp));
 		
@@ -236,13 +241,11 @@ void GameState::save_inGameTime(){
 	//shrani podatke
 	std::string timePath = path+"/time.txt";
 	std::ofstream saveOFile(timePath);
-	float tempDayTime = this->isDay ? this->dayTimer.getElapsedTime().asSeconds() : 0.f;
-	float tempNightTime = this->isDay ? 0.f : this->nightTimer.getElapsedTime().asSeconds();
 	if (saveOFile.is_open()) {
 		//Shranjevanje
 		saveOFile << this->isDay << std::endl;
-		saveOFile << tempDayTime << std::endl;
-		saveOFile << tempNightTime << std::endl;
+		saveOFile << this->inGameTime_Hours << std::endl;
+		saveOFile << this->inGameTime_Minutes << std::endl;
 		saveOFile << this->gameDaysElapsed << std::endl;
 		saveOFile << this->currentSeason << std::endl;
 
@@ -277,51 +280,21 @@ void GameState::save(){
 	this->save_player();
 }
 
-int GameState::calculateHour(){
-	int minutesInDay = 720;
-	int hours = 0;
-	switch (this->currentSeason) {
-	case pomlad:break;
-	case poletje:minutesInDay = 840;break;
-	case jesen:break;
-	case zima:minutesInDay = 600;break;
+void GameState::updateHours_Minutes(){
+	if (this->minutesTimer.getElapsedTime().asSeconds() >= this->minutesTimerMax) {
+		//spreminjanje minut
+		if (this->inGameTime_Minutes + 1 == 60) { //ce je poteklu 60min dodaje eno uro
+			this->inGameTime_Minutes = 0;
+			if (this->inGameTime_Hours + 1 == 24) { //ce potece 24 ur doda en dan
+				this->inGameTime_Hours = 0;
+				this->gameDaysElapsed++;
+			}
+			else this->inGameTime_Hours++;
+		}
+		else this->inGameTime_Minutes++;
+		this->minutesTimer.restart();
 	}
-	int minutesInNight = 1440 - minutesInDay;
-	if (this->isDay) {
-		float minutsElapsed = floor(this->dayTimer.getElapsedTime().asSeconds()) / 60.f;
-		minutsElapsed += floor(this->dayTimerOff) / 60.f;
-		float realMinutes = minutsElapsed * minutesInDay / this->dayTimerMax;
-		hours = floor(realMinutes / 60);
-	}
-	else {
-		float minutsElapsed = floor(this->nightTimer.getElapsedTime().asSeconds() + this->nightTimerOff) / 60.f;
-		float realMinutes = minutsElapsed * minutesInNight / this->nightTimerMax;
-		hours = floor(realMinutes / 60);
-	}
-	return hours;
-}
-
-int GameState::calculateMinute(){
-	int minutesInDay = 720;
-	int minutes = 0;
-	switch (this->currentSeason) {
-	case pomlad:break;
-	case poletje:minutesInDay = 840; break;
-	case jesen:break;
-	case zima:minutesInDay = 600; break;
-	}
-	int minutesInNight = 1440 - minutesInDay;
-	if (this->isDay) {
-		float minutsElapsed = floor(this->dayTimer.getElapsedTime().asSeconds()) / 60.f;
-		int realMinutes = minutsElapsed * minutesInDay / this->dayTimerMax;
-		minutes = realMinutes % 60;
-	}
-	else {
-		float minutsElapsed = floor(this->nightTimer.getElapsedTime().asSeconds()) / 60.f;
-		int realMinutes = minutsElapsed * minutesInNight / this->nightTimerMax;
-		minutes = realMinutes % 60;
-	}
-	return minutes;
+	std::cout << this->inGameTime_Hours << " : " << this->inGameTime_Minutes << std::endl;
 }
 
 std::string whatTime() {
@@ -556,6 +529,7 @@ void GameState::updateDebugText(const float& dt){
 }
 
 void GameState::updateInGameTime(){
+	/*
 	if (this->isDay) { //ce je dan
 		if (floor((this->dayTimer.getElapsedTime().asSeconds()+this->dayTimerOff)*100/60)/100 >= this->dayTimerMax) {
 			//cas za dan je pretuku je treba spremenit v noc
@@ -583,8 +557,28 @@ void GameState::updateInGameTime(){
 				}
 			}
 		}
+	}*/
+	this->updateHours_Minutes();
+	if (this->isDay && this->inGameTime_Hours == this->whenIsNightHour) {
+		//dan se je koncau torej bo zdej noc
+		this->isDay = false;
 	}
-	std::cout << calculateHour() << ":" << calculateMinute() << std::endl; //DEBUG
+	if (!(this->isDay) && this->inGameTime_Hours == this->whenIsDayHour) {
+		this->isDay = true;
+	}
+	if ((this->gameDaysElapsed % 45) == 0 && this->gameDaysElapsed != 0) {
+		//spremeni letni cas
+		if (static_cast<int>(this->currentSeason) == 4)this->currentSeason = pomlad;
+		else this->currentSeason = static_cast<letniCasi>(static_cast<int>(this->currentSeason) + 1);
+		//posodobi dolzine dneva in noci
+		switch (this->currentSeason) {
+		case pomlad:this->whenIsNightHour = 18; this->whenIsDayHour = 6; break;
+		case poletje:this->whenIsNightHour = 19; this->whenIsDayHour = 5; break;
+		case jesen:this->whenIsNightHour = 18; this->whenIsDayHour = 6; break;
+		case zima:this->whenIsNightHour = 17; this->whenIsDayHour = 7; break;
+		}
+	}
+	//std::cout << calculateHour() << ":" << calculateMinute() << std::endl; //DEBUG
 	//std::cout << this->dayTimerOff << "  " << this->nightTimerOff << std::endl;
 	//this->calculateHour();
 	//this->calculateMinute();
