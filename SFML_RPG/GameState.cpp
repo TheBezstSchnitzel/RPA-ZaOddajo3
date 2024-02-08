@@ -125,7 +125,20 @@ void GameState::initEnemySystem(){
 }
 
 void GameState::initTileMap(){
-	this->tileMap = new TileMap("Config/text.slmp");
+	switch (this->currentSeason) {
+	case pomlad:
+		this->tileMap = new TileMap("Config/text.slmp", "Resources/Images/Tiles/newFloorTiles_Pomlad.png");
+		break;
+	case poletje:
+		this->tileMap = new TileMap("Config/text.slmp", "Resources/Images/Tiles/newFloorTiles_Poletje.png");
+		break;
+	case jesen:
+		this->tileMap = new TileMap("Config/text.slmp", "Resources/Images/Tiles/newFloorTiles_Jesen.png");
+		break;
+	case zima:
+		this->tileMap = new TileMap("Config/text.slmp","Resources/Images/Tiles/newFloorTiles_Zima.png");
+		break;
+	}
 }
 
 void GameState::initSystems(){
@@ -552,12 +565,32 @@ void GameState::updateInGameTime(){
 		//spremeni letni cas
 		if (static_cast<int>(this->currentSeason) == 4)this->currentSeason = pomlad;
 		else this->currentSeason = static_cast<letniCasi>(static_cast<int>(this->currentSeason) + 1);
-		//posodobi dolzine dneva in noci
+		//posodobi dolzine dneva in noci in se mapo
 		switch (this->currentSeason) {
-		case pomlad:this->whenIsNightHour = 18; this->whenIsDayHour = 6; break;
-		case poletje:this->whenIsNightHour = 19; this->whenIsDayHour = 5; break;
-		case jesen:this->whenIsNightHour = 18; this->whenIsDayHour = 6; break;
-		case zima:this->whenIsNightHour = 17; this->whenIsDayHour = 7; break;
+		case pomlad:
+			this->whenIsNightHour = 18; 
+			this->whenIsDayHour = 6;
+			delete this->tileMap;
+			this->tileMap = new TileMap("Config/text.slmp", "Resources/Images/Tiles/newFloorTiles_Pomlad.png");
+			break;
+		case poletje:
+			this->whenIsNightHour = 19; 
+			this->whenIsDayHour = 5;
+			delete this->tileMap;
+			this->tileMap = new TileMap("Config/text.slmp", "Resources/Images/Tiles/newFloorTiles_Poletje.png");
+			break;
+		case jesen:
+			this->whenIsNightHour = 18; 
+			this->whenIsDayHour = 6;
+			delete this->tileMap;
+			this->tileMap = new TileMap("Config/text.slmp", "Resources/Images/Tiles/newFloorTiles_Jesen.png");
+			break;
+		case zima:
+			this->whenIsNightHour = 17; 
+			this->whenIsDayHour = 7; 
+			delete this->tileMap;
+			this->tileMap = new TileMap("Config/text.slmp", "Resources/Images/Tiles/newFloorTiles_Zima.png");
+			break;
 		}
 	}
 	this->playerGUI->updateClockDisplay(this->inGameTime_Hours, this->inGameTime_Minutes);

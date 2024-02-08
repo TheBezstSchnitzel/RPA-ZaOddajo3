@@ -56,14 +56,15 @@ TileMap::TileMap(float gridSize, int width, int height, std::string texture_file
 	this->collisionBox.setOutlineThickness(1.f);
 }
 
-TileMap::TileMap(const std::string file_name){
+TileMap::TileMap(const std::string file_name, const std::string textureFile){
 	this->fromX = 0;
 	this->toX = 0;
 	this->fromY = 0;
 	this->toY = 0;
 	this->layer = 0;
 
-	this->loadFromFile(file_name);
+	if (textureFile == "")this->loadFromFile(file_name);
+	else this->loadFromFile(file_name, textureFile);
 
 	this->collisionBox.setSize(sf::Vector2f(this->gridSizeF, this->gridSizeF));
 	this->collisionBox.setFillColor(sf::Color(255, 0, 0, 50));
@@ -182,7 +183,7 @@ void TileMap::saveToFile(const std::string file_name){
 	out_file.close();
 }
 
-void TileMap::loadFromFile(const std::string file_name){
+void TileMap::loadFromFile(const std::string file_name, const std::string textureFile){
 	std::ifstream in_file;
 
 	in_file.open(file_name);
@@ -210,7 +211,8 @@ void TileMap::loadFromFile(const std::string file_name){
 		this->maxSizeWorldF.x = static_cast<float>(size.x * gridSize);
 		this->maxSizeWorldF.y = static_cast<float>(size.y * gridSize);
 		this->layers = layers;
-		this->textureFile = texture_file;
+		if (textureFile == "")this->textureFile = texture_file;
+		else this->textureFile = textureFile;
 
 		this->clear();
 
@@ -225,8 +227,8 @@ void TileMap::loadFromFile(const std::string file_name){
 			}
 		}
 
-		if (!this->tileSheet.loadFromFile(texture_file))
-			std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET::FILENAME: " << texture_file << "\n";
+		if (!this->tileSheet.loadFromFile(this->textureFile))
+			std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET::FILENAME: " << this->textureFile << "\n";
 
 		//nalozi use tile
 		while (in_file >> x >> y >> z >> type){

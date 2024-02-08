@@ -28,7 +28,7 @@ private:
 
 public:
 	TileMap(float gridSize, int width, int height, std::string texture_file);
-	TileMap(const std::string file_name);
+	TileMap(const std::string file_name, const std::string textureFile = "");
 	virtual ~TileMap();
 
 	//Dostop
@@ -38,13 +38,14 @@ public:
 	const sf::Vector2i& getMaxSizeGrid() const;
 	const sf::Vector2f& getMaxSizeF() const;
 
+
 	//Funkcije
 	void addTile(const int x, const int y, const int z, const sf::IntRect& texture_rect, const bool& collision, const short& type);
 	void addTile(const int x, const int y, const int z, const sf::IntRect & texture_rect,
 		const int enemy_type, const int enemy_amount, const int enemy_tts, const int enemy_md);
 	void removeTile(const int x, const int y, const int z, const int type = -1);
 	void saveToFile(const std::string file_name);
-	void loadFromFile(const std::string file_name);
+	void loadFromFile(const std::string file_name, const std::string textureFile = "");
 	const bool checkType(const int x, const int y, const int z, const int type) const;
 
 	void updateWorldBoundsCollision(Entity* entity, const float& dt);
