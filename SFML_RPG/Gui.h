@@ -1,6 +1,6 @@
 #pragma once
 
-enum button_states{BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE};
+enum button_states{BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE, BTN_DISABLED};
 
 namespace gui{
 	const float p2pX(const float perc, const sf::VideoMode& vm);
@@ -11,6 +11,7 @@ namespace gui{
 	private:
 		short unsigned buttonState;
 		short unsigned id;
+		bool lastMouseState;
 
 		sf::RectangleShape shape;
 		sf::Font* font;
@@ -27,6 +28,10 @@ namespace gui{
 		sf::Color outlineIdleColor;
 		sf::Color outlineHoverColor;
 		sf::Color outlineActiveColor;
+
+		//klik sound
+		sf::SoundBuffer buffer;
+		sf::Sound click;
 
 	public:
 		Button(float x, float y, float width, float height,
@@ -49,6 +54,13 @@ namespace gui{
 		//Funkcije
 		void update(const sf::Vector2i& mousePosWindow);
 		void render(sf::RenderTarget& target);
+
+		void disable();
+		void enable();
+
+		//zvok
+		void makeSound();
+		short getStatus();
 	};
 
 	class DropDownList{
@@ -76,7 +88,49 @@ namespace gui{
 		void update(const sf::Vector2i& mousePosWindow, const float& dt);
 		void render(sf::RenderTarget& target);
 	};
+	
+	class Slider {
+	private:
+		float startmousePosX;
+		float value;
 
+		sf::RectangleShape sliderBar;
+
+		sf::CircleShape sliderButton;
+
+		short unsigned buttonState;
+		short unsigned lastButtonState;
+
+		sf::Font* font;
+		sf::Text leftText;
+		sf::Text textCurrentValue;
+
+		//inicializacija
+		void initSliderBar(float x, float y, float width, float height, sf::Color outline, sf::Color fill);
+		void initSliderButton(float x, float y, float width, float height, sf::Color fill);
+		void initTexts(sf::Font* font, unsigned character_size,sf::Color text_color);
+		void initVariables();
+		
+		void moveButton(const sf::Vector2i& mousePosWindow);
+
+		float calucalateValue();
+		float calculatePos();
+	public:
+		Slider(float x, float y, float width, float height,
+			sf::Font* font, unsigned character_size, 
+			sf::Color slider_bar_outline_color,sf::Color slider_bar_color, sf::Color slider_button_color,
+			sf::Color text_color);
+		~Slider();
+
+		//dostop
+		void setValue(float newValue);
+		float getValue();
+
+		//funkcije
+		void update(const sf::Vector2i& mousePosWindow);
+		void render(sf::RenderTarget& target);
+	};
+	
 	class TextureSelector{
 	private:
 		float keytime;

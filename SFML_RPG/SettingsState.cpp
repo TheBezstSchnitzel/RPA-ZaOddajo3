@@ -3,10 +3,8 @@
 
 void SettingsState::initVariables(){
 	this->modes = sf::VideoMode::getFullscreenModes();
-	if (!this->buffer.loadFromFile("Resources/Audio/click.wav")) {
-		throw "ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_CLICK_SOUND";
-	}
-	this->click.setBuffer(this->buffer);
+	if (this->game->getThemeStatus() == 2)this->sound = true;
+	else this->sound = false;
 }
 
 void SettingsState::initFonts(){
@@ -30,8 +28,19 @@ void SettingsState::initKeybinds(){
 	ifs.close();
 }
 
+//najde index od resolucije ki se uporablja
+int SettingsState::findIndexOfCurrRes() {
+	for (int i = 0; i < this->modes.size(); ++i) {
+		if (this->modes[i] == this->stateData->gfxSettings->resolution)return i;
+	}
+	return 0;
+}
+
 void SettingsState::initGui(){
+
 	const sf::VideoMode& vm = this->stateData->gfxSettings->resolution;
+
+	this->fullscreen = false;
 
 	//Ozadje
 	this->background.setSize(
@@ -75,7 +84,14 @@ void SettingsState::initGui(){
 	this->buttons["SOUND_SWITCH"] = new gui::Button(
 		gui::p2pX(68.5f, vm), gui::p2pY(10.f, vm),
 		gui::p2pX(13.f, vm), gui::p2pY(6.f, vm),
-		&this->font, "Sound: on/off", gui::calcCharSize(vm),
+		&this->font, this->sound ? "Sound: ON" : "Sound: OFF", gui::calcCharSize(vm),
+		sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 150),
+		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0));
+
+	this->buttons["FULLSCREEN_SWITCH"] = new gui::Button(
+		gui::p2pX(42.f, vm), gui::p2pY(34.2f, vm),
+		gui::p2pX(10.4f, vm), gui::p2pY(4.5f, vm),
+		&this->font, this->stateData->gfxSettings->fullscreen ? "ON" : "OFF", gui::calcCharSize(vm),
 		sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 150),
 		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0));
 
@@ -87,9 +103,9 @@ void SettingsState::initGui(){
 
 	//Spustni seznam
 	this->dropDownLists["RESOLUTION"] = new gui::DropDownList(
-		gui::p2pX(42.f, vm), gui::p2pY(25.3f, vm),
+		gui::p2pX(42.f, vm), gui::p2pY(25.f, vm),
 		gui::p2pX(10.4f, vm), gui::p2pY(4.5f, vm),
-		font, modes_str.data(), modes_str.size()
+		font, modes_str.data(), modes_str.size(), 6//->findIndexOfCurrRes()
 	);
 
 	//Inicializacija teksta
@@ -99,8 +115,20 @@ void SettingsState::initGui(){
 	this->optionsText.setFillColor(sf::Color(255, 255, 255, 200));
 
 	this->optionsText.setString(
-		"Resolution \n\nFullscreen \n\nVsync \n\nAntialiasing \n\n "
+		"Resolution \n\nFullscreen \n\nVolume"
 	);
+
+	//incicializacija sliderja za zvok
+	this->volumeSlider = new gui::Slider(
+		gui::p2pX(42.f, vm), gui::p2pY(46.7f, vm),
+		gui::p2pX(25.f, vm), gui::p2pY(1.5f, vm),
+		&this->font, gui::calcCharSize(vm),
+		sf::Color(0, 0, 0, 250), sf::Color(69, 65, 64, 250), sf::Color(255, 255, 255, 200),
+		sf::Color(255, 255, 255, 200));
+
+	this->volumeSlider->setValue(this->game->getThemeVolume());
+	if (this->volumeSlider->getValue() == 0)this->sliderStop = true;
+	else this->sliderStop = false;
 }
 
 void SettingsState::resetGui(){
@@ -116,17 +144,16 @@ void SettingsState::resetGui(){
 		delete it2->second;
 	}
 	this->dropDownLists.clear();
+	delete this->volumeSlider;
 	this->initGui();
 }
 
 SettingsState::SettingsState(StateData* state_data, Game* game) : State(state_data){
+	this->game = game;
 	this->initVariables();
 	this->initFonts();
 	this->initKeybinds();
 	this->initGui();
-	this->sound = 1;
-	//this->rel = 1;
-	this->game=game;
 }
 
 SettingsState::~SettingsState(){
@@ -139,6 +166,7 @@ SettingsState::~SettingsState(){
 	for (it2 = this->dropDownLists.begin(); it2 != this->dropDownLists.end(); ++it2){
 		delete it2->second;
 	}
+	delete this->volumeSlider;
 }
 
 //Funkcije
@@ -153,38 +181,70 @@ void SettingsState::updateGui(const float & dt){
 	}
 
 	//Delovanje gumbou
-	//Zapre game
+	//Zapre state
 	if (this->buttons["BACK"]->isPressed()){
-		this->click.play();
-		this->endState();
+		this->game->saveAudio();
+		this->buttons["BACK"]->makeSound();
+		while (true)if (this->buttons["BACK"]->getStatus() == 0)break;
+		this->endState();	
 	}
 	//Sound switch
-	if (this->buttons["SOUND_SWITCH"]->isPressed()) { // ne dela lih najbuls
-		if (sound) {
+	if (this->buttons["SOUND_SWITCH"]->isPressed()) {
+		if (this->sound) {
 			this->game->playTheme(false);
-			sound = !sound;
-			this->click.play();
+			this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
+			this->sound = !this->sound;
+			this->buttons["SOUND_SWITCH"]->makeSound();
 		}
 		else {
 			this->game->playTheme(true);
-			sound = !sound;
-			this->click.play();
+			this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
+			this->sound = !this->sound;
+			this->buttons["SOUND_SWITCH"]->makeSound();;
 		}
+	}
+	if (this->buttons["FULLSCREEN_SWITCH"]->isPressed()) {
+		if (this->fullscreen) {
+			this->buttons["FULLSCREEN_SWITCH"]->setText("OFF");
+		}
+		else {
+			this->buttons["FULLSCREEN_SWITCH"]->setText("ON");
+		}
+		this->fullscreen = !this->fullscreen;
+		this->buttons["FULLSCREEN_SWITCH"]->makeSound();
 	}
 	//Applya settinge
 	if (this->buttons["APPLY"]->isPressed()){
-		//TEST
-		this->click.play();
+		this->buttons["APPLY"]->makeSound();
+
 		this->stateData->gfxSettings->resolution = this->modes[this->dropDownLists["RESOLUTION"]->getActiveElementId()];
 
-		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, sf::Style::Default);
+		this->stateData->gfxSettings->fullscreen = this->fullscreen;
 
+		this->window->create(this->stateData->gfxSettings->resolution, this->stateData->gfxSettings->title, this->stateData->gfxSettings->fullscreen ? sf::Style::Fullscreen : sf::Style::Default);
 		this->resetGui();
+		
+		this->stateData->gfxSettings->saveToFile("Config/graphics.ini");
 	}
 
 	//Spustni seznam
 	for (auto &it : this->dropDownLists){
 		it.second->update(this->mousePosWindow, dt);
+	}
+
+	//volume slider
+	this->volumeSlider->update(this->mousePosWindow);
+	this->game->setThemeVolume(this->volumeSlider->getValue());
+	if (this->sound || this->sliderStop) {
+		if (this->game->getThemeVolume() == 0) {
+			this->sound = false;
+			this->sliderStop = true;
+			this->buttons["SOUND_SWITCH"]->setText("Sound: OFF");
+		}
+		else {
+			this->buttons["SOUND_SWITCH"]->setText("Sound: ON");
+			this->sliderStop = false;
+		}
 	}
 }
 
@@ -196,6 +256,7 @@ void SettingsState::update(const float& dt){
 }
 
 void SettingsState::renderGui(sf::RenderTarget& target){
+	this->volumeSlider->render(target);
 	for (auto &it : this->buttons){
 		it.second->render(target);
 	}
@@ -215,14 +276,4 @@ void SettingsState::render(sf::RenderTarget* target){
 	this->renderGui(*target);
 
 	target->draw(this->optionsText);
-
-	/*  //SAM DEBUG ZA ODSTRANT POL
-	sf::Text mouseText;
-	mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 50);
-	mouseText.setFont(this->font);
-	mouseText.setCharacterSize(12);
-	std::stringstream ss;
-	ss << this->mousePosView.x << " " << this->mousePosView.y;
-	mouseText.setString(ss.str());
-	target->draw(mouseText);*/
 }

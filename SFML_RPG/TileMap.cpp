@@ -201,6 +201,7 @@ void TileMap::loadFromFile(const std::string file_name){
 		short type = 0;
 
 		in_file >> size.x >> size.y >> gridSize >> layers >> texture_file;
+		//Resources/Images/Tiles/tilesheet3.png
 
 		this->gridSizeF = static_cast<float>(gridSize);
 		this->gridSizeI = gridSize;
@@ -229,7 +230,7 @@ void TileMap::loadFromFile(const std::string file_name){
 
 		//nalozi use tile
 		while (in_file >> x >> y >> z >> type){
-			std::cout << type << "\n";
+			//::cout << type << "\n";
 			if (type == TileTypes::ENEMYSPAWNER){
 				int enemy_type = 0;
 				int	enemy_am = 0;
@@ -325,51 +326,50 @@ void TileMap::updateTileCollision(Entity * entity, const float & dt){
 	else if (this->toY > this->maxSizeWorldGrid.y)
 		this->toY = this->maxSizeWorldGrid.y;
 
-	for (int x = this->fromX; x < this->toX; x++){
-		for (int y = this->fromY; y < this->toY; y++){
-			for (size_t k = 0; k < this->map[x][y][this->layer].size(); k++){
+	for (int x = this->fromX; x < this->toX; x++) {
+		for (int y = this->fromY; y < this->toY; y++) {
+			for (size_t k = 0; k < this->map[x][y][this->layer].size(); k++) {
 				sf::FloatRect playerBounds = entity->getGlobalBounds();
 				sf::FloatRect wallBounds = this->map[x][y][this->layer][k]->getGlobalBounds();
 				sf::FloatRect nextPositionBounds = entity->getNextPositionBounds(dt);
-
 				if (this->map[x][y][this->layer][k]->getCollision() &&
-					this->map[x][y][this->layer][k]->intersects(nextPositionBounds)
-					){ //gor collision
-					if (playerBounds.top < wallBounds.top
-						&& playerBounds.top + playerBounds.height < wallBounds.top + wallBounds.height
-						&& playerBounds.left < wallBounds.left + wallBounds.width
-						&& playerBounds.left + playerBounds.width > wallBounds.left
-						){
+					this->map[x][y][this->layer][k]->intersects(nextPositionBounds)){
+					//player dol collision ,,,,, zgorna stran tila
+					if (nextPositionBounds.top < wallBounds.top
+						&& nextPositionBounds.top + nextPositionBounds.height < wallBounds.top + wallBounds.height
+						&& nextPositionBounds.left < wallBounds.left + wallBounds.width
+						&& nextPositionBounds.left + nextPositionBounds.width > wallBounds.left
+						) {
 						entity->stopVelocityY();
-						entity->setPosition(playerBounds.left, wallBounds.top - playerBounds.height);
+						//entity->setPosition(playerBounds.left, wallBounds.top - playerBounds.height);
 					}
-					else if (playerBounds.top > wallBounds.top
-						&& playerBounds.top + playerBounds.height > wallBounds.top + wallBounds.height
-						&& playerBounds.left < wallBounds.left + wallBounds.width
-						&& playerBounds.left + playerBounds.width > wallBounds.left
-						){ //dol collision
+					else if (nextPositionBounds.top > wallBounds.top
+						&& nextPositionBounds.top + nextPositionBounds.height > wallBounds.top + wallBounds.height
+						&& nextPositionBounds.left < wallBounds.left + wallBounds.width
+						&& nextPositionBounds.left + nextPositionBounds.width > wallBounds.left
+						) { //player gor collision ,,, spodna stran tila
 						entity->stopVelocityY();
-						entity->setPosition(playerBounds.left, wallBounds.top + wallBounds.height);
+						//entity->setPosition(playerBounds.left, wallBounds.top + wallBounds.height);
 					}
 
-					//Desn collision
-					if (playerBounds.left < wallBounds.left
-						&& playerBounds.left + playerBounds.width < wallBounds.left + wallBounds.width
-						&& playerBounds.top < wallBounds.top + wallBounds.height
-						&& playerBounds.top + playerBounds.height > wallBounds.top
-						){
+					//Player desnu collison ,,, leva stran tila
+					if (nextPositionBounds.left < wallBounds.left
+						&& nextPositionBounds.left + nextPositionBounds.width < wallBounds.left + wallBounds.width
+						&& nextPositionBounds.top < wallBounds.top + wallBounds.height
+						&& nextPositionBounds.top + nextPositionBounds.height > wallBounds.top
+						) {
 						entity->stopVelocityX();
-						entity->setPosition(wallBounds.left - playerBounds.width, playerBounds.top);
+						//entity->setPosition(wallBounds.left - playerBounds.width, playerBounds.top);
 					}
 
-					//Leu collision
-					else if (playerBounds.left > wallBounds.left
-						&& playerBounds.left + playerBounds.width > wallBounds.left + wallBounds.width
-						&& playerBounds.top < wallBounds.top + wallBounds.height
-						&& playerBounds.top + playerBounds.height > wallBounds.top
-						){
+					//Player Levu collision  ,,, desna stran tila
+					else if (nextPositionBounds.left > wallBounds.left
+						&& nextPositionBounds.left + nextPositionBounds.width > wallBounds.left + wallBounds.width
+						&& nextPositionBounds.top < wallBounds.top + wallBounds.height
+						&& nextPositionBounds.top + nextPositionBounds.height > wallBounds.top
+						) {
 						entity->stopVelocityX();
-						entity->setPosition(wallBounds.left + wallBounds.width, playerBounds.top);
+						//entity->setPosition(wallBounds.left + wallBounds.width, playerBounds.top);
 					}
 				}
 			}
@@ -434,29 +434,33 @@ void TileMap::render
 	const sf::Vector2i& gridPosition, 
 	sf::Shader* shader, 
 	const sf::Vector2f playerPosition, 
-	const bool show_collision
+	const bool show_collision,
+	const bool isZoomedOut
 ){
 	this->layer = 0;
 
-	this->fromX = gridPosition.x - 15;
+	int tempX = (isZoomedOut) ? 22 : 11;
+	int tempY = (isZoomedOut) ? 12 : 6;
+
+	this->fromX = gridPosition.x - tempX;
 	if (this->fromX < 0)
 		this->fromX = 0;
 	else if (this->fromX > this->maxSizeWorldGrid.x)
 		this->fromX = this->maxSizeWorldGrid.x;
 
-	this->toX = gridPosition.x + 16;
+	this->toX = gridPosition.x + tempX + 1;
 	if (this->toX < 0)
 		this->toX = 0;
 	else if (this->toX > this->maxSizeWorldGrid.x)
 		this->toX = this->maxSizeWorldGrid.x;
 
-	this->fromY = gridPosition.y - 8;
+	this->fromY = gridPosition.y - tempY;
 	if (this->fromY < 0)
 		this->fromY = 0;
 	else if (this->fromY > this->maxSizeWorldGrid.y)
 		this->fromY = this->maxSizeWorldGrid.y;
 
-	this->toY = gridPosition.y + 9;
+	this->toY = gridPosition.y + tempY + 1;
 	if (this->toY < 0)
 		this->toY = 0;
 	else if (this->toY > this->maxSizeWorldGrid.y)

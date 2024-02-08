@@ -18,10 +18,6 @@ private:
 	std::map<std::string, gui::Button*> buttons;
 	std::map<std::string, sf::Text> texts;
 
-	//Zvok
-	sf::SoundBuffer buffer;
-	sf::Sound click;
-
 	//Privatne funkcije
 	void initFonts();
 	void initKeybinds();
@@ -32,6 +28,10 @@ private:
 	void initKeyTime();
 	std::string whatTime();
 	void resetGui();
+
+	void deleteSave(short saveNum);
+
+	std::string readFromSave(std::string path);
 
 public:
 	PlayGameState(StateData* state_data,Game* game);

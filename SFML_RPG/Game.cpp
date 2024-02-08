@@ -7,12 +7,7 @@ void Game::initVariables(){
 
 	this->dt = 0.f;
 
-	this->gridSize = 64.f;
-
-	//this->theme.openFromFile("Resources/Audio/themeSong.wav");
-	//theme.setPitch(1.f);
-	//theme.setVolume(50.f);
-	//theme.setLoop(true);
+	this->gridSize = 16.f;
 }
 
 void Game::initGraphicsSettings(){
@@ -35,7 +30,6 @@ void Game::initWindow(){
 			this->gfxSettings.contextSettings);
 
 	this->window->setFramerateLimit(this->gfxSettings.frameRateLimit);
-	this->window->setVerticalSyncEnabled(this->gfxSettings.verticalSync);
 }
 
 void Game::initKeys(){
@@ -70,6 +64,27 @@ void Game::initStates(){
 	this->states.push(new MainMenuState(&this->stateData,this));
 }
 
+void Game::initAudio(){
+	std::string savePath = "Config/audio.ini";
+	std::ifstream saveIFile(savePath);
+	bool isPlaying = true;
+	if (saveIFile.is_open()) {
+		//nalaganje podatkov
+		saveIFile >> isPlaying;
+		saveIFile >> this->volume;
+
+		saveIFile.close();
+	}
+	else {
+		throw("ERROR::GAME::initAudio::FILE_NOT_OPEN");
+	}
+	theme.openFromFile("Resources/Audio/themeSong.wav");
+	theme.setPitch(1.f);
+	theme.setVolume(this->volume);
+	theme.setLoop(true);
+	if(isPlaying)theme.play();
+}
+
 //Konstruktor / Destruktor
 Game::Game(){
 	this->initVariables();
@@ -78,11 +93,7 @@ Game::Game(){
 	this->initKeys();
 	this->initStateData();
 	this->initStates();
-	theme.openFromFile("Resources/Audio/themeSong.wav");
-	theme.setPitch(1.f);
-	theme.setVolume(50.f);
-	theme.setLoop(true);
-	theme.play();
+	this->initAudio();
 }
 
 Game::~Game(){
@@ -145,6 +156,35 @@ void Game::restartTheme(bool go){
 	}
 	else
 		theme.stop();
+}
+
+int Game::getThemeStatus(){
+	return (int)this->theme.getStatus();
+}
+
+void Game::setThemeVolume(float newVolume){
+	this->theme.setVolume(newVolume);
+	this->volume = newVolume;
+}
+
+float Game::getThemeVolume(){
+	return this->volume;
+}
+
+void Game::saveAudio(){
+	std::string savePath = "Config/audio.ini";
+	std::ofstream saveOFile(savePath);
+	bool isPlaying = true;
+	if (this->theme.getStatus() != 2)isPlaying = false;
+	if (saveOFile.is_open()) {
+		saveOFile << isPlaying << std::endl;
+		saveOFile << this->volume << std::endl;
+
+		saveOFile.close();
+	}
+	else {
+		throw("ERROR::GAME::initAudio::FILE_NOT_OPEN");
+	}
 }
 
 void Game::render(){

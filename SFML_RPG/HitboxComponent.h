@@ -1,8 +1,12 @@
 #pragma once
 
+#include "EllipseShape.h"
+
+
 class HitboxComponent{
 private:
 	sf::Sprite& sprite;
+
 	sf::RectangleShape hitbox;
 	sf::FloatRect nextPosition;
 	float offsetX;

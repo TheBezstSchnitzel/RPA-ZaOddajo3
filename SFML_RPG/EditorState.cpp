@@ -30,6 +30,8 @@ void EditorState::initView(){
 		static_cast<float>(this->stateData->gfxSettings->resolution.width) / 2.f,
 		static_cast<float>(this->stateData->gfxSettings->resolution.height) / 2.f
 	);
+
+	this->view.zoom(0.5f);
 }
 
 void EditorState::initFonts(){
@@ -71,12 +73,25 @@ void EditorState::initGui(){
 }
 
 void EditorState::initTileMap(){
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/tilesheet3.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Test/full_version/tiles/floorTiles.png");
+	//Resources/Images/Tiles/tilesheet3.png
+	//SAM DEBUG 
+	/*std::ofstream oFile("Config/text.slmp");
+	if (oFile.is_open()) {
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				for (int t = 0; t < 7; t++) {
+					oFile << i << " " << j << " 0 0 16 16 0 ";
+				}
+			}
+		}
+		oFile.close();
+	}	*/
 }
 
 void EditorState::initModes(){
 	this->modes.push_back(new DefaultEditorMode(this->stateData, this->tileMap, &this->editorStateData));
-	this->modes.push_back(new EnemyEditorMode(this->stateData, this->tileMap, &this->editorStateData));
+	//this->modes.push_back(new EnemyEditorMode(this->stateData, this->tileMap, &this->editorStateData));
 
 	this->activeMode = EditorModes::DEFAULT_EDITOR_MODE;
 }
@@ -164,14 +179,19 @@ void EditorState::updateGui(const float& dt){
 }
 
 void EditorState::updatePauseMenuButtons(){
-	if (this->pmenu->isButtonPressed("QUIT"))
+	if (this->pmenu->isButtonPressed("QUIT")) {
+		this->pmenu->makeSound("QUIT");
+		while (true)if (this->pmenu->getStatus("QUIT") == 0)break;
 		this->endState();
-
-	if (this->pmenu->isButtonPressed("SAVE"))
-		this->tileMap->saveToFile("text.slmp");
-
-	if (this->pmenu->isButtonPressed("LOAD"))
-		this->tileMap->loadFromFile("text.slmp");
+	}
+	if (this->pmenu->isButtonPressed("SAVE")) {
+		this->pmenu->makeSound("SAVE");
+		this->tileMap->saveToFile("Config/text.slmp");
+	}
+	if (this->pmenu->isButtonPressed("LOAD")) {
+		this->pmenu->makeSound("LOAD");
+		this->tileMap->loadFromFile("Config/text.slmp");
+	}
 }
 
 void EditorState::updateModes(const float & dt){

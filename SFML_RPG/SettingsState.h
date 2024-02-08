@@ -17,15 +17,18 @@ private:
 
 	//Zvok
 	bool sound;
-	sf::SoundBuffer buffer;
-	sf::Sound click;
+	bool sliderStop;
 
 	std::map<std::string, gui::Button*> buttons;
 	std::map<std::string, gui::DropDownList*> dropDownLists;
+	gui::Slider* volumeSlider;
 
 	sf::Text optionsText;
 
 	std::vector<sf::VideoMode> modes;
+
+	//Settings
+	bool fullscreen;
 
 	//Privatne funkcije
 	void initVariables();
@@ -33,6 +36,8 @@ private:
 	void initKeybinds();
 	void initGui();
 	void resetGui();
+
+	int findIndexOfCurrRes();
 
 public:
 	SettingsState(StateData* state_data, Game* game);

@@ -48,8 +48,9 @@ gui::Button::Button(float x, float y, float width, float height,
 	short unsigned id){
 	this->buttonState = BTN_IDLE;
 	this->id = id;
+	this->lastMouseState = false;
 
-	this->shape.setPosition(sf::Vector2f(x, y));
+	this->shape.setPosition(sf::Vector2f(x, y));	
 	this->shape.setSize(sf::Vector2f(width, height));
 	this->shape.setFillColor(idle_color);
 	this->shape.setOutlineThickness(1.f);
@@ -60,7 +61,7 @@ gui::Button::Button(float x, float y, float width, float height,
 	this->text.setString(text);
 	this->text.setFillColor(text_idle_color);
 	this->text.setCharacterSize(character_size);
-	//std::cout << this->text.getGlobalBounds().width << "\n";
+
 	this->text.setPosition(
 		this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text.getGlobalBounds().width / 2.f,
 		this->shape.getPosition().y
@@ -77,6 +78,11 @@ gui::Button::Button(float x, float y, float width, float height,
 	this->outlineIdleColor = outline_idle_color;
 	this->outlineHoverColor = outline_hover_color;
 	this->outlineActiveColor = outline_active_color;
+
+	if (!this->buffer.loadFromFile("Resources/Audio/click.wav")) {
+		throw "ERROR::GUI::FAILED_TO_LOAD_CLICK_SOUND";
+	}
+	else this->click.setBuffer(this->buffer);
 }
 
 gui::Button::~Button(){
@@ -110,51 +116,76 @@ void gui::Button::setId(const short unsigned id){
 
 //Funkcije
 void gui::Button::update(const sf::Vector2i& mousePosWindow){
-	//updata boole od hover pa active
+	if (this->buttonState != BTN_DISABLED) {
+		//updata boole od hover pa active
 
-	//Idle
-	this->buttonState = BTN_IDLE;
+		//Idle
+		this->buttonState = BTN_IDLE;
 
-	//Hover
-	if (this->shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))){
-		this->buttonState = BTN_HOVER;
+		//Hover
+		if (this->shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))) {
+			this->buttonState = BTN_HOVER;
 
-		//Pressed
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			this->buttonState = BTN_ACTIVE;
+			//Pressed
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))this->lastMouseState = true;
+			else if (this->lastMouseState) {
+				this->buttonState = BTN_ACTIVE;
+				this->lastMouseState = false;
+			}
+		}
+
+		switch (this->buttonState) {
+		case BTN_IDLE:
+			this->shape.setFillColor(this->idleColor);
+			this->text.setFillColor(this->textIdleColor);
+			this->shape.setOutlineColor(this->outlineIdleColor);
+			break;
+
+		case BTN_HOVER:
+			this->shape.setFillColor(this->hoverColor);
+			this->text.setFillColor(this->textHoverColor);
+			this->shape.setOutlineColor(this->outlineHoverColor);
+			break;
+
+		case BTN_ACTIVE:
+			this->shape.setFillColor(this->activeColor);
+			this->text.setFillColor(this->textActiveColor);
+			this->shape.setOutlineColor(this->outlineActiveColor);
+			break;
+
+		default:
+			this->shape.setFillColor(sf::Color::Red);
+			this->text.setFillColor(sf::Color::Blue);
+			this->shape.setOutlineColor(sf::Color::Green);
+			break;
 		}
 	}
-
-	switch (this->buttonState){
-	case BTN_IDLE:
+	else {
 		this->shape.setFillColor(this->idleColor);
 		this->text.setFillColor(this->textIdleColor);
 		this->shape.setOutlineColor(this->outlineIdleColor);
-		break;
-
-	case BTN_HOVER:
-		this->shape.setFillColor(this->hoverColor);
-		this->text.setFillColor(this->textHoverColor);
-		this->shape.setOutlineColor(this->outlineHoverColor);
-		break;
-
-	case BTN_ACTIVE:
-		this->shape.setFillColor(this->activeColor);
-		this->text.setFillColor(this->textActiveColor);
-		this->shape.setOutlineColor(this->outlineActiveColor);
-		break;
-
-	default:
-		this->shape.setFillColor(sf::Color::Red);
-		this->text.setFillColor(sf::Color::Blue);
-		this->shape.setOutlineColor(sf::Color::Green);
-		break;
 	}
 }
 
 void gui::Button::render(sf::RenderTarget& target){
 	target.draw(this->shape);
 	target.draw(this->text);
+}
+
+void gui::Button::disable(){
+	this->buttonState = BTN_DISABLED;
+}
+
+void gui::Button::enable(){
+	this->buttonState = BTN_IDLE;
+}
+
+void gui::Button::makeSound() {
+	this->click.play();
+}
+
+short gui::Button::getStatus(){
+	return this->click.getStatus();
 }
 
 //DROP DOWN LIST =============================================
@@ -169,7 +200,8 @@ gui::DropDownList::DropDownList(float x, float y, float width, float height,
 		&this->font, list[default_index], 14,
 		sf::Color(255, 255, 255, 150), sf::Color(255, 255, 255, 200), sf::Color(20, 20, 20, 50),
 		sf::Color(70, 70, 70, 200), sf::Color(150, 150, 150, 200), sf::Color(20, 20, 20, 200),
-		sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50)
+		sf::Color(255, 255, 255, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		default_index
 	);
 
 	for (unsigned i = 0; i < nrOfElements; i++){
@@ -256,7 +288,7 @@ gui::TextureSelector::TextureSelector(float x, float y, float width, float heigh
 	this->gridSize = gridSize;
 	this->active = false;
 	this->hidden = false;
-	float offset = gridSize;
+	float offset = 64.f;
 
 	this->bounds.setSize(sf::Vector2f(width, height));
 	this->bounds.setPosition(x + offset, y);
@@ -414,4 +446,116 @@ void gui::ProgressBar::render(sf::RenderTarget & target){
 	target.draw(this->back);
 	target.draw(this->inner);
 	target.draw(this->text);
+}
+
+//SLIDER =====================================================
+
+void gui::Slider::initSliderBar(float x, float y, float width, float height, sf::Color outline, sf::Color fill){
+	this->sliderBar.setPosition(sf::Vector2f(x, y));
+	this->sliderBar.setSize(sf::Vector2f(width, height));
+	this->sliderBar.setFillColor(fill);
+	this->sliderBar.setOutlineThickness(height/6.f);
+	this->sliderBar.setOutlineColor(outline);
+}
+
+void gui::Slider::initSliderButton(float x, float y, float width, float height, sf::Color fill){
+	this->sliderButton.setPointCount(100);
+	this->sliderButton.setPosition(sf::Vector2f(x - (height), y - (height/2.f)));
+	this->sliderButton.setRadius(height);
+	this->sliderButton.setFillColor(fill);
+	this->sliderButton.setOutlineThickness(2.f);
+	this->sliderButton.setOutlineColor(sf::Color(0, 0, 0, 250));
+}
+
+void gui::Slider::initTexts(sf::Font* font, unsigned character_size, sf::Color text_color){
+	this->textCurrentValue.setCharacterSize(character_size);
+	this->textCurrentValue.setString("0");
+	this->textCurrentValue.setFont(*font);
+	this->textCurrentValue.setColor(text_color);
+	this->textCurrentValue.setPosition(sf::Vector2f(this->sliderBar.getPosition().x + this->sliderBar.getSize().x + character_size, this->sliderBar.getPosition().y - character_size/2.2));
+}
+
+void gui::Slider::initVariables(){
+	this->value = 0;
+}
+
+gui::Slider::Slider(float x, float y, float width, float height, sf::Font* font, unsigned character_size, sf::Color slider_bar_outline_color, sf::Color slider_bar_color, sf::Color slider_button_color, sf::Color text_color) {
+	this->initSliderBar(x,y,width,height,slider_bar_outline_color,slider_bar_color);
+	this->initSliderButton(x,y,width,height,slider_button_color);
+	this->initTexts(font, character_size, text_color);
+	this->initVariables();
+	this->lastButtonState = BTN_IDLE;
+}
+
+gui::Slider::~Slider(){
+}
+
+void gui::Slider::setValue(float newValue){
+	this->value = newValue;
+	this->sliderButton.setPosition(this->calculatePos(), this->sliderButton.getPosition().y);
+}
+
+float gui::Slider::getValue(){
+	return this->value;
+}
+
+void gui::Slider::moveButton(const sf::Vector2i& mousePosWindow){
+	float minX = this->sliderBar.getPosition().x - this->sliderButton.getRadius();
+	float maxX = minX + this->sliderBar.getSize().x;
+	float x = this->sliderButton.getPosition().x;
+	float mousX = static_cast<float>(mousePosWindow.x);
+	//premik na levo
+	if (mousX < this->startmousePosX) {
+		if (x > minX) {
+			if ((this->startmousePosX - mousX) > (x - minX))this->sliderButton.move(-(x - minX),0);
+			else this->sliderButton.move(-(this->startmousePosX - mousX), 0);
+		}
+	}
+	//premik na desno
+	if (mousX > this->startmousePosX) {
+		if (x < maxX) {
+			if ((mousX - this->startmousePosX) > (maxX - x))this->sliderButton.move(maxX-x,0);
+			else this->sliderButton.move(mousX-this->startmousePosX, 0);
+		}
+	}
+}
+
+float gui::Slider::calucalateValue(){
+	float x = this->sliderButton.getPosition().x;
+	float minX = this->sliderBar.getPosition().x - this->sliderButton.getRadius();
+	float maxX = minX + this->sliderBar.getSize().x;
+	return (100 * (x - minX)) / (maxX - minX);
+}
+
+float gui::Slider::calculatePos(){
+	float minX = this->sliderBar.getPosition().x - this->sliderButton.getRadius();
+	float maxX = minX + this->sliderBar.getSize().x;
+	return minX + this->value*((maxX-minX)/100);
+}
+
+void gui::Slider::update(const sf::Vector2i& mousePosWindow) {
+	//updata button
+	//Idle
+	this->buttonState = BTN_IDLE;
+	//Hover
+	if (this->sliderButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))) {
+		this->buttonState = BTN_HOVER;
+		//Pressed
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			this->buttonState = BTN_ACTIVE;
+			if (this->lastButtonState != BTN_ACTIVE) {
+				this->startmousePosX = static_cast<float>(mousePosWindow.x);
+			}
+			this->moveButton(mousePosWindow);
+		}
+	}
+	this->lastButtonState = this->buttonState;
+	this->textCurrentValue.setString(std::to_string(static_cast<int>(this->calucalateValue())));
+	this->value = this->calucalateValue();
+}
+
+void gui::Slider::render(sf::RenderTarget& target){
+	target.draw(this->sliderBar);
+	target.draw(this->sliderButton);
+	target.draw(this->textCurrentValue);
 }

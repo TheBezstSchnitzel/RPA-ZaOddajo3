@@ -21,6 +21,7 @@ private:
 
 	//Tematska pesem
 	sf::Music theme;
+	float volume;
 
 	//Inicializacija
 	void initVariables();
@@ -29,6 +30,7 @@ private:
 	void initKeys();
 	void initStateData();
 	void initStates();
+	void initAudio();
 
 public:
 	//Konstuktor / destruktor
@@ -47,6 +49,11 @@ public:
 	//Zvok
 	void playTheme(bool what=true);
 	void restartTheme(bool go=true);
+	int getThemeStatus();
+	void setThemeVolume(float newVolume);
+	float getThemeVolume();
+		//shranjevanje
+	void saveAudio();
 
 	//Render
 	void render();

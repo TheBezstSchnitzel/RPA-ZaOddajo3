@@ -25,9 +25,12 @@ private:
 	void initInventory();
 
 public:
-	Player(float x, float y, sf::Texture& texture_sheet);
+	Player(float x, float y, sf::Texture& texture_sheet,bool fromSave);
 	virtual ~Player();
 	
+	//shranjevanje
+	void save(std::string savePath);
+
 	//Dostop
 	AttributeComponent* getAttributeComponent();
 	Weapon* getWeapon() const;

@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "EditorState.h"
 #include "SettingsState.h"
+#include "TutorialState.h"
 #include "Gui.h"
 #include "PlayGameState.h"
 
@@ -19,9 +20,8 @@ private:
 	sf::RectangleShape btnBackground;
 	std::map<std::string, gui::Button*> buttons;
 
-	//Zvok
-	sf::SoundBuffer buffer;
-	sf::Sound click;
+	//refreshanje
+	bool isTrueRes;
 
 	//Privatne funkcije
 	void initVariables();

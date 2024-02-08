@@ -3,6 +3,7 @@
 #include "EnemySpawnerTile.h"
 #include "RegularTile.h"
 #include "EnemySystem.h"
+#include "EllipseShape.h"
 
 class TileMap{
 private:
@@ -53,10 +54,11 @@ public:
 
 	void render(
 		sf::RenderTarget& target,
-		const sf::Vector2i& gridPosition, 
-		sf::Shader* shader = NULL, 
+		const sf::Vector2i& gridPosition,
+		sf::Shader* shader = NULL,
 		const sf::Vector2f playerPosition = sf::Vector2f(),
-		const bool show_collision = false
+		const bool show_collision = false,
+		const bool isZoomedOut = false
 	);
 	void renderDeferred(sf::RenderTarget& target, sf::Shader* shader = NULL, const sf::Vector2f playerPosition = sf::Vector2f());
 };

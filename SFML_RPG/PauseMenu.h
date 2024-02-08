@@ -22,6 +22,8 @@ public:
 	std::map<std::string, gui::Button*>& getButtons();
 
 	//Funkcije
+	void makeSound(const std::string key);
+	unsigned short getStatus(const std::string key);
 	const bool isButtonPressed(const std::string key);
 	void addButton(const std::string key, const float y, const float width,	const float height, const unsigned char_size, const std::string text);
 	void update(const sf::Vector2i& mousePosWindow);

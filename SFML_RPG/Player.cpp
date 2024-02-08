@@ -5,27 +5,30 @@
 void Player::initVariables(){
 	this->initAttack = false;
 	this->attacking = false;
-	this->weapon = new Sword(1, 2, 5, 100, 20, "Resources/Images/Sprites/Player/sword.png");
-	this->weapon->generate(1, 3);
-
+	//this->weapon = new Sword(1, 2, 5, 100, 20, "Resources/Images/Sprites/Player/sword.png");
+	//this->weapon->generate(1, 3);
+	this->sprite.setScale(sf::Vector2f(0.5f, 0.5f));
 	this->damageTimerMax = 500;
 }
 
 void Player::initComponents(sf::Texture& texture_sheet){
-	this->createHitboxComponent(this->sprite, 16.f, 26.f, 32.f, 38.f);
-	this->createMovementComponent(140.f, 1400.f, 1000.f);
+	//this->createHitboxComponent(this->sprite, 16.f, 26.f, 32.f, 38.f, true, 9.f, 47.f, 23.f, 10.f);
+	//this->createHitboxComponent(this->sprite, 9.f, 47.f, 23.f, 10.f, false);
+	this->createHitboxComponent(this->sprite, 8.5f, 24.5f, 15.f, 7.5f);
+	//this->createMovementComponent(140.f, 1400.f, 1000.f);
+	this->createMovementComponent(100.f, 1400.f, 1000.f);
 	this->createAnimationComponent(texture_sheet);
 	this->createAttributeComponent(1,15,20);
-	this->createSkillComponent();
+	//this->createSkillComponent();
 }
 
 void Player::initAnimations(){
-	this->animationComponent->addAnimation("IDLE", 15.f, 0, 0, 8, 0, 64, 64);
-	this->animationComponent->addAnimation("WALK_DOWN", 11.f, 0, 1, 3, 1, 64, 64);
-	this->animationComponent->addAnimation("WALK_LEFT", 11.f, 4, 1, 7, 1, 64, 64);
-	this->animationComponent->addAnimation("WALK_RIGHT", 11.f, 8, 1, 11, 1, 64, 64);
-	this->animationComponent->addAnimation("WALK_UP", 11.f, 12, 1, 15, 1, 64, 64);
-	this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 64, 64);
+	this->animationComponent->addAnimation("IDLE", 15.f, 0, 2, 0, 2, 64, 64);
+	this->animationComponent->addAnimation("WALK_DOWN", 5.0f, 0, 6, 8, 6, 64, 64);
+	this->animationComponent->addAnimation("WALK_LEFT", 5.0f, 0, 5, 8, 5, 64, 64);
+	this->animationComponent->addAnimation("WALK_RIGHT", 5.0f, 0, 7, 8, 7, 64, 64);
+	this->animationComponent->addAnimation("WALK_UP", 5.0f, 0, 4, 8, 4, 64, 64);
+	//this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 64, 64);
 }
 
 void Player::initInventory(){
@@ -33,7 +36,7 @@ void Player::initInventory(){
 }
 
 //Konstruktor / Destruktor
-Player::Player(float x, float y, sf::Texture& texture_sheet){
+Player::Player(float x, float y, sf::Texture& texture_sheet,bool fromSave){
 	this->initVariables();
 
 	this->initComponents(texture_sheet);
@@ -46,7 +49,13 @@ Player::Player(float x, float y, sf::Texture& texture_sheet){
 
 Player::~Player(){
 	delete this->inventory;
-	delete this->weapon;
+	//delete this->weapon;
+}
+
+void Player::save(std::string savePath){
+	//shranjuje podatke o playerju
+	//not zapisuj brez da brises kar je ze v datoteki ce dajes v player.txt
+	//std::cout << "save od playerja dela" << std::endl; //debug
 }
 
 //Dostop
@@ -61,18 +70,18 @@ Weapon * Player::getWeapon() const{
 const std::string Player::toStringCharacterTab() const{
 	std::stringstream ss;
 	const AttributeComponent* ac = this->attributeComponent;
-	const Weapon* w = this->weapon;
+	//const Weapon* w = this->weapon;
 
 	ss << "Level: " << ac->level << "\n"
 		<< "Exp: " << ac->exp << "\n"
-		<< "Exp next: " << ac->expNext << "\n"
-		
+		<< "Exp next: " << ac->expNext << "\n";
+		/*
 		<< "Weapon Level: " << w->getLevel() << "\n"
 		<< "Weapon Type: " << w->getType() << "\n"
 		<< "Weapon Value: " << w->getValue() << "\n"
 		<< "Weapon Range: " << w->getRange() << "\n"
 		<< "Weapon Damage Min: " << w->getDamageMin() + this->attributeComponent->damageMin << " (" << this->attributeComponent->damageMin << ")" << "\n"
-		<< "Weapon Damage Max: " << w->getDamageMax() + this->attributeComponent->damageMax << " (" << this->attributeComponent->damageMax << ")" << "\n";
+		<< "Weapon Damage Max: " << w->getDamageMax() + this->attributeComponent->damageMax << " (" << this->attributeComponent->damageMax << ")" << "\n";*/
 
 	return ss.str();
 }
@@ -146,7 +155,7 @@ void Player::update(const float & dt, sf::Vector2f& mouse_pos_view, const sf::Vi
 	
 	this->hitboxComponent->update();
 
-	this->weapon->update(mouse_pos_view, sf::Vector2f(this->getSpriteCenter().x, this->getSpriteCenter().y + 5.f));
+	//this->weapon->update(mouse_pos_view, sf::Vector2f(this->getSpriteCenter().x, this->getSpriteCenter().y + 5.f));
 }
 
 void Player::render(sf::RenderTarget & target, sf::Shader* shader, const sf::Vector2f light_position, const bool show_hitbox){
@@ -154,14 +163,14 @@ void Player::render(sf::RenderTarget & target, sf::Shader* shader, const sf::Vec
 		shader->setUniform("hasTexture", true);
 		shader->setUniform("lightPos", light_position);
 		target.draw(this->sprite, shader);
-
+		/*
 		shader->setUniform("hasTexture", true);
 		shader->setUniform("lightPos", light_position);
-		this->weapon->render(target, shader);
+		this->weapon->render(target, shader);*/
 	}
 	else {
 		target.draw(this->sprite);
-		this->weapon->render(target);
+		//this->weapon->render(target);
 	}
 	
 	if(show_hitbox)
