@@ -538,6 +538,8 @@ void GameState::updateInGameTime(){
 		this->isDay = true;
 	}
 	if ((this->gameDaysElapsed % 45) == 0 && this->gameDaysElapsed != 0) {
+		//resetira dneve
+		this->gameDaysElapsed = 0;
 		//spremeni letni cas
 		if (static_cast<int>(this->currentSeason) == 4)this->currentSeason = pomlad;
 		else this->currentSeason = static_cast<letniCasi>(static_cast<int>(this->currentSeason) + 1);
@@ -551,6 +553,7 @@ void GameState::updateInGameTime(){
 	}
 	this->playerGUI->updateClockDisplay(this->inGameTime_Hours, this->inGameTime_Minutes);
 	this->playerGUI->updateSeasonDisplay(static_cast<int>(this->currentSeason));
+	this->playerGUI->updateGameTimeDay(this->gameDaysElapsed);
 }
 
 void GameState::update(const float& dt){

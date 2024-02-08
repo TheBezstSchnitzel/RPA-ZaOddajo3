@@ -12,6 +12,9 @@ void PlayerGUI::initTextures(){
 	if (!this->gameTimeNum_Texture.loadFromFile("Resources/Images/Gui/numbers.png")) {
 		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_TIMEDISPLAYNUMHOUR_TEXTURE";
 	}
+	if (!this->gameTimeDayText_Texture.loadFromFile("Resources/Images/Gui/daySign.png")) {
+		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_TIMEDISPLAYDAYTEXT_TEXTURE";
+	}
 }
 
 void PlayerGUI::initLevelBar(){
@@ -53,8 +56,8 @@ void PlayerGUI::initPlayerTabs(sf::VideoMode &vm, sf::Font &font, Player &player
 void PlayerGUI::initGameClockDisplay(sf::VideoMode& vm){
 	//this->gameTimeDisplay.setFillColor(sf::Color::Transparent);
 	this->gameTimeDisplay.setTexture(&this->gameTimeDisplay_Texture);
-	this->gameTimeDisplay.setOutlineColor(sf::Color::Red);
-	this->gameTimeDisplay.setOutlineThickness(1.f);
+	//this->gameTimeDisplay.setOutlineColor(sf::Color::Red);
+	//this->gameTimeDisplay.setOutlineThickness(1.f);
 	this->gameTimeDisplay.setSize(sf::Vector2f(gui::p2pX(10.f,vm),gui::p2pY(16.f,vm)));
 	this->gameTimeDisplay.setPosition(gui::p2pX(88.f,vm), gui::p2pY(2.f,vm));
 }
@@ -98,6 +101,27 @@ void PlayerGUI::initGameSeasonDisplay(sf::VideoMode& vm){
 	this->currSeason.setStyle(1);
 }
 
+void PlayerGUI::initGameDayDisplay(sf::VideoMode& vm){
+	//Display
+	//this->gameTimeDay.setOutlineColor(sf::Color::Blue);
+	//this->gameTimeDay.setOutlineThickness(1.f);
+	this->gameTimeDay.setSize(sf::Vector2f(gui::p2pX(2.5f, vm), gui::p2pY(2.6f, vm)));
+	this->gameTimeDay.setPosition(gui::p2pX(93.5f, vm), gui::p2pY(3.55f, vm));
+	//texture Rect
+	this->gameTimeDay_TexRect.width = 16;
+	this->gameTimeDay_TexRect.height = 9;
+	this->gameTimeDay_TexRect.left = 0;
+	this->gameTimeDay_TexRect.top = 0;
+	//Textur gor
+	this->gameTimeDay.setTexture(&this->gameTimeNum_Texture);
+	this->gameTimeDay.setTextureRect(this->gameTimeDay_TexRect);
+
+	//day text
+	this->gameTimeDayText.setSize(sf::Vector2f(gui::p2pX(2.5f, vm), gui::p2pY(2.7f, vm)));
+	this->gameTimeDayText.setPosition(gui::p2pX(90.f, vm), gui::p2pY(3.55f, vm));
+	this->gameTimeDayText.setTexture(&this->gameTimeDayText_Texture);
+}
+
 PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 	this->player = player;
 
@@ -111,6 +135,7 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 	this->initGameClockDisplay(vm);
 	this->initGameClockNumbers(vm);
 	this->initGameSeasonDisplay(vm);
+	this->initGameDayDisplay(vm);
 }
 
 PlayerGUI::~PlayerGUI(){
@@ -171,6 +196,16 @@ void PlayerGUI::updateSeasonDisplay(short unsigned seasonNum){
 	}
 }
 
+void PlayerGUI::updateGameTimeDay(int daysElapsed){
+	int tmpX = 0;
+	int tmpY = 0;
+	tmpX = ((daysElapsed % 10) * this->gameTimeDay_TexRect.width);
+	tmpY = ((daysElapsed / 10) * this->gameTimeDay_TexRect.height);
+	this->gameTimeDay_TexRect.left = tmpX;
+	this->gameTimeDay_TexRect.top = tmpY;
+	this->gameTimeDay.setTextureRect(this->gameTimeDay_TexRect);
+}
+
 void PlayerGUI::update(const float & dt){
 	this->updateLevelBar();
 	this->updateEXPBar();
@@ -200,6 +235,8 @@ void PlayerGUI::renderGameClock(sf::RenderTarget& target){
 	target.draw(this->gameTimeNum_Hour);
 	target.draw(this->gameTimeNum_Minute);
 	target.draw(this->currSeason);
+	target.draw(this->gameTimeDay);
+	target.draw(this->gameTimeDayText);
 }
 
 void PlayerGUI::render(sf::RenderTarget & target){

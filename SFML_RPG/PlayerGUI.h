@@ -41,6 +41,12 @@ private:
 	//letni cas
 	sf::Text currSeason;
 
+	//dnevi
+	sf::RectangleShape gameTimeDayText;
+	sf::Texture gameTimeDayText_Texture;
+	sf::RectangleShape gameTimeDay;
+	sf::IntRect gameTimeDay_TexRect;
+
 	//inicializacija
 	void initFont();
 	void initTextures();
@@ -51,6 +57,7 @@ private:
 	void initGameClockDisplay(sf::VideoMode& vm);
 	void initGameClockNumbers(sf::VideoMode& vm);
 	void initGameSeasonDisplay(sf::VideoMode& vm);
+	void initGameDayDisplay(sf::VideoMode& vm);
 
 public:
 	PlayerGUI(Player* player, sf::VideoMode& vm);
@@ -67,6 +74,7 @@ public:
 	void updatePlayerTabs();
 	void updateClockDisplay(int hour,int minute);
 	void updateSeasonDisplay(short unsigned seasonNum);
+	void updateGameTimeDay(int daysElapsed);
 
 	void update(const float& dt);
 
