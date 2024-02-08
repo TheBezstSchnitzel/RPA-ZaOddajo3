@@ -89,6 +89,15 @@ void PlayerGUI::initGameClockNumbers(sf::VideoMode& vm){
 	this->gameTimeNum_Minute.setPosition(gui::p2pX(93.7f, vm), gui::p2pY(8.5f, vm));
 }
 
+void PlayerGUI::initGameSeasonDisplay(sf::VideoMode& vm){
+	this->currSeason.setFont(this->font);
+	this->currSeason.setCharacterSize(gui::calcCharSize(vm,120));
+	this->currSeason.setString("Pomlad");
+	this->currSeason.setPosition(sf::Vector2f(gui::p2pX(91.5f, vm), gui::p2pY(14.8f, vm)));
+	this->currSeason.setColor(sf::Color(80,62,54,255));
+	this->currSeason.setStyle(1);
+}
+
 PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 	this->player = player;
 
@@ -101,6 +110,7 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 	
 	this->initGameClockDisplay(vm);
 	this->initGameClockNumbers(vm);
+	this->initGameSeasonDisplay(vm);
 }
 
 PlayerGUI::~PlayerGUI(){
@@ -152,13 +162,21 @@ void PlayerGUI::updateClockDisplay(int hour, int minute){
 	this->gameTimeNum_Minute.setTextureRect(this->gameTimeNum_Minute_TexRect);
 }
 
+void PlayerGUI::updateSeasonDisplay(short unsigned seasonNum){
+	switch (seasonNum) {
+	case 1:this->currSeason.setString("Pomlad");break;//pomlad
+	case 2:this->currSeason.setString("Poletje");break;//poletje
+	case 3:this->currSeason.setString("Jesen"); break;//jesen
+	case 4:this->currSeason.setString("Zima"); break;//zima
+	}
+}
+
 void PlayerGUI::update(const float & dt){
 	this->updateLevelBar();
 	this->updateEXPBar();
 	this->updateHPBar();
 	this->updatePlayerTabs();
 }
-
 
 void PlayerGUI::renderLevelBar(sf::RenderTarget & target){
 	target.draw(this->levelBarBack);
@@ -181,6 +199,7 @@ void PlayerGUI::renderGameClock(sf::RenderTarget& target){
 	target.draw(this->gameTimeDisplay);
 	target.draw(this->gameTimeNum_Hour);
 	target.draw(this->gameTimeNum_Minute);
+	target.draw(this->currSeason);
 }
 
 void PlayerGUI::render(sf::RenderTarget & target){

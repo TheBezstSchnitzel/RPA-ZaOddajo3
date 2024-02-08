@@ -294,7 +294,7 @@ void GameState::updateHours_Minutes(){
 		else this->inGameTime_Minutes++;
 		this->minutesTimer.restart();
 	}
-	std::cout << this->inGameTime_Hours << " : " << this->inGameTime_Minutes << std::endl;
+	//std::cout << this->inGameTime_Hours << " : " << this->inGameTime_Minutes << std::endl;
 }
 
 std::string whatTime() {
@@ -550,6 +550,7 @@ void GameState::updateInGameTime(){
 		}
 	}
 	this->playerGUI->updateClockDisplay(this->inGameTime_Hours, this->inGameTime_Minutes);
+	this->playerGUI->updateSeasonDisplay(static_cast<int>(this->currentSeason));
 }
 
 void GameState::update(const float& dt){

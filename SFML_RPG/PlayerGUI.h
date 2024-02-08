@@ -23,7 +23,9 @@ private:
 	//Player GUI
 	PlayerGUITabs* playerTabs;
 
-	//inGameTime Display
+	//inGameTime Display ======================================
+	
+	//Ura in minute
 	sf::RectangleShape gameTimeDisplay;
 	sf::Texture gameTimeDisplay_Texture;
 	//inGameTime Numbers
@@ -36,6 +38,9 @@ private:
 	//tekstura
 	sf::Texture gameTimeNum_Texture;
 
+	//letni cas
+	sf::Text currSeason;
+
 	//inicializacija
 	void initFont();
 	void initTextures();
@@ -45,6 +50,7 @@ private:
 	void initPlayerTabs(sf::VideoMode &vm, sf::Font &font, Player &player);
 	void initGameClockDisplay(sf::VideoMode& vm);
 	void initGameClockNumbers(sf::VideoMode& vm);
+	void initGameSeasonDisplay(sf::VideoMode& vm);
 
 public:
 	PlayerGUI(Player* player, sf::VideoMode& vm);
@@ -60,6 +66,7 @@ public:
 	void updateHPBar();
 	void updatePlayerTabs();
 	void updateClockDisplay(int hour,int minute);
+	void updateSeasonDisplay(short unsigned seasonNum);
 
 	void update(const float& dt);
 
