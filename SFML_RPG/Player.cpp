@@ -56,6 +56,7 @@ void Player::save(std::string savePath){ //path = "../game/player/"
 	//shranjuje podatke o playerju
 	//not zapisuj brez da brises kar je ze v datoteki ce dajes v info.txt
 	//std::cout << "save od playerja dela" << std::endl; //debug
+	this->inventory->saveToFile(savePath + "/inventory.txt");
 }
 
 //Dostop
@@ -99,12 +100,13 @@ const bool Player::getDamageTimer(){
 	return false;
 }
 
+/*
 const unsigned Player::getDamage() const{
 	return rand() % (
 	(this->attributeComponent->damageMax + this->weapon->getDamageMax()) 
 	- (this->attributeComponent->damageMin + this->weapon->getDamageMin()) + 1)
 	+ (this->attributeComponent->damageMin + this->weapon->getDamageMin());
-}
+}*/
 
 void Player::setNewMaxVelocity(float newMaxVelocity){
 	this->getMovementComponent()->setNewMaxVelocity(newMaxVelocity);

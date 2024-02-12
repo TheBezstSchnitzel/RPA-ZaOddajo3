@@ -531,6 +531,7 @@ void GameState::updateCombatAndEnemies(const float & dt){
 }
 
 void GameState::updateCombat(Enemy* enemy, const int index, const float & dt){
+	/*
 	if (this->player->getInitAttack()
 	  && enemy->getGlobalBounds().contains(this->mousePosView)
 		&& enemy->getSpriteDistance(*this->player) < this->player->getWeapon()->getRange() 
@@ -539,7 +540,7 @@ void GameState::updateCombat(Enemy* enemy, const int index, const float & dt){
 		enemy->loseHP(dmg);
 		enemy->resetDamageTimer();
 		this->tts->addTextTag(DEFAULT_TAG, enemy->getPosition().x, enemy->getPosition().y, dmg, "", "");	
-	}
+	}*/
 
 	//Checka za enmy damage
 	/*

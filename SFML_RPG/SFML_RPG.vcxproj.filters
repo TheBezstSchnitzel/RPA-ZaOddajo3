@@ -40,15 +40,6 @@
     <Filter Include="Entities\Enemies">
       <UniqueIdentifier>{51f8059d-8704-4505-baf2-c66fad747dd2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Item\Weapons">
-      <UniqueIdentifier>{b96d2d10-c9f3-4c4a-9189-5e55033e5fa4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Item\Weapons\RangedWeapon">
-      <UniqueIdentifier>{a342622c-5e89-4c09-99d9-247266e60bb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Item\Weapons\MeleeWeapon">
-      <UniqueIdentifier>{0f1680c2-336d-430e-9685-acb617189d61}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Systems">
       <UniqueIdentifier>{6ffd502e-3261-40ec-9764-3bb2c697655d}</UniqueIdentifier>
     </Filter>
@@ -63,6 +54,9 @@
     </Filter>
     <Filter Include="Config">
       <UniqueIdentifier>{4897c8e2-53df-4f7d-adc7-c4ab64819a84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item\Tools">
+      <UniqueIdentifier>{424cde46-881a-409e-be85-85daae6f1da1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,18 +123,6 @@
     <ClCompile Include="Item.cpp">
       <Filter>Item</Filter>
     </ClCompile>
-    <ClCompile Include="MeleeWeapon.cpp">
-      <Filter>Item\Weapons\MeleeWeapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Sword.cpp">
-      <Filter>Item\Weapons\MeleeWeapon</Filter>
-    </ClCompile>
-    <ClCompile Include="RangedWeapon.cpp">
-      <Filter>Item\Weapons\RangedWeapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Bow.cpp">
-      <Filter>Item\Weapons\RangedWeapon</Filter>
-    </ClCompile>
     <ClCompile Include="SkillComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -170,9 +152,6 @@
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
       <Filter>Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Item\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="TextTagSystem.cpp">
       <Filter>Systems</Filter>
@@ -206,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="TutorialState.cpp">
       <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool.cpp">
+      <Filter>Item\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,18 +251,6 @@
     <ClInclude Include="Item.h">
       <Filter>Item</Filter>
     </ClInclude>
-    <ClInclude Include="MeleeWeapon.h">
-      <Filter>Item\Weapons\MeleeWeapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Sword.h">
-      <Filter>Item\Weapons\MeleeWeapon</Filter>
-    </ClInclude>
-    <ClInclude Include="RangedWeapon.h">
-      <Filter>Item\Weapons\RangedWeapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Bow.h">
-      <Filter>Item\Weapons\RangedWeapon</Filter>
-    </ClInclude>
     <ClInclude Include="SkillComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -317,9 +287,6 @@
     <ClInclude Include="Items.h">
       <Filter>Item</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Item\Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="TextTagSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
@@ -355,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="TutorialState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool.h">
+      <Filter>Item\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

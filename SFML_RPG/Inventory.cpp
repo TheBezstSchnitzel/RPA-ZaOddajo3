@@ -58,7 +58,7 @@ void Inventory::clear(){
 	this->nullify();
 }
 
-const bool Inventory::empty() const{
+const bool Inventory::isEmpty() const{
 	return this->nrOfItems == 0;
 }
 

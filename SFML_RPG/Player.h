@@ -40,7 +40,7 @@ public:
 
 	const bool getDamageTimer();
 
-	const unsigned getDamage() const;
+	//const unsigned getDamage() const;
 
 	void setNewMaxVelocity(float newMaxVelocity);
 

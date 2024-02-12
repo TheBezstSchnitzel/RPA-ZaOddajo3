@@ -24,7 +24,7 @@ public:
 
 	//Funkcije
 	void clear();
-	const bool empty() const;
+	const bool isEmpty() const;
 
 	const bool add(Item* item);
 	const bool remove(const unsigned index);

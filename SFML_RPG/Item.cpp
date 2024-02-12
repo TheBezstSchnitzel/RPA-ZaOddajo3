@@ -5,12 +5,11 @@ void Item::initVariables(){
 
 }
 
-Item::Item(unsigned level, unsigned value){
+Item::Item(short unsigned type, unsigned value){
 	this->initVariables();
 
-	this->level = level;
 	this->value = value;
-	this->type = ItemTypes::IT_DEFAULT;
+	this->type = type;
 }
 
 Item::~Item(){
