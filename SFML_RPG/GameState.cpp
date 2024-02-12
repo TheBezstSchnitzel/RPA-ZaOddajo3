@@ -207,7 +207,7 @@ void GameState::loadFromSave_inGameTime(){
 }
 
 void GameState::loadFromSave_player(){
-	std::string playerPath = this->savePath + "/game/player.txt";
+	std::string playerPath = this->savePath + "/game/player/info.txt";
 	std::ifstream saveIFile(playerPath);
 
 	//prebere podatke
@@ -232,6 +232,20 @@ void GameState::loadFromSave(){
 	this->loadFromSave_player();
 }
 
+void GameState::createSaveDir(){
+	//prever ce mapa obstaja (da ni prvoi shranjevanj)
+	std::string path = this->savePath + "/game";
+	if (!std::filesystem::is_directory(path)) {
+		//ustvari novo mapo ce je prvo shranjevanje
+		std::filesystem::create_directory(path);
+	}
+	path = path + "/player";
+	if (!std::filesystem::is_directory(path)) {
+		//ustvari novo mapo ce je prvo shranjevanje
+		std::filesystem::create_directory(path);
+	}
+}
+
 //funkcije za shranjevanje
 void GameState::save_misc(){
 	std::string miscPath = this->savePath + "/misc.txt";
@@ -249,15 +263,8 @@ void GameState::save_misc(){
 }
 
 void GameState::save_inGameTime(){
-	//prever ce mapa obstaja (da ni prvoi shranjevanj)
-	std::string path = this->savePath + "/game";
-	if (!std::filesystem::is_directory(path)) {
-		//ustvari novo mapo ce je prvo shranjevanje
-		std::filesystem::create_directory(path);
-	}
-
 	//shrani podatke
-	std::string timePath = path+"/time.txt";
+	std::string timePath = this->savePath+"/game/time.txt";
 	std::ofstream saveOFile(timePath);
 	if (saveOFile.is_open()) {
 		//Shranjevanje
@@ -276,7 +283,7 @@ void GameState::save_inGameTime(){
 
 void GameState::save_player(){
 	sf::Vector2f playerPosition = this->player->getPosition();
-	std::string playerPath = this->savePath + "/game/player.txt";
+	std::string playerPath = this->savePath + "/game/player/info.txt";
 	std::ofstream saveOFile(playerPath);
 	if (saveOFile.is_open()) {
 		//shranjevanje
@@ -288,10 +295,11 @@ void GameState::save_player(){
 	else {
 		throw("ERROR::GameState::save_player::FILE_NOT_OPEN");
 	}
-	this->player->save(this->savePath);
+	this->player->save(this->savePath + "/game/player");
 }
 
 void GameState::save(){
+	this->createSaveDir();
 	//klièe vse funkcije za shranjevanje
 	this->save_inGameTime();
 	this->save_misc();

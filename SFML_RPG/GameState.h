@@ -101,6 +101,8 @@ private:
 	void loadFromSave();
 
 	//funkcije za shranjevanje
+	void createSaveDir();
+
 	void save_misc();
 	void save_inGameTime();
 	void save_player();

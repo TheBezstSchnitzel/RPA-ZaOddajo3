@@ -52,9 +52,9 @@ Player::~Player(){
 	//delete this->weapon;
 }
 
-void Player::save(std::string savePath){
+void Player::save(std::string savePath){ //path = "../game/player/"
 	//shranjuje podatke o playerju
-	//not zapisuj brez da brises kar je ze v datoteki ce dajes v player.txt
+	//not zapisuj brez da brises kar je ze v datoteki ce dajes v info.txt
 	//std::cout << "save od playerja dela" << std::endl; //debug
 }
 
