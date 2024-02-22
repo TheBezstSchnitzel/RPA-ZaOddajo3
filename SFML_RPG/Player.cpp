@@ -100,6 +100,11 @@ const bool Player::getDamageTimer(){
 	return false;
 }
 
+Inventory* Player::getInventory()
+{
+	return this->inventory;
+}
+
 /*
 const unsigned Player::getDamage() const{
 	return rand() % (

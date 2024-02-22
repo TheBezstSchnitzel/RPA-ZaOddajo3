@@ -28,7 +28,8 @@ void Inventory::freeMemory(){
 //Konstruktor / Destruktor
 Inventory::Inventory(unsigned capacity){
 	this->capacity = capacity;
-
+	this->inventoryGUI.loadFromFile("Resources/Images/Gui/inventory.png");
+	this->hotbarGUI.loadFromFile("Resources/Images/Gui/hotbar.png");
 	this->initialize();
 }
 
@@ -44,6 +45,26 @@ const unsigned & Inventory::size() const{
 
 const unsigned & Inventory::maxSize() const{
 	return this->capacity;
+}
+
+void Inventory::makeInventoryTexture(const sf::VideoMode& vm){
+	//this->textRect.setOutlineColor(sf::Color::Red);
+	//this->textRect.setOutlineThickness(5.f);
+	this->textRectINV.setSize(
+		sf::Vector2f(gui::p2pX(55.f,vm),
+					gui::p2pY(60.f,vm))
+	);
+	this->textRectINV.setPosition(sf::Vector2f(gui::p2pX(22.5f, vm), gui::p2pY(10.f, vm)));
+	//this->textRect.setFillColor(sf::Color::Transparent);
+	this->textRectINV.setTexture(&this->inventoryGUI);
+
+	//hotbar
+	this->textRectHB.setSize(
+		sf::Vector2f(gui::p2pX(50.f, vm),
+			gui::p2pY(11.f, vm))
+	);
+	this->textRectHB.setPosition(sf::Vector2f(gui::p2pX(25.f, vm), gui::p2pY(86.f, vm)));
+	this->textRectHB.setTexture(&this->hotbarGUI);
 }
 
 //Funkcije
@@ -93,4 +114,20 @@ const bool Inventory::saveToFile(const std::string fileName){
 
 const bool Inventory::loadFromFile(const std::string fileName){
 	return false;
+}
+
+void Inventory::updateINV(){
+	//std::cout << "Dela" << std::endl;
+}
+
+void Inventory::renderINV(sf::RenderTarget& target){
+	target.draw(this->textRectINV);
+}
+
+void Inventory::updateHB(){
+
+}
+
+void Inventory::renderHB(sf::RenderTarget& target){
+	target.draw(this->textRectHB);
 }

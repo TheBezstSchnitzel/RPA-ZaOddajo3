@@ -40,6 +40,8 @@ public:
 
 	const bool getDamageTimer();
 
+	Inventory* getInventory();
+
 	//const unsigned getDamage() const;
 
 	void setNewMaxVelocity(float newMaxVelocity);

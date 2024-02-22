@@ -31,6 +31,7 @@ private:
 	sf::Sprite renderSprite;
 
 	bool isZoomedOut;
+	bool isInventoryOpen;
 
 	sf::Font font;
 	PauseMenu* pmenu;

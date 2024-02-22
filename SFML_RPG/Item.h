@@ -5,20 +5,26 @@
 
 class Item{
 private:
-	void initVariables();
+	static std::vector<int> takenIDs; //kolk je itemou narjenioh oziroma jih ze obstaja
 
+	sf::Texture* inventoryIcon;
+
+	//inicializacija
+	void initVariables(short unsigned type);
+
+	void findFreeID();
 protected:
 	//Lastnosti
 	short unsigned type;
-	unsigned value;
+	int id;
 
 public:
-	Item(short unsigned type, unsigned value);
-	virtual ~Item();
+	Item(short unsigned type, sf::Texture* inventoryIcon);
+	~Item();
 
 	//Dostop
 	const short unsigned& getType() const { return this->type;}
-	const unsigned& getValue() const { return this->value;}
+	int getID() const { return this->id;}
 
 	//Funkcije
 	virtual Item* clone() = 0;

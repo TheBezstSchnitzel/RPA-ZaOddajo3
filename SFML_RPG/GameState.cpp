@@ -57,6 +57,7 @@ void GameState::initKeybinds(){
 		while (ifs >> key >> key2){
 			this->keybinds[key] = this->supportedKeys->at(key2);
 			if(key == "ZOOM")this->keybindsTimes[key] = sf::Clock();
+			if (key == "INVENTORY")this->keybindsTimes[key] = sf::Clock();
 		}
 	}
 
@@ -365,6 +366,8 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->theme.setVolume(40.f);
 	this->theme.setLoop(true);
 	this->theme.play();*/
+	this->isInventoryOpen = false;
+	this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
 }
 
 GameState::~GameState(){
@@ -427,11 +430,21 @@ void GameState::updateView(const float & dt){
 }
 
 void GameState::updateInput(const float & dt){
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeytime()){
-		if (!this->paused)
-			this->pauseState();
-		else
-			this->unpauseState();
+	if (!this->isInventoryOpen) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeytime()) {
+			if (!this->paused)
+				this->pauseState();
+			else
+				this->unpauseState();
+		}
+	}
+	//inventory
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("INVENTORY"))) &&
+		this->keybindsTimes.at("INVENTORY").getElapsedTime().asSeconds() >= this->keyTimeMax) {
+		this->keybindsTimes.at("INVENTORY").restart();
+		//odpre inventory
+		this->isInventoryOpen = !this->isInventoryOpen;
+		this->paused = this->isInventoryOpen;
 	}
 }
 
@@ -611,7 +624,6 @@ void GameState::update(const float& dt){
 	this->updateMousePositions(&this->view);
 	this->updateKeytime(dt);
 	this->updateInput(dt);
-
 	//this->updateDebugText(dt); //DEBUG
 	
 	if (!this->paused){ //Unpausan update
@@ -635,9 +647,15 @@ void GameState::update(const float& dt){
 		this->updateInGameTime();
 	}
 	else{ //Pausan update
-		this->pmenu->update(this->mousePosWindow,dt);
-		this->updatePauseMenuButtons();
+		if (!this->isInventoryOpen) {
+			this->pmenu->update(this->mousePosWindow, dt);
+			this->updatePauseMenuButtons();
+		}
+		else {
+			this->player->getInventory()->updateINV();
+		}
 	}
+	this->player->getInventory()->updateHB();
 }
 
 void GameState::render(sf::RenderTarget* target){
@@ -669,8 +687,14 @@ void GameState::render(sf::RenderTarget* target){
 	//Rendera GUI
 	this->renderTexture.setView(this->renderTexture.getDefaultView());
 	this->playerGUI->render(this->renderTexture);
-	 
-	if (this->paused){
+
+	this->player->getInventory()->renderHB(this->renderTexture);
+
+	if (this->isInventoryOpen) {
+		this->player->getInventory()->renderINV(this->renderTexture);
+	}
+	
+	if (this->paused && !this->isInventoryOpen){
 		//this->renderTexture.setView(this->renderTexture.getDefaultView());
 		this->pmenu->render(this->renderTexture);
 	}
@@ -682,4 +706,5 @@ void GameState::render(sf::RenderTarget* target){
 	this->renderTexture.display();
 	//this->renderSprite.setTexture(this->renderTexture.getTexture());
 	target->draw(this->renderSprite);
+
 }
