@@ -12,9 +12,6 @@ private:
 	sf::Texture inventoryGUI;
 	sf::RectangleShape textRectINV;
 
-	sf::Texture hotbarGUI;
-	sf::RectangleShape textRectHB;
-
 	//Privatne funkcije
 	void initialize();
 	void nullify(const unsigned from = 0);
@@ -42,8 +39,5 @@ public:
 
 	void updateINV();
 	void renderINV(sf::RenderTarget& target);
-
-	void updateHB();
-	void renderHB(sf::RenderTarget& target);
 };
 

@@ -15,6 +15,10 @@ void PlayerGUI::initTextures(){
 	if (!this->gameTimeDayText_Texture.loadFromFile("Resources/Images/Gui/daySign.png")) {
 		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_TIMEDISPLAYDAYTEXT_TEXTURE";
 	}
+	//hotbar
+	if (!this->hotbarText.loadFromFile("Resources/Images/Gui/hotbar.png")) {
+		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_HOTBAR_TEXTURE";
+	}
 }
 
 void PlayerGUI::initLevelBar(){
@@ -122,6 +126,22 @@ void PlayerGUI::initGameDayDisplay(sf::VideoMode& vm){
 	this->gameTimeDayText.setTexture(&this->gameTimeDayText_Texture);
 }
 
+void PlayerGUI::initHB(sf::VideoMode& vm){
+	this->hotbarRect.setSize(
+		sf::Vector2f(
+			gui::p2pX(50.f, vm),
+			gui::p2pY(11.f, vm)
+		)
+	);
+	this->hotbarRect.setPosition(
+		sf::Vector2f(
+			gui::p2pX(25.f, vm),
+			gui::p2pY(86.f, vm)
+		)
+	);
+	this->hotbarRect.setTexture(&this->hotbarText);
+}
+
 PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 	this->player = player;
 
@@ -130,18 +150,21 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 	//this->initLevelBar();
 	//this->initEXPBar();
 	//this->initHPBar();
-	this->initPlayerTabs(vm, font, *player);
+	//this->initPlayerTabs(vm, font, *player);
 	
 	this->initGameClockDisplay(vm);
 	this->initGameClockNumbers(vm);
 	this->initGameSeasonDisplay(vm);
 	this->initGameDayDisplay(vm);
+
+	//hotbar
+	this->initHB(vm);
 }
 
 PlayerGUI::~PlayerGUI(){
 	//delete this->hpBar;
 	//delete this->expBar;
-	delete this->playerTabs;
+	//delete this->playerTabs;
 }
 
 const bool PlayerGUI::getTabsOpen() const{
@@ -210,7 +233,7 @@ void PlayerGUI::update(const float & dt){
 	//this->updateLevelBar();
 	//this->updateEXPBar();
 	//this->updateHPBar();
-	this->updatePlayerTabs();
+	//this->updatePlayerTabs();
 }
 
 void PlayerGUI::renderLevelBar(sf::RenderTarget & target){
@@ -239,10 +262,15 @@ void PlayerGUI::renderGameClock(sf::RenderTarget& target){
 	target.draw(this->gameTimeDayText);
 }
 
+void PlayerGUI::renderHB(sf::RenderTarget& target){
+	target.draw(this->hotbarRect);
+}
+
 void PlayerGUI::render(sf::RenderTarget & target){
 	//this->renderLevelBar(target);
 	//this->renderEXPBar(target);
 	//this->renderHPBar(target);
-	this->renderPlayerTabs(target);
+	//this->renderPlayerTabs(target);
 	this->renderGameClock(target);
+	this->renderHB(target);
 }

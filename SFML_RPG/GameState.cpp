@@ -481,9 +481,9 @@ void GameState::updatePlayerInput(const float & dt){
 void GameState::updatePlayerGUI(const float & dt){
 	this->playerGUI->update(dt);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_PLAYER_TAB_CHARACTER"))) && this->getKeyTime()){
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_PLAYER_TAB_CHARACTER"))) && this->getKeyTime()) {
 		this->playerGUI->toggleCharacterTab();
-	}
+	}*/
 }
 
 void GameState::updatePauseMenuButtons(){
@@ -655,7 +655,6 @@ void GameState::update(const float& dt){
 			this->player->getInventory()->updateINV();
 		}
 	}
-	this->player->getInventory()->updateHB();
 }
 
 void GameState::render(sf::RenderTarget* target){
@@ -687,8 +686,6 @@ void GameState::render(sf::RenderTarget* target){
 	//Rendera GUI
 	this->renderTexture.setView(this->renderTexture.getDefaultView());
 	this->playerGUI->render(this->renderTexture);
-
-	this->player->getInventory()->renderHB(this->renderTexture);
 
 	if (this->isInventoryOpen) {
 		this->player->getInventory()->renderINV(this->renderTexture);

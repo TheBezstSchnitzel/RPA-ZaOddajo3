@@ -46,6 +46,15 @@ private:
 	sf::Texture gameTimeDayText_Texture;
 	sf::RectangleShape gameTimeDay;
 	sf::IntRect gameTimeDay_TexRect;
+	
+	//hotbar(GUI) =======================================================
+	sf::RectangleShape hotbarRect;
+	sf::Texture hotbarText;
+	
+	void initHB(sf::VideoMode& vm);
+
+	//inventory(GUI) ====================================================
+
 
 	//inicializacija
 	void initFont();
@@ -83,6 +92,7 @@ public:
 	void renderHPBar(sf::RenderTarget & target);
 	void renderPlayerTabs(sf::RenderTarget& target);
 	void renderGameClock(sf::RenderTarget& target);
+	void renderHB(sf::RenderTarget& target);
 
 	void render(sf::RenderTarget& target);
 };
