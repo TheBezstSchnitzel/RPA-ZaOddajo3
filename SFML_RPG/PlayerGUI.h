@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PlayerGUITabs.h"
+#include "Inventory.h"
 
 class PlayerGUI{
 private:
@@ -51,10 +52,16 @@ private:
 	sf::RectangleShape hotbarRect;
 	sf::Texture hotbarText;
 	
+	sf::RectangleShape hotbarRectSelected;
+	sf::Texture hotbarTextSelected;
+
 	void initHB(sf::VideoMode& vm);
 
 	//inventory(GUI) ====================================================
+	sf::RectangleShape inventoryRect;
+	sf::Texture inventoryText;
 
+	void initINV(sf::VideoMode& vm);
 
 	//inicializacija
 	void initFont();
@@ -84,8 +91,10 @@ public:
 	void updateClockDisplay(int hour,int minute);
 	void updateSeasonDisplay(short unsigned seasonNum);
 	void updateGameTimeDay(int daysElapsed);
+	void updateHB(Inventory* inventory);
+	void updateINV();
 
-	void update(const float& dt);
+	void update(const float& dt, Inventory* inventory);
 
 	void renderLevelBar(sf::RenderTarget & target);
 	void renderEXPBar(sf::RenderTarget & target);
@@ -93,6 +102,7 @@ public:
 	void renderPlayerTabs(sf::RenderTarget& target);
 	void renderGameClock(sf::RenderTarget& target);
 	void renderHB(sf::RenderTarget& target);
+	void renderINV(sf::RenderTarget& target);
 
 	void render(sf::RenderTarget& target);
 };

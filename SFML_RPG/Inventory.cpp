@@ -28,8 +28,8 @@ void Inventory::freeMemory(){
 //Konstruktor / Destruktor
 Inventory::Inventory(unsigned capacity){
 	this->capacity = capacity;
-	this->inventoryGUI.loadFromFile("Resources/Images/Gui/inventory.png");
 	this->initialize();
+	this->idSelectedHotbar = 0;
 }
 
 Inventory::~Inventory(){
@@ -46,16 +46,14 @@ const unsigned & Inventory::maxSize() const{
 	return this->capacity;
 }
 
-void Inventory::makeInventoryTexture(const sf::VideoMode& vm){
-	//this->textRect.setOutlineColor(sf::Color::Red);
-	//this->textRect.setOutlineThickness(5.f);
-	this->textRectINV.setSize(
-		sf::Vector2f(gui::p2pX(55.f,vm),
-					gui::p2pY(60.f,vm))
-	);
-	this->textRectINV.setPosition(sf::Vector2f(gui::p2pX(22.5f, vm), gui::p2pY(10.f, vm)));
-	//this->textRect.setFillColor(sf::Color::Transparent);
-	this->textRectINV.setTexture(&this->inventoryGUI);
+void Inventory::setSelectedHB(unsigned short id){
+	if (id >= 0 && id <= 8) {
+		this->idSelectedHotbar = id;
+	}
+}
+
+unsigned short Inventory::getIDSelectedHB(){
+	return this->idSelectedHotbar;
 }
 
 //Funkcije
@@ -105,12 +103,4 @@ const bool Inventory::saveToFile(const std::string fileName){
 
 const bool Inventory::loadFromFile(const std::string fileName){
 	return false;
-}
-
-void Inventory::updateINV(){
-	//std::cout << "Dela" << std::endl;
-}
-
-void Inventory::renderINV(sf::RenderTarget& target){
-	target.draw(this->textRectINV);
 }

@@ -9,8 +9,8 @@ private:
 	unsigned nrOfItems;
 	unsigned capacity;
 
-	sf::Texture inventoryGUI;
-	sf::RectangleShape textRectINV;
+	Item* hotbar[9];
+	unsigned short idSelectedHotbar; //0-8
 
 	//Privatne funkcije
 	void initialize();
@@ -24,8 +24,8 @@ public:
 	//Dostop
 	const unsigned& size() const;
 	const unsigned& maxSize() const;
-
-	void makeInventoryTexture(const sf::VideoMode& vm);
+	void setSelectedHB(unsigned short id);
+	unsigned short getIDSelectedHB();
 
 	//Funkcije
 	void clear();
@@ -36,8 +36,5 @@ public:
 
 	const bool saveToFile(const std::string fileName);
 	const bool loadFromFile(const std::string fileName);
-
-	void updateINV();
-	void renderINV(sf::RenderTarget& target);
 };
 

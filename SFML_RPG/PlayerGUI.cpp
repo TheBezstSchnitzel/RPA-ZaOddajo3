@@ -16,8 +16,15 @@ void PlayerGUI::initTextures(){
 		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_TIMEDISPLAYDAYTEXT_TEXTURE";
 	}
 	//hotbar
-	if (!this->hotbarText.loadFromFile("Resources/Images/Gui/hotbar.png")) {
+	if (!this->hotbarText.loadFromFile("Resources/Images/Gui/hotbar_Layer0.png")) {
 		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_HOTBAR_TEXTURE";
+	}
+	if (!this->hotbarTextSelected.loadFromFile("Resources/Images/Gui/hotbar_Layer1.png")) {
+		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_HOTBAR_TEXTURE";
+	}
+	//inventory
+	if (!this->inventoryText.loadFromFile("Resources/Images/Gui/inventory.png")) {
+		throw "ERROR::PLAYERGUI::COULD_NOT_LOAD_INVENTORY_TEXTURE";
 	}
 }
 
@@ -140,6 +147,24 @@ void PlayerGUI::initHB(sf::VideoMode& vm){
 		)
 	);
 	this->hotbarRect.setTexture(&this->hotbarText);
+	this->hotbarRectSelected = sf::RectangleShape(this->hotbarRect);
+	this->hotbarRectSelected.setTexture(&this->hotbarTextSelected);
+}
+
+void PlayerGUI::initINV(sf::VideoMode& vm){
+	this->inventoryRect.setSize(
+		sf::Vector2f(
+			gui::p2pX(55.f, vm),
+			gui::p2pY(60.f, vm)
+		)
+	);
+	this->inventoryRect.setPosition(
+		sf::Vector2f(
+			gui::p2pX(22.5f, vm),
+			gui::p2pY(10.f, vm)
+		)
+	);
+	this->inventoryRect.setTexture(&this->inventoryText);
 }
 
 PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
@@ -159,6 +184,8 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 
 	//hotbar
 	this->initHB(vm);
+	//inventory
+	this->initINV(vm);
 }
 
 PlayerGUI::~PlayerGUI(){
@@ -229,11 +256,23 @@ void PlayerGUI::updateGameTimeDay(int daysElapsed){
 	this->gameTimeDay.setTextureRect(this->gameTimeDay_TexRect);
 }
 
-void PlayerGUI::update(const float & dt){
+void PlayerGUI::updateHB(Inventory* inventory){
+	unsigned short id = inventory->getIDSelectedHB() + 1;
+	std::string path = "Resources/Images/Gui/hotbar_Layer" + std::to_string(id) + ".png";
+	this->hotbarTextSelected.loadFromFile(path);
+	this->hotbarRectSelected.setTexture(&this->hotbarTextSelected);
+}
+
+void PlayerGUI::updateINV(){
+	//se klice po potrebi (k je inventory odprrt)
+}
+
+void PlayerGUI::update(const float & dt, Inventory* inventory){
 	//this->updateLevelBar();
 	//this->updateEXPBar();
 	//this->updateHPBar();
 	//this->updatePlayerTabs();
+	this->updateHB(inventory);
 }
 
 void PlayerGUI::renderLevelBar(sf::RenderTarget & target){
@@ -264,6 +303,12 @@ void PlayerGUI::renderGameClock(sf::RenderTarget& target){
 
 void PlayerGUI::renderHB(sf::RenderTarget& target){
 	target.draw(this->hotbarRect);
+	target.draw(this->hotbarRectSelected);
+}
+
+void PlayerGUI::renderINV(sf::RenderTarget& target){
+	//se klice po potrebi (k je inventory odprrt)
+	target.draw(this->inventoryRect);
 }
 
 void PlayerGUI::render(sf::RenderTarget & target){

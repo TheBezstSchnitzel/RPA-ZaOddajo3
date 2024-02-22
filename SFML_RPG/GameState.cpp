@@ -367,7 +367,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->theme.setLoop(true);
 	this->theme.play();*/
 	this->isInventoryOpen = false;
-	this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
+	//this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
 }
 
 GameState::~GameState(){
@@ -479,7 +479,7 @@ void GameState::updatePlayerInput(const float & dt){
 }
 
 void GameState::updatePlayerGUI(const float & dt){
-	this->playerGUI->update(dt);
+	this->playerGUI->update(dt,this->player->getInventory());
 
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_PLAYER_TAB_CHARACTER"))) && this->getKeyTime()) {
 		this->playerGUI->toggleCharacterTab();
@@ -652,7 +652,8 @@ void GameState::update(const float& dt){
 			this->updatePauseMenuButtons();
 		}
 		else {
-			this->player->getInventory()->updateINV();
+			//this->player->getInventory()->updateINV();
+			this->playerGUI->updateINV();
 		}
 	}
 }
@@ -688,7 +689,8 @@ void GameState::render(sf::RenderTarget* target){
 	this->playerGUI->render(this->renderTexture);
 
 	if (this->isInventoryOpen) {
-		this->player->getInventory()->renderINV(this->renderTexture);
+		//this->player->getInventory()->renderINV(this->renderTexture);
+		this->playerGUI->renderINV(this->renderTexture);
 	}
 	
 	if (this->paused && !this->isInventoryOpen){
