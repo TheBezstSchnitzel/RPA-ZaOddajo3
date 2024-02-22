@@ -91,6 +91,7 @@ void GameState::initPauseMenu(){
 	const sf::VideoMode& vm = this->stateData->gfxSettings->resolution;
 	this->pmenu = new PauseMenu(this->stateData->gfxSettings->resolution, this->font);
 
+	this->pmenu->addButton("RESUME", gui::p2pY(30.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Resume");
 	this->pmenu->addButton("SAVE", gui::p2pY(60.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Save");
 	this->pmenu->addButton("QUIT", gui::p2pY(74.f, vm), gui::p2pX(13.f, vm), gui::p2pY(6.f, vm), gui::calcCharSize(vm), "Quit");
 }
@@ -432,10 +433,8 @@ void GameState::updateView(const float & dt){
 void GameState::updateInput(const float & dt){
 	if (!this->isInventoryOpen) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeytime()) {
-			if (!this->paused)
-				this->pauseState();
-			else
-				this->unpauseState();
+			if (!this->paused)this->pauseState();
+			else this->unpauseState();
 		}
 	}
 	//inventory
@@ -487,6 +486,10 @@ void GameState::updatePlayerGUI(const float & dt){
 }
 
 void GameState::updatePauseMenuButtons(){
+	if (this->pmenu->isButtonPressed("RESUME")) {
+		this->pmenu->makeSound("RESUME");
+		this->unpauseState();
+	}
 	if (this->pmenu->isButtonPressed("SAVE")) {
 		this->pmenu->makeSound("SAVE");
 		this->save();
