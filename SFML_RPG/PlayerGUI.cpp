@@ -127,9 +127,9 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 
 	this->initTextures();
 	this->initFont();
-	this->initLevelBar();
-	this->initEXPBar();
-	this->initHPBar();
+	//this->initLevelBar();
+	//this->initEXPBar();
+	//this->initHPBar();
 	this->initPlayerTabs(vm, font, *player);
 	
 	this->initGameClockDisplay(vm);
@@ -139,8 +139,8 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 }
 
 PlayerGUI::~PlayerGUI(){
-	delete this->hpBar;
-	delete this->expBar;
+	//delete this->hpBar;
+	//delete this->expBar;
 	delete this->playerTabs;
 }
 
@@ -207,9 +207,9 @@ void PlayerGUI::updateGameTimeDay(int daysElapsed){
 }
 
 void PlayerGUI::update(const float & dt){
-	this->updateLevelBar();
-	this->updateEXPBar();
-	this->updateHPBar();
+	//this->updateLevelBar();
+	//this->updateEXPBar();
+	//this->updateHPBar();
 	this->updatePlayerTabs();
 }
 
@@ -240,9 +240,9 @@ void PlayerGUI::renderGameClock(sf::RenderTarget& target){
 }
 
 void PlayerGUI::render(sf::RenderTarget & target){
-	this->renderLevelBar(target);
-	this->renderEXPBar(target);
-	this->renderHPBar(target);
+	//this->renderLevelBar(target);
+	//this->renderEXPBar(target);
+	//this->renderHPBar(target);
 	this->renderPlayerTabs(target);
 	this->renderGameClock(target);
 }
