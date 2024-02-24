@@ -5,6 +5,12 @@
 
 class PlayerGUI{
 private:
+	struct InventorySlot {
+		bool isHovered;
+		bool isSelected;
+		bool isFull;
+		sf::RectangleShape shape;
+	};
 	Player* player;
 
 	sf::VideoMode& vm;
@@ -55,14 +61,26 @@ private:
 	sf::RectangleShape hotbarRectSelected;
 	sf::Texture hotbarTextSelected;
 
+	InventorySlot hotbarSlots[9];
+
+	void initHBSlots(sf::VideoMode& vm);
 	void initHB(sf::VideoMode& vm);
 
+	void updateHBSlots(const sf::Vector2i& mousePosWindow);
+
+	void renderHBSlots(sf::RenderTarget& target);
 	//inventory(GUI) ====================================================
+	bool lastMouseState;
 	sf::RectangleShape inventoryRect;
 	sf::Texture inventoryText;
-
+	InventorySlot inventorySlots[3][9];
+	
+	void initINVSlots(sf::VideoMode& vm);
 	void initINV(sf::VideoMode& vm);
 
+	void updateINVSlots(const sf::Vector2i& mousePosWindow);
+
+	void renderINVSlots(sf::RenderTarget& target);
 	//inicializacija
 	void initFont();
 	void initTextures();
@@ -74,7 +92,6 @@ private:
 	void initGameClockNumbers(sf::VideoMode& vm);
 	void initGameSeasonDisplay(sf::VideoMode& vm);
 	void initGameDayDisplay(sf::VideoMode& vm);
-
 public:
 	PlayerGUI(Player* player, sf::VideoMode& vm);
 	virtual ~PlayerGUI();
@@ -91,10 +108,10 @@ public:
 	void updateClockDisplay(int hour,int minute);
 	void updateSeasonDisplay(short unsigned seasonNum);
 	void updateGameTimeDay(int daysElapsed);
-	void updateHB(Inventory* inventory);
-	void updateINV();
+	void updateHB();
+	void updateINV(const sf::Vector2i& mousePosWindow);
 
-	void update(const float& dt, Inventory* inventory);
+	void update(const float& dt);
 
 	void renderLevelBar(sf::RenderTarget & target);
 	void renderEXPBar(sf::RenderTarget & target);

@@ -437,6 +437,10 @@ void GameState::updateInput(const float & dt){
 			else this->unpauseState();
 		}
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeytime() && this->isInventoryOpen) {
+		this->isInventoryOpen = false;
+		this->paused = false;
+	}
 	//inventory
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("INVENTORY"))) &&
 		this->keybindsTimes.at("INVENTORY").getElapsedTime().asSeconds() >= this->keyTimeMax) {
@@ -475,10 +479,37 @@ void GameState::updatePlayerInput(const float & dt){
 		}
 		this->isZoomedOut = !this->isZoomedOut;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB1")))) {
+		this->player->getInventory()->setSelectedHB(0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB2")))) {
+		this->player->getInventory()->setSelectedHB(1);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB3")))) {
+		this->player->getInventory()->setSelectedHB(2);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB4")))) {
+		this->player->getInventory()->setSelectedHB(3);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB5")))) {
+		this->player->getInventory()->setSelectedHB(4);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB6")))) {
+		this->player->getInventory()->setSelectedHB(5);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB7")))) {
+		this->player->getInventory()->setSelectedHB(6);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB8")))) {
+		this->player->getInventory()->setSelectedHB(7);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB9")))) {
+		this->player->getInventory()->setSelectedHB(8);
+	}
 }
 
 void GameState::updatePlayerGUI(const float & dt){
-	this->playerGUI->update(dt,this->player->getInventory());
+	this->playerGUI->update(dt);
 
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_PLAYER_TAB_CHARACTER"))) && this->getKeyTime()) {
 		this->playerGUI->toggleCharacterTab();
@@ -656,7 +687,7 @@ void GameState::update(const float& dt){
 		}
 		else {
 			//this->player->getInventory()->updateINV();
-			this->playerGUI->updateINV();
+			this->playerGUI->updateINV(this->mousePosWindow);
 		}
 	}
 }
