@@ -133,23 +133,6 @@ void PlayerGUI::initGameDayDisplay(sf::VideoMode& vm){
 	this->gameTimeDayText.setTexture(&this->gameTimeDayText_Texture);
 }
 
-void PlayerGUI::initHBSlots(sf::VideoMode& vm){
-	float width = 3.9f;
-	float height = 6.7f;
-	float x = 26.7f;
-	float y = 88.14f;
-	float offsetX = width + 1.45f;
-	for (int i = 0; i < 9; i++) {
-		if (i != 0)x += offsetX;
-		this->hotbarSlots[i].isHovered = false;
-		this->hotbarSlots[i].isSelected = false;
-		this->hotbarSlots[i].isFull = false;
-		this->hotbarSlots[i].shape.setFillColor(sf::Color::Red);
-		this->hotbarSlots[i].shape.setSize(sf::Vector2f(gui::p2pX(width, vm), gui::p2pY(height, vm)));
-		this->hotbarSlots[i].shape.setPosition(sf::Vector2f(gui::p2pX(x, vm), gui::p2pY(y, vm)));
-	}
-}
-
 void PlayerGUI::initHB(sf::VideoMode& vm){
 	this->hotbarRect.setSize(
 		sf::Vector2f(
@@ -166,7 +149,6 @@ void PlayerGUI::initHB(sf::VideoMode& vm){
 	this->hotbarRect.setTexture(&this->hotbarText);
 	this->hotbarRectSelected = sf::RectangleShape(this->hotbarRect);
 	this->hotbarRectSelected.setTexture(&this->hotbarTextSelected);
-	this->initHBSlots(vm);
 }
 
 void PlayerGUI::initMousRect(sf::VideoMode& vm){
@@ -181,8 +163,8 @@ void PlayerGUI::initMousRect(sf::VideoMode& vm){
 	this->mouseOffset.y = 0;
 }
 
-void PlayerGUI::initINVSlots(sf::VideoMode& vm){
-	//width = 4.1f height = 7.1f x = 26.f y = 32.f
+void PlayerGUI::initINVSlots(sf::VideoMode& vm) {
+	//inventory
 	float width = 4.1f;
 	float height = 7.1f;
 	float x = 26.f;
@@ -202,10 +184,29 @@ void PlayerGUI::initINVSlots(sf::VideoMode& vm){
 			this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
 			this->inventorySlots[j][i].shape.setSize(sf::Vector2f(gui::p2pX(width, vm), gui::p2pY(height, vm)));
 			this->inventorySlots[j][i].shape.setPosition(sf::Vector2f(gui::p2pX(x, vm), gui::p2pY(y, vm)));
-			//this->inventorySlots[j][i].originalPos = this->inventorySlots[j][i].shape.getPosition();
 			tmpID++;
 		}
 		x = 26.f;
+	}
+	//hotbar
+	width = 3.9f;
+	height = 6.7f;
+	x = 26.7f;
+	y = 88.14f;
+	offsetX = width + 1.45f;
+	for (int j = 3; j < 4; j++) {
+		for (int i = 0; i < 9; i++) {
+			if (i != 0)x += offsetX;
+			this->inventorySlots[j][i].isHovered = false;
+			this->inventorySlots[j][i].isSelected = false;
+			this->inventorySlots[j][i].isFull = false;
+			this->inventorySlots[j][i].lastMouseState = false;
+			this->inventorySlots[j][i].inventoryID = tmpID;
+			this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
+			this->inventorySlots[j][i].shape.setSize(sf::Vector2f(gui::p2pX(width, vm), gui::p2pY(height, vm)));
+			this->inventorySlots[j][i].shape.setPosition(sf::Vector2f(gui::p2pX(x, vm), gui::p2pY(y, vm)));
+			tmpID++;
+		}
 	}
 }
 
@@ -323,27 +324,6 @@ void PlayerGUI::updateHB(){
 	this->hotbarRectSelected.setTexture(&this->hotbarTextSelected);
 }
 
-void PlayerGUI::updateHBSlots(const sf::Vector2i& mousePosWindow){
-	for (int i = 0; i < 9; i++) {
-		//preveri ce je miska gor
-		if (this->hotbarSlots[i].shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))) {
-			this->hotbarSlots[i].isHovered = true;
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))this->lastMouseState = true;
-			else if (this->lastMouseState) {
-				this->hotbarSlots[i].isSelected = !this->hotbarSlots[i].isSelected;
-				this->lastMouseState = false;
-			}
-		}
-		else if (this->hotbarSlots[i].isHovered)this->hotbarSlots[i].isHovered = false;
-		//spreminja gleden na njegove lastnosti
-		if (this->hotbarSlots[i].isHovered)this->hotbarSlots[i].shape.setFillColor(sf::Color::Blue);
-		else this->hotbarSlots[i].shape.setFillColor(sf::Color::Transparent);
-		if (this->hotbarSlots[i].isSelected) {
-			this->hotbarSlots[i].shape.setFillColor(sf::Color::Green);
-		}
-	}
-}
-
 void PlayerGUI::swapINVPlace(int from, int to){
 	//std::cout << "Menjava Mesta" << std::endl;
 	Inventory* inv = this->player->getInventory();
@@ -374,7 +354,7 @@ void PlayerGUI::swapINVPlace(int from, int to){
 }
 
 void PlayerGUI::updateINVSlots(const sf::Vector2i& mousePosWindow){
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < 4; j++) {
 		for (int i = 0; i < 9; i++) {
 			//prever ce je poun =============================================//
 			if (this->player->getInventory()->hasItem(this->inventorySlots[j][i].inventoryID)) {
@@ -436,7 +416,7 @@ void PlayerGUI::updateINVSlots(const sf::Vector2i& mousePosWindow){
 	//preveri za klike izven slotou
 	bool isIn = false;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-		for (int j = 0; j < 3 && !isIn; j++) {
+		for (int j = 0; j < 4 && !isIn; j++) {
 			for (int i = 0; i < 9 && !isIn; i++) {
 				if (this->inventorySlots[j][i].isHovered) {
 					//std::cout<<"vredi" << std::endl;
@@ -448,7 +428,7 @@ void PlayerGUI::updateINVSlots(const sf::Vector2i& mousePosWindow){
 			this->mouseHasItem = false;
 			//this->mouseRect.setTexture(nullptr);
 			//this->mouseRect.setFillColor(sf::Color::Transparent);
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j < 4; j++) {
 				for (int i = 0; i < 9; i++) {
 					if (this->inventorySlots[j][i].inventoryID == this->idMouseItem) {
 						this->inventorySlots[j][i].isSelected = false;
@@ -471,7 +451,6 @@ void PlayerGUI::updateINV(const sf::Vector2i& mousePosWindow){
 	//se klice po potrebi (k je inventory odprrt)
 	this->updateMousRect(mousePosWindow);
 	this->updateINVSlots(mousePosWindow);
-	this->updateHBSlots(mousePosWindow);
 }
 
 void PlayerGUI::update(const float & dt){
@@ -511,25 +490,35 @@ void PlayerGUI::renderGameClock(sf::RenderTarget& target){
 void PlayerGUI::renderHB(sf::RenderTarget& target){
 	target.draw(this->hotbarRect);
 	target.draw(this->hotbarRectSelected);
-}
-
-void PlayerGUI::renderHBSlots(sf::RenderTarget& target){
-	for (int i = 0; i < 9; i++) {
-		target.draw(this->hotbarSlots[i].shape);
+	for (int j = 3; j < 4; j++) {
+		for (int i = 0; i < 9; i++) {
+			//ureja barvo
+			if (this->inventorySlots[j][i].isFull)this->inventorySlots[j][i].shape.setFillColor(sf::Color::White);
+			else this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
+			//ureja teksturo
+			if (this->inventorySlots[j][i].isFull) {
+				sf::Texture* tmp = this->player->getInventory()->getItemIcon(this->inventorySlots[j][i].inventoryID);
+				this->inventorySlots[j][i].shape.setTexture(tmp);
+			}
+			else {
+				this->inventorySlots[j][i].shape.setTexture(nullptr);
+			}
+			//narise
+			target.draw(this->inventorySlots[j][i].shape);
+		}
 	}
 }
 
 void PlayerGUI::renderINVSlots(sf::RenderTarget& target){
 	Inventory* tmp = this->player->getInventory();
-	//int inventoryItemId = 0;
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < 4; j++) {
 		for (int i = 0; i < 9; i++) {
-			//spremeni barvo (DEBUG)
+			//spremeni barvo
 			if (this->inventorySlots[j][i].isSelected) {
 				this->inventorySlots[j][i].shape.setFillColor(sf::Color(92, 84, 64, 50));
 			}
 			else if (this->inventorySlots[j][i].isHovered) {
-				if(this->inventorySlots[j][i].isFull)this->inventorySlots[j][i].shape.setFillColor(sf::Color(153, 151, 150, 255));
+				if (this->inventorySlots[j][i].isFull)this->inventorySlots[j][i].shape.setFillColor(sf::Color(153, 151, 150, 255));
 				else this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
 			}
 			else {
@@ -556,7 +545,6 @@ void PlayerGUI::renderINV(sf::RenderTarget& target){
 	target.draw(this->inventoryRect);
 	target.draw(this->mouseRect);
 	this->renderINVSlots(target);
-	this->renderHBSlots(target);
 }
 
 void PlayerGUI::render(sf::RenderTarget & target){

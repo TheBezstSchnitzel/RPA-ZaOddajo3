@@ -7,23 +7,17 @@ void Inventory::initialize(){
 	for (int i = 0; i < this->capacity; i++) {
 		this->inventory[i] = nullptr;
 	}
-	for (int i = 0; i < 9; i++) {
-		this->hotbar[i] = nullptr;
-	}
 }
 
 void Inventory::freeMemory(){
 	for (size_t i = 0; i < this->capacity; i++){
 		delete this->inventory[i];
 	}
-	for (size_t i = 0; i < 9; i++) {
-		delete this->hotbar[i];
-	}
 }
 
 //Konstruktor / Destruktor
 Inventory::Inventory(){
-	this->capacity = 27;
+	this->capacity = 36;
 	this->initialize();
 	this->idSelectedHotbar = 0;
 }
@@ -52,35 +46,16 @@ unsigned short Inventory::getIDSelectedHB(){
 	return this->idSelectedHotbar;
 }
 
-sf::Texture* Inventory::getItemIcon(int itemPlace, bool isInHB){ //item plac od 0
+sf::Texture* Inventory::getItemIcon(int itemPlace){ //item plac od 0
 	//preveri itemplace
-	if (isInHB) {
-		if (itemPlace <= 9) {
-			if (this->hotbar[itemPlace] == nullptr)return nullptr;
-			else return this->hotbar[itemPlace]->getTexture();
-		}
-		else return nullptr;
-	}
-	else {
-		if (itemPlace <= this->capacity - 1) {
-			//if (this->inventory[0] == nullptr)std::cout << "Dela" << std::endl;
-			if (this->inventory[itemPlace] == nullptr) {
-				//std::cout << "test" << std::endl;
-				return nullptr;
-			}
-			else return this->inventory[itemPlace]->getTexture();
-		}
-	}
+	if (itemPlace < 0 || itemPlace >= this->capacity)return nullptr; //preveri veljavnost vnosa 
+	if (this->inventory[itemPlace] == nullptr)return nullptr; //ce je prazen
+	else return this->inventory[itemPlace]->getTexture(); //ce je poun
 }
 
-bool Inventory::hasItem(int itemPlace, bool isInHB){
-	if (itemPlace < 0 || itemPlace > this->capacity - 1)return false;
-	if (isInHB) {
-		if (itemPlace > 8)return false;
-		return (this->hotbar[itemPlace] != nullptr);
-	}else {
-		return (this->inventory[itemPlace] != nullptr);
-	}
+bool Inventory::hasItem(int itemPlace){
+	if (itemPlace < 0 || itemPlace >= this->capacity)return false;
+	return (this->inventory[itemPlace] != nullptr);
 }
 
 //Funkcije
@@ -93,62 +68,42 @@ const bool Inventory::isEmpty() const{
 	return this->nrOfItems == 0;
 }
 
-const bool Inventory::add(Item * item, int place, bool isInHB){ //item plac od 0
-	if (this->nrOfItems == this->capacity)return false;
+const bool Inventory::add(Item * item, int place){ //item plac od 0 (ce je negativn najde prvo frej mesto)
+	if (this->nrOfItems == this->capacity)return false;//ce je poun inventory
 	if (place < 0) {
-		//doda na prvo prosto mesto
-		for (int i = 0; i < 9; i++) {
-			if (this->hotbar[i] == nullptr) {
-				this->hotbar[i] = item;
-				this->nrOfItems++;
-				return true;
-			}
-		}
+		//najde prvi frej plac
 		for (int i = 0; i < this->capacity; i++) {
 			if (this->inventory[i] == nullptr) {
-				this->inventory[i] == item;
+				this->inventory[i] = item;
 				this->nrOfItems++;
 				return true;
 			}
 		}
 	}
-	if (isInHB) {
-		if (place > 9)return false;
-		if (this->hotbar[place] == nullptr) {
-			this->hotbar[place] = item;
-			this->nrOfItems++;
-			return true;
-		}
-		return false;
-	}
-	else {
-		if (place > this->capacity - 1)return false;
+	if (place >= 0 && place < this->capacity) {
 		if (this->inventory[place] == nullptr) {
 			this->inventory[place] = item;
 			this->nrOfItems++;
 			return true;
 		}
-		return false;
+		else return false;
 	}
+	return false;
 }
 
-const bool Inventory::remove(int place, bool isInHB){
-	if (this->nrOfItems > 0 && this->hasItem(place,isInHB)) {
-		if (isInHB) {
-			this->hotbar[place] = nullptr;
-			this->nrOfItems--;
-		}else {
-			this->inventory[place] = nullptr;
-			this->nrOfItems--;
-		}
+const bool Inventory::remove(int place){
+	if (place < 0 || place >= this->capacity)return false; //preveri veljavnost vnosa 
+	if (this->nrOfItems > 0 && this->hasItem(place)) {
+		this->inventory[place] = nullptr;
+		this->nrOfItems--;
 		return true;
 	}
 	return false;
 }
 
-Item* Inventory::getItem(int place, bool isInHB){
-	if (this->hasItem(place, isInHB)) {
-		if (isInHB)return this->hotbar[place];
+Item* Inventory::getItem(int place){
+	if (place < 0 || place >= this->capacity)return nullptr; //preveri veljavnost vnosa 
+	if (this->hasItem(place)) {
 		return this->inventory[place];
 	}
 	return nullptr;

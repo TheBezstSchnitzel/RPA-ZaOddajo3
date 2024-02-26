@@ -65,14 +65,14 @@ private:
 	sf::RectangleShape hotbarRectSelected;
 	sf::Texture hotbarTextSelected;
 
-	InventorySlot hotbarSlots[9];
+	//InventorySlot hotbarSlots[9];
 
-	void initHBSlots(sf::VideoMode& vm);
+	//void initHBSlots(sf::VideoMode& vm);
 	void initHB(sf::VideoMode& vm);
 
-	void updateHBSlots(const sf::Vector2i& mousePosWindow);
+	//void updateHBSlots(const sf::Vector2i& mousePosWindow);
 
-	void renderHBSlots(sf::RenderTarget& target);
+	//void renderHBSlots(sf::RenderTarget& target);
 	//inventory(GUI) ====================================================
 	bool lastMouseState; //sam pr hb
 	bool mouseHasItem;
@@ -81,7 +81,7 @@ private:
 	sf::Vector2f mouseOffset;
 	sf::RectangleShape inventoryRect;
 	sf::Texture inventoryText;
-	InventorySlot inventorySlots[3][9];
+	InventorySlot inventorySlots[4][9];
 	
 	void initMousRect(sf::VideoMode& vm);
 	void initINVSlots(sf::VideoMode& vm);
