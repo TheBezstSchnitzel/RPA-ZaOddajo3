@@ -4,8 +4,7 @@
 #include "PauseMenu.h"
 #include "TileMap.h"
 #include "PlayerGUI.h"
-#include "Sword.h"
-#include "Bow.h"
+#include "Items.h"
 #include "TextTagSystem.h"
 
 class Game;
@@ -43,6 +42,9 @@ private:
 	float keyTimeMax;
 
 	std::map<std::string, sf::Clock> keybindsTimes;
+
+	//items
+	std::map<std::string, Item*> items;
 
 	//in game time
 	int whenIsNightHour; //kdaj se dan spremeni u noc
@@ -85,6 +87,8 @@ private:
 	void initShaders();
 	void initKeyTime();
 	void initDebugText();
+
+	void initTools();
 
 	void initPlayers();
 	void initPlayerGUI();

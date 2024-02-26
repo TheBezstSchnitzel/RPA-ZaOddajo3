@@ -77,13 +77,16 @@ void GameState::initTextures(){
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Test/new_playerSpriteSheet_Osnova_beu.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
 	}
-
+	/*
 	if(!this->textures["RAT1_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/rat1_60x64.png")){
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_RAT1_TEXTURE";
 	}
 
 	if (!this->textures["BIRD1_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/bird1_61x57.png")){
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_BIRD1_TEXTURE";
+	}*/
+	if (!this->textures["HoeIcon"].loadFromFile("Resources/Images/Gui/hoeIcon.png")) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_ICON_TEXTURE";
 	}
 }
 
@@ -112,6 +115,14 @@ void GameState::initDebugText(){
 	this->debugText.setFillColor(sf::Color::White);
 	this->debugText.setCharacterSize(16);
 	this->debugText.setPosition(15.f, this->window->getSize().y / 2.f);
+}
+
+void GameState::initTools(){
+	this->items["Hoe"] = new Hoe(&this->textures["HoeIcon"], 120, false, false);
+	//if (this->items["Hoe"]->getTexture() == nullptr)std::cout << "lol" << std::endl;
+	//Hoe tmp = Hoe(&this->textures["HoeIcon"], 120, false, false);
+	this->player->getInventory()->add(this->items["Hoe"], 1);
+	//if(this->player->getInventory()->getItemIcon(0) == nullptr)std::cout << "lol1" << std::endl; ;
 }
 
 void GameState::initPlayers() {
@@ -369,6 +380,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->theme.play();*/
 	this->isInventoryOpen = false;
 	//this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
+	this->initTools();
 }
 
 GameState::~GameState(){

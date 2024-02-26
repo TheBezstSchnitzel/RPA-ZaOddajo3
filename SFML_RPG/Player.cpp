@@ -32,7 +32,7 @@ void Player::initAnimations(){
 }
 
 void Player::initInventory(){
-	this->inventory = new Inventory(100);
+	this->inventory = new Inventory();
 }
 
 //Konstruktor / Destruktor

@@ -8,7 +8,7 @@ private:
 	bool isBroken;
 
 public:
-	Tool(short unsigned type, sf::Texture* inventoryIcon, int maxDurability, int durability, bool isEquipped, bool isBroken = false);
+	Tool(short unsigned type, int maxDurability, int durability, bool isEquipped, bool isBroken = false);
 	~Tool();
 	
 	void damageDurability(int damage);
@@ -20,8 +20,7 @@ public:
 	bool getIsBrooken();
 
 	//usage
-	virtual void use() = 0;
-	virtual void render() = 0;
+	virtual bool use() = 0;
 	virtual void update() = 0;
 };
 

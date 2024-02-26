@@ -9,7 +9,11 @@ private:
 		bool isHovered;
 		bool isSelected;
 		bool isFull;
+		bool lastMouseState;
+		int inventoryID;
 		sf::RectangleShape shape;
+		//sf::Vector2f offsetWhenSelected;
+		//sf::Vector2f originalPos; //vrjetnu ne rabs
 	};
 	Player* player;
 
@@ -70,14 +74,22 @@ private:
 
 	void renderHBSlots(sf::RenderTarget& target);
 	//inventory(GUI) ====================================================
-	bool lastMouseState;
+	bool lastMouseState; //sam pr hb
+	bool mouseHasItem;
+	int idMouseItem;
+	sf::RectangleShape mouseRect;
+	sf::Vector2f mouseOffset;
 	sf::RectangleShape inventoryRect;
 	sf::Texture inventoryText;
 	InventorySlot inventorySlots[3][9];
 	
+	void initMousRect(sf::VideoMode& vm);
 	void initINVSlots(sf::VideoMode& vm);
 	void initINV(sf::VideoMode& vm);
 
+	void swapINVPlace(int from, int to);
+
+	void updateMousRect(const sf::Vector2i& mousePosWindow);
 	void updateINVSlots(const sf::Vector2i& mousePosWindow);
 
 	void renderINVSlots(sf::RenderTarget& target);

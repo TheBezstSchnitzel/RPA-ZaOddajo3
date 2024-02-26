@@ -5,7 +5,9 @@
 
 class Inventory{
 private:
-	Item** itemArray;
+	//std::map<int, Item*>inventory;
+	//std::map<int, Item*>hotbar;
+	Item* inventory[27];
 	unsigned nrOfItems;
 	unsigned capacity;
 
@@ -14,11 +16,10 @@ private:
 
 	//Privatne funkcije
 	void initialize();
-	void nullify(const unsigned from = 0);
 	void freeMemory();
 
 public:
-	Inventory(unsigned capacity);
+	Inventory();
 	virtual ~Inventory();
 
 	//Dostop
@@ -26,15 +27,17 @@ public:
 	const unsigned& maxSize() const;
 	void setSelectedHB(unsigned short id);
 	unsigned short getIDSelectedHB();
+	sf::Texture* getItemIcon(int itemPlace, bool isInHB = false);
+	bool hasItem(int itemPlace, bool isInHB = false); //ce ma item na tistmu indexu
 
 	//Funkcije
 	void clear();
 	const bool isEmpty() const;
 
-	const bool add(Item* item);
-	const bool remove(const unsigned index);
+	const bool add(Item* item, int place = -1, bool isInHB = false);
+	const bool remove(int place, bool isInHB=false);
+	Item* getItem(int place, bool isInHB = false);
 
 	const bool saveToFile(const std::string fileName);
 	const bool loadFromFile(const std::string fileName);
 };
-

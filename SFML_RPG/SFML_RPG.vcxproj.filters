@@ -189,6 +189,9 @@
     <ClCompile Include="Tool.cpp">
       <Filter>Item\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Hoe.cpp">
+      <Filter>Item\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -324,6 +327,9 @@
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="Tool.h">
+      <Filter>Item\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Hoe.h">
       <Filter>Item\Tools</Filter>
     </ClInclude>
   </ItemGroup>

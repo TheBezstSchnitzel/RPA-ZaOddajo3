@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Tool.h"
 
-Tool::Tool(short unsigned type, sf::Texture* inventoryIcon, int maxDurability, int durability, bool isEquipped, bool isBroken) : Item(type,inventoryIcon){
+Tool::Tool(short unsigned type, int maxDurability, int durability, bool isEquipped, bool isBroken) : Item(type){
 	this->maxDurability = maxDurability;
 	this->durabiltity = durability;
 	this->isEquipped = isEquipped;
