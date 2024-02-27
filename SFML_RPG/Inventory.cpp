@@ -18,6 +18,7 @@ void Inventory::freeMemory(){
 //Konstruktor / Destruktor
 Inventory::Inventory(){
 	this->capacity = 36;
+	this->money = 100000; //DEBUG
 	this->initialize();
 	this->idSelectedHotbar = 0;
 }
@@ -56,6 +57,22 @@ sf::Texture* Inventory::getItemIcon(int itemPlace){ //item plac od 0
 bool Inventory::hasItem(int itemPlace){
 	if (itemPlace < 0 || itemPlace >= this->capacity)return false;
 	return (this->inventory[itemPlace] != nullptr);
+}
+
+unsigned int Inventory::getMoney(){
+	return this->money;
+}
+
+void Inventory::addMoney(unsigned int amount){
+	this->money += amount;
+}
+
+void Inventory::takeMoney(unsigned int amount){
+	this->money -= amount;
+}
+
+bool Inventory::hasEnoughMoney(unsigned int amount){
+	return (this->money >= amount);
 }
 
 //Funkcije
@@ -109,8 +126,22 @@ Item* Inventory::getItem(int place){
 	return nullptr;
 }
 
-const bool Inventory::saveToFile(const std::string fileName){
-	return false;
+void Inventory::saveToFile(const std::string fileName){
+	//std::cout << "Dela" << std::endl;
+	/*std::string inventoryInfo = fileName + "/inventoryInfo.txt";
+	std::ofstream saveOFile(inventoryInfo);
+	if (saveOFile.is_open()) {
+		//shranjevanje
+		saveOFile << this->nrOfItems << std::endl;
+		saveOFile << this->capacity << std::endl;
+		saveOFile << this->money << std::endl;
+		saveOFile << this->idSelectedHotbar << std::endl;
+
+		saveOFile.close();
+	}
+	else {
+		throw("ERROR::Inventory::saveToFile::FILE_NOT_OPEN");
+	}*/
 }
 
 const bool Inventory::loadFromFile(const std::string fileName){

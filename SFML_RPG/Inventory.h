@@ -9,6 +9,8 @@ private:
 	unsigned nrOfItems;
 	unsigned capacity;
 
+	unsigned int money;
+
 	unsigned short idSelectedHotbar; //0-8
 
 	//Privatne funkcije
@@ -26,6 +28,10 @@ public:
 	unsigned short getIDSelectedHB();
 	sf::Texture* getItemIcon(int itemPlace);
 	bool hasItem(int itemPlace); //ce ma item na tistmu indexu
+	unsigned int getMoney();
+	void addMoney(unsigned int amount);
+	void takeMoney(unsigned int amount);
+	bool hasEnoughMoney(unsigned int amount);
 
 	//Funkcije
 	void clear();
@@ -35,6 +41,6 @@ public:
 	const bool remove(int place);
 	Item* getItem(int place);
 
-	const bool saveToFile(const std::string fileName);
+	void saveToFile(const std::string fileName);
 	const bool loadFromFile(const std::string fileName);
 };

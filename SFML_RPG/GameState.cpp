@@ -130,7 +130,7 @@ void GameState::initPlayers() {
 }
 
 void GameState::initPlayerGUI(){
-	this->playerGUI = new PlayerGUI(this->player, this->stateData->gfxSettings->resolution);
+	this->playerGUI = new PlayerGUI(this->player, this->stateData->gfxSettings->resolution, this->font);
 }
 
 void GameState::initEnemySystem(){

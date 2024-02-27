@@ -152,7 +152,6 @@ void PlayerGUI::initHB(sf::VideoMode& vm){
 }
 
 void PlayerGUI::initMousRect(sf::VideoMode& vm){
-	this->lastMouseState = false;  //sam HB
 	this->mouseHasItem = false;
 	this->mouseRect.setFillColor(sf::Color::Transparent);
 	//this->mouseRect.setOutlineThickness(1.f);
@@ -210,7 +209,16 @@ void PlayerGUI::initINVSlots(sf::VideoMode& vm) {
 	}
 }
 
-void PlayerGUI::initINV(sf::VideoMode& vm){
+void PlayerGUI::initMoneySlot(sf::VideoMode& vm, sf::Font &font){
+	this->moneySlot.setCharacterSize(gui::calcCharSize(vm, 90U));
+	this->moneySlot.setPosition(sf::Vector2f(gui::p2pX(60.f, vm), gui::p2pY(23.6f, vm)));
+	this->moneySlot.setString("Money:");
+	this->moneySlot.setColor(sf::Color::Black);
+	this->moneySlot.setFont(font);
+	this->moneySlot.setStyle(sf::Text::Bold);
+}
+
+void PlayerGUI::initINV(sf::VideoMode& vm, sf::Font &font){
 	this->inventoryRect.setSize(
 		sf::Vector2f(
 			gui::p2pX(55.f, vm),
@@ -226,9 +234,10 @@ void PlayerGUI::initINV(sf::VideoMode& vm){
 	this->inventoryRect.setTexture(&this->inventoryText);
 	this->initINVSlots(vm);
 	this->initMousRect(vm);
+	this->initMoneySlot(vm,font);
 }
 
-PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
+PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font) : vm(vm){
 	this->player = player;
 
 	this->initTextures();
@@ -246,7 +255,7 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm) : vm(vm){
 	//hotbar
 	this->initHB(vm);
 	//inventory
-	this->initINV(vm);
+	this->initINV(vm,font);
 }
 
 PlayerGUI::~PlayerGUI(){
@@ -540,11 +549,18 @@ void PlayerGUI::renderINVSlots(sf::RenderTarget& target){
 	}
 }
 
+void PlayerGUI::renderMoney(sf::RenderTarget& target){
+	std::string tmp = "Money: " + std::to_string(this->player->getInventory()->getMoney());
+	this->moneySlot.setString(tmp);
+	target.draw(this->moneySlot);
+}
+
 void PlayerGUI::renderINV(sf::RenderTarget& target){
 	//se klice po potrebi (k je inventory odprrt)
 	target.draw(this->inventoryRect);
 	target.draw(this->mouseRect);
 	this->renderINVSlots(target);
+	this->renderMoney(target);
 }
 
 void PlayerGUI::render(sf::RenderTarget & target){

@@ -65,16 +65,9 @@ private:
 	sf::RectangleShape hotbarRectSelected;
 	sf::Texture hotbarTextSelected;
 
-	//InventorySlot hotbarSlots[9];
-
-	//void initHBSlots(sf::VideoMode& vm);
 	void initHB(sf::VideoMode& vm);
 
-	//void updateHBSlots(const sf::Vector2i& mousePosWindow);
-
-	//void renderHBSlots(sf::RenderTarget& target);
 	//inventory(GUI) ====================================================
-	bool lastMouseState; //sam pr hb
 	bool mouseHasItem;
 	int idMouseItem;
 	sf::RectangleShape mouseRect;
@@ -83,9 +76,12 @@ private:
 	sf::Texture inventoryText;
 	InventorySlot inventorySlots[4][9];
 	
+	sf::Text moneySlot;
+
 	void initMousRect(sf::VideoMode& vm);
 	void initINVSlots(sf::VideoMode& vm);
-	void initINV(sf::VideoMode& vm);
+	void initMoneySlot(sf::VideoMode& vm, sf::Font &font);
+	void initINV(sf::VideoMode& vm, sf::Font &font);
 
 	void swapINVPlace(int from, int to);
 
@@ -93,6 +89,7 @@ private:
 	void updateINVSlots(const sf::Vector2i& mousePosWindow);
 
 	void renderINVSlots(sf::RenderTarget& target);
+	void renderMoney(sf::RenderTarget& target);
 	//inicializacija
 	void initFont();
 	void initTextures();
@@ -105,7 +102,7 @@ private:
 	void initGameSeasonDisplay(sf::VideoMode& vm);
 	void initGameDayDisplay(sf::VideoMode& vm);
 public:
-	PlayerGUI(Player* player, sf::VideoMode& vm);
+	PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font);
 	virtual ~PlayerGUI();
 
 	//Dostop
