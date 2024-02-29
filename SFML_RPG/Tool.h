@@ -13,11 +13,13 @@ public:
 	
 	void damageDurability(int damage);
 	void healDurability(int heal);
+	void setDurability(int durability);
 
 	//dostop
 	int getDurability();
 	bool getIsEquipped();
 	bool getIsBrooken();
+	void setIsBrooken(bool value);
 
 	//usage
 	virtual bool use() = 0;

@@ -18,4 +18,7 @@ public:
 
 	void update();
 	sf::Texture* getTexture();
+
+	void saveToFile(std::string savePath);
+	void loadFromSave(std::string savePath);
 };

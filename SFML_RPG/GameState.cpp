@@ -5,6 +5,7 @@
 
 void GameState::initVariables(){
 	this->isZoomedOut = false;
+	this->i = 0;
 }
 
 //Inicializacija
@@ -239,11 +240,31 @@ void GameState::loadFromSave_player(){
 	}
 }
 
+void GameState::loadFromSave_items(){
+	Inventory* inv = this->player->getInventory();
+	std::ifstream saveIFile(this->savePath + "/game/items/itemsList.txt");
+	std::string className = "";
+	int i = 0;
+	while (saveIFile >> className) {
+		saveIFile >> i;
+		if (className == "hoe") {
+			this->items["Hoe" + std::to_string(i)] = new Hoe(&this->textures["HoeIcon"], 120, false, false);
+			this->items["Hoe" + std::to_string(i)]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
+			this->player->getInventory()->add(this->items["Hoe" + std::to_string(i)], i);
+		}
+		else {
+			std::cout << "mors popraut gamestate loadSaveItems" << std::endl;
+		}
+	}
+	saveIFile.close();
+}
+
 void GameState::loadFromSave(){
 	//klièe vse funkcije za loudanje iz save
 	this->loadFromSave_inGameTime();
 	this->loadFromSave_misc();
 	this->loadFromSave_player();
+	this->loadFromSave_items();
 }
 
 void GameState::createSaveDir(){
@@ -254,6 +275,11 @@ void GameState::createSaveDir(){
 		std::filesystem::create_directory(path);
 	}
 	path = path + "/player";
+	if (!std::filesystem::is_directory(path)) {
+		//ustvari novo mapo ce je prvo shranjevanje
+		std::filesystem::create_directory(path);
+	}
+	path = this->savePath + "/game/items";
 	if (!std::filesystem::is_directory(path)) {
 		//ustvari novo mapo ce je prvo shranjevanje
 		std::filesystem::create_directory(path);
@@ -312,12 +338,32 @@ void GameState::save_player(){
 	this->player->save(this->savePath + "/game/player");
 }
 
+void GameState::save_items(){
+	Inventory* inv = this->player->getInventory();
+	std::ofstream saveOFile(this->savePath + "/game/items/itemsList.txt", std::ios::out | std::ios::trunc);
+	for (int i = 0; i < inv->maxSize(); i++) {
+		if (inv->hasItem(i)) {
+			//ce je tam item ga shrani
+			std::string tempSave = this->savePath + "/game/items/item" + std::to_string(i) + ".txt";
+			inv->getItem(i)->saveToFile(tempSave);
+			if (Hoe* temp = dynamic_cast<Hoe*>(inv->getItem(i))) {
+				saveOFile << "hoe" << " " << std::to_string(i) << std::endl;
+			}
+			else{
+				std::cout << "Game state save mors popraut" << std::endl;
+			}
+		}
+	}
+	saveOFile.close();
+}
+
 void GameState::save(){
 	this->createSaveDir();
 	//klièe vse funkcije za shranjevanje
 	this->save_inGameTime();
 	this->save_misc();
 	this->save_player();
+	this->save_items();
 }
 
 void GameState::updateHours_Minutes(){
@@ -357,6 +403,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 		this->initPlayers();
 		this->creationDate = whatTime();
 		this->initInGameTime();
+		this->initTools();
 	}
 	//te se u sakmu primeru na novo kreairajo
 	this->initDeferredRender();
@@ -381,7 +428,6 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->theme.play();*/
 	this->isInventoryOpen = false;
 	//this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
-	this->initTools();
 }
 
 GameState::~GameState(){
@@ -672,7 +718,10 @@ void GameState::update(const float& dt){
 	this->updateKeytime(dt);
 	this->updateInput(dt);
 	//this->updateDebugText(dt); //DEBUG
-	
+	if (this->i = 0) {
+		this->playerGUI->updateINV(this->mousePosWindow);
+		i++;
+	}
 	if (!this->paused){ //Unpausan update
 		this->updateView(dt);
 

@@ -30,6 +30,10 @@ void Tool::healDurability(int heal){
 	}
 }
 
+void Tool::setDurability(int durability){
+	this->durabiltity = durability;
+}
+
 int Tool::getDurability(){
 	return this->durabiltity;
 }
@@ -40,4 +44,8 @@ bool Tool::getIsEquipped(){
 
 bool Tool::getIsBrooken(){
 	return this->isBroken;
+}
+
+void Tool::setIsBrooken(bool value){
+	this->isBroken = value;
 }

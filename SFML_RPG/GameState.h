@@ -75,6 +75,8 @@ private:
 	//Sistemi
 	TextTagSystem* tts;
 
+	int i; //za stvari k se zgodijo sam pr 1 ponovitvi
+
 	//Privatne funkcije
 	//inicializacija
 	void initVariables();
@@ -103,6 +105,7 @@ private:
 	void loadFromSave_misc();
 	void loadFromSave_inGameTime();
 	void loadFromSave_player();
+	void loadFromSave_items();
 	void loadFromSave();
 
 	//funkcije za shranjevanje
@@ -111,6 +114,7 @@ private:
 	void save_misc();
 	void save_inGameTime();
 	void save_player();
+	void save_items();
 	void save();
 
 	//Game time
