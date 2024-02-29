@@ -42,5 +42,5 @@ public:
 	Item* getItem(int place);
 
 	void saveToFile(const std::string fileName);
-	const bool loadFromFile(const std::string fileName);
+	void loadFromFile(const std::string fileName);
 };

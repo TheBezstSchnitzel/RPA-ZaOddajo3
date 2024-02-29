@@ -128,12 +128,11 @@ Item* Inventory::getItem(int place){
 
 void Inventory::saveToFile(const std::string fileName){
 	//std::cout << "Dela" << std::endl;
-	/*std::string inventoryInfo = fileName + "/inventoryInfo.txt";
-	std::ofstream saveOFile(inventoryInfo);
+	std::ofstream saveOFile(fileName, std::ios::out);
 	if (saveOFile.is_open()) {
 		//shranjevanje
-		saveOFile << this->nrOfItems << std::endl;
-		saveOFile << this->capacity << std::endl;
+		//saveOFile << this->nrOfItems << std::endl;
+		//saveOFile << this->capacity << std::endl;
 		saveOFile << this->money << std::endl;
 		saveOFile << this->idSelectedHotbar << std::endl;
 
@@ -141,9 +140,20 @@ void Inventory::saveToFile(const std::string fileName){
 	}
 	else {
 		throw("ERROR::Inventory::saveToFile::FILE_NOT_OPEN");
-	}*/
+	}
 }
 
-const bool Inventory::loadFromFile(const std::string fileName){
-	return false;
+void Inventory::loadFromFile(const std::string fileName){
+	std::ifstream saveIFile(fileName);
+	//prebere podatke
+	if (saveIFile.is_open()) {
+		//Branje in zapisovanje podatkov
+		saveIFile >> this->money;
+		saveIFile >> this->idSelectedHotbar;
+	
+		saveIFile.close(); //zapre datoteko 
+	}
+	else {
+		throw("ERROR::Inventory::loadFromSave::FILE_NOT_OPEN");
+	}
 }

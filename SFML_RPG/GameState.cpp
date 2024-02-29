@@ -232,6 +232,7 @@ void GameState::loadFromSave_player(){
 		saveIFile.close();
 		//zapisovanje podatkov
 		this->player = new Player(x, y, this->textures["PLAYER_SHEET"],true);
+		this->player->getInventory()->loadFromFile(this->savePath + "/game/player/inventory.txt");
 	}
 	else {
 		throw("ERROR::GameState::loadFromSave_inGameTime::FILE_NOT_OPEN");
