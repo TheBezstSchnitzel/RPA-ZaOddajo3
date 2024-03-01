@@ -257,6 +257,7 @@ void GameState::loadFromSave_items(){
 		}
 	}
 	saveIFile.close();
+	//this->playerGUI->updateINV(this->mousePosWindow);
 }
 
 void GameState::loadFromSave(){
@@ -428,6 +429,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->theme.play();*/
 	this->isInventoryOpen = false;
 	//this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
+	this->playerGUI->updateINV(this->mousePosWindow); //sam enkrat rabm za hb kazat
 }
 
 GameState::~GameState(){

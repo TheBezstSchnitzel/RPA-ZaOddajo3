@@ -75,8 +75,6 @@ private:
 	//Sistemi
 	TextTagSystem* tts;
 
-	int i; //za stvari k se zgodijo sam pr 1 ponovitvi
-
 	//Privatne funkcije
 	//inicializacija
 	void initVariables();
