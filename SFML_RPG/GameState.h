@@ -117,6 +117,7 @@ private:
 	void loadFromSave_inGameTime();
 	void loadFromSave_player();
 	void loadFromSave_items();
+	void loadFromSave_buildings();
 	void loadFromSave();
 
 	//funkcije za shranjevanje
@@ -126,6 +127,7 @@ private:
 	void save_inGameTime();
 	void save_player();
 	void save_items();
+	void save_buildings();
 	void save();
 
 	//Game time

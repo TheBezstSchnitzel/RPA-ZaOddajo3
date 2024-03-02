@@ -272,12 +272,31 @@ void GameState::loadFromSave_items(){
 	//this->playerGUI->updateINV(this->mousePosWindow);
 }
 
+void GameState::loadFromSave_buildings() {
+	std::ifstream saveIFile(this->savePath + "/game/buildings/buildingsList.txt");
+	std::string buildingType = "";
+	int n = 0;
+	while (saveIFile >> buildingType >> n) {
+		if (buildingType == "farmland") {
+			for (int i = 0; i < n; i++) {
+				this->buildings["farmland"][i] = new Farmland(&this->textures["Farmland"], sf::Vector2f(0.f, 0.f), sf::Vector2f(16.f, 16.f));
+				this->buildings["farmland"][i]->loadFromFile(this->savePath + "/game/buildings/" + buildingType + std::to_string(i) + ".txt");
+			}
+		}
+		else {
+			std::cout << "Popravt mors loadFromSave buildings" << std::endl;
+		}
+	}
+	saveIFile.close();
+}
+
 void GameState::loadFromSave(){
 	//klièe vse funkcije za loudanje iz save
 	this->loadFromSave_inGameTime();
 	this->loadFromSave_misc();
 	this->loadFromSave_player();
 	this->loadFromSave_items();
+	this->loadFromSave_buildings();
 }
 
 void GameState::createSaveDir(){
@@ -293,6 +312,11 @@ void GameState::createSaveDir(){
 		std::filesystem::create_directory(path);
 	}
 	path = this->savePath + "/game/items";
+	if (!std::filesystem::is_directory(path)) {
+		//ustvari novo mapo ce je prvo shranjevanje
+		std::filesystem::create_directory(path);
+	}
+	path = this->savePath + "/game/buildings";
 	if (!std::filesystem::is_directory(path)) {
 		//ustvari novo mapo ce je prvo shranjevanje
 		std::filesystem::create_directory(path);
@@ -370,6 +394,21 @@ void GameState::save_items(){
 	saveOFile.close();
 }
 
+void GameState::save_buildings(){
+	std::ofstream saveOFile(this->savePath + "/game/buildings/buildingsList.txt");
+	int id = 0;
+	for (const auto& pair : this->buildings) {
+		saveOFile << pair.first << std::endl;
+		for (const auto& value : pair.second) {
+			value.second->saveToFile(this->savePath + "/game/buildings/"+ pair.first + std::to_string(id) +".txt");
+			id++;
+		}
+		saveOFile << id << std::endl;
+		id = 0;
+	}
+	saveOFile.close();
+}
+
 void GameState::save(){
 	this->createSaveDir();
 	//klièe vse funkcije za shranjevanje
@@ -377,6 +416,7 @@ void GameState::save(){
 	this->save_misc();
 	this->save_player();
 	this->save_items();
+	this->save_buildings();
 }
 
 void GameState::updateHours_Minutes(){
@@ -404,6 +444,7 @@ std::string whatTime() {
 
 //Konstruktor / destruktor
 GameState::GameState(StateData* state_data,Game*game, unsigned short save) : State(state_data){
+	this->initTextures();
 	//novo shranjevanje ================================================
 	this->savePath = "Saves/save" + std::to_string(save);
 	this->game = game;
@@ -423,13 +464,11 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->initView();
 	this->initKeybinds();
 	this->initFonts();
-	this->initTextures();
 	this->initPauseMenu();
 	this->initShaders();
 	//this->initDebugText(); // DEBUG
 	this->initKeyTime();
 	this->initPlayerGUI();
-	//this->initEnemySystem();
 	this->initTileMap();
 	this->initInGameTimers();
 	this->initSystems();
@@ -585,7 +624,6 @@ void GameState::updatePlayerInput(const float & dt){
 		if (this->player->getDamageTimer()) {
 			if (!this->player->useItem) {
 				//uporabi item
-				this->player->useItem = true;
 				if (this->iteminHand == "hoe")this->useHoe();
 			}
 		}
@@ -594,11 +632,14 @@ void GameState::updatePlayerInput(const float & dt){
 
 void GameState::useHoe(){
 	if (this->playerGUI->getIsPlaceble()) {
+		this->player->useItem = true;
+		//dobi id
 		int id = 0;
-		if (!this->farmlandIDs.empty()) {
-			id = this->farmlandIDs.back() + 1;
+		if (!this->buildings["farmland"].empty()) {
+			auto zadn = this->buildings["farmland"].rbegin();
+			id = zadn->first + 1;
 		}
-		this->farmlandIDs.push_back(id);
+		//doda v mapo
 		this->buildings["farmland"][id] = new Farmland(&this->textures["Farmland"], this->tileMap->getPosOfRectWithMousOver(this->mousePosView), sf::Vector2f(16.f, 16.f));
 	}
 }

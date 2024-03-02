@@ -26,6 +26,10 @@ std::string Building::getType(){
 	return this->type;
 }
 
+void Building::setPos(sf::Vector2f pos){
+	this->renderRect.setPosition(pos);
+}
+
 void Building::update(){
 }
 

@@ -15,6 +15,8 @@ public:
 	sf::Vector2f getPos();
 	std::string getType();
 
+	void setPos(sf::Vector2f pos);
+
 	virtual void update();
 	virtual void render(sf::RenderTarget* target);
 
