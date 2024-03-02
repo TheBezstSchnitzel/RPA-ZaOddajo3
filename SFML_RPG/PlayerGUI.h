@@ -14,8 +14,8 @@ private:
 		bool lastMouseState;
 		int inventoryID;
 		sf::RectangleShape shape;
-		//sf::Vector2f offsetWhenSelected;
-		//sf::Vector2f originalPos; //vrjetnu ne rabs
+		bool hasDurability;
+		sf::Text durability;
 	};
 	Player* player;
 
@@ -87,7 +87,7 @@ private:
 	void initPossible(sf::VideoMode& vm);
 
 	void initMousRect(sf::VideoMode& vm);
-	void initINVSlots(sf::VideoMode& vm);
+	void initINVSlots(sf::VideoMode& vm, sf::Font& font);
 	void initMoneySlot(sf::VideoMode& vm, sf::Font &font);
 	void initINV(sf::VideoMode& vm, sf::Font &font);
 

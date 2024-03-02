@@ -631,7 +631,10 @@ void GameState::updatePlayerInput(const float & dt){
 }
 
 void GameState::useHoe(){
-	if (this->playerGUI->getIsPlaceble()) {
+	Item* item = this->player->getInventory()->getHBSelectedItem();
+	Tool* tool = static_cast<Tool*>(item);
+	if (this->playerGUI->getIsPlaceble() && !tool->getIsBrooken()) {
+		//uporabi item ==============================
 		this->player->useItem = true;
 		//dobi id
 		int id = 0;
@@ -641,6 +644,9 @@ void GameState::useHoe(){
 		}
 		//doda v mapo
 		this->buildings["farmland"][id] = new Farmland(&this->textures["Farmland"], this->tileMap->getPosOfRectWithMousOver(this->mousePosView), sf::Vector2f(16.f, 16.f));
+		//===========================================
+		//mu odbije durability =====
+		tool->damageDurability(2);
 	}
 }
 

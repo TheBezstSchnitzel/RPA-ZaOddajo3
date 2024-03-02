@@ -171,7 +171,7 @@ void PlayerGUI::initMousRect(sf::VideoMode& vm){
 	this->mouseOffset.y = 0;
 }
 
-void PlayerGUI::initINVSlots(sf::VideoMode& vm) {
+void PlayerGUI::initINVSlots(sf::VideoMode& vm, sf::Font& font) {
 	//inventory
 	float width = 4.1f;
 	float height = 7.1f;
@@ -192,6 +192,12 @@ void PlayerGUI::initINVSlots(sf::VideoMode& vm) {
 			this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
 			this->inventorySlots[j][i].shape.setSize(sf::Vector2f(gui::p2pX(width, vm), gui::p2pY(height, vm)));
 			this->inventorySlots[j][i].shape.setPosition(sf::Vector2f(gui::p2pX(x, vm), gui::p2pY(y, vm)));
+			this->inventorySlots[j][i].hasDurability = false;
+			this->inventorySlots[j][i].durability.setCharacterSize(gui::calcCharSize(vm,100U));
+			this->inventorySlots[j][i].durability.setPosition(sf::Vector2f(gui::p2pX(x, vm), gui::p2pY((y + 5.f), vm)));
+			this->inventorySlots[j][i].durability.setFont(font);
+			this->inventorySlots[j][i].durability.setString("");
+			this->inventorySlots[j][i].durability.setColor(sf::Color::White);
 			tmpID++;
 		}
 		x = 26.f;
@@ -213,6 +219,12 @@ void PlayerGUI::initINVSlots(sf::VideoMode& vm) {
 			this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
 			this->inventorySlots[j][i].shape.setSize(sf::Vector2f(gui::p2pX(width, vm), gui::p2pY(height, vm)));
 			this->inventorySlots[j][i].shape.setPosition(sf::Vector2f(gui::p2pX(x, vm), gui::p2pY(y, vm)));
+			this->inventorySlots[j][i].hasDurability = false;
+			this->inventorySlots[j][i].durability.setCharacterSize(gui::calcCharSize(vm, 100U));
+			this->inventorySlots[j][i].durability.setPosition(sf::Vector2f(gui::p2pX(x, vm), gui::p2pY((y + 5.f), vm)));
+			this->inventorySlots[j][i].durability.setFont(font);
+			this->inventorySlots[j][i].durability.setString("");
+			this->inventorySlots[j][i].durability.setColor(sf::Color::White);
 			tmpID++;
 		}
 	}
@@ -241,7 +253,7 @@ void PlayerGUI::initINV(sf::VideoMode& vm, sf::Font &font){
 		)
 	);
 	this->inventoryRect.setTexture(&this->inventoryText);
-	this->initINVSlots(vm);
+	this->initINVSlots(vm,font);
 	this->initMousRect(vm);
 	this->initMoneySlot(vm,font);
 }
@@ -342,6 +354,21 @@ void PlayerGUI::updateHB(){
 	std::string path = "Resources/Images/Gui/hotbar_Layer" + std::to_string(id) + ".png";
 	this->hotbarTextSelected.loadFromFile(path);
 	this->hotbarRectSelected.setTexture(&this->hotbarTextSelected);
+
+	//sloti
+	//hotbar
+	for (int j = 3; j < 4; j++) {
+		for (int i = 0; i < 9; i++) {
+			if (this->inventorySlots[j][i].hasDurability) {
+				Item* item = this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID);
+				if (Tool* temp = dynamic_cast<Tool*>(item)) {
+					std::string dur = std::to_string(temp->getDurability());
+					this->inventorySlots[j][i].durability.setString(dur);
+				}
+			}
+		}
+	}
+
 }
 
 void PlayerGUI::swapINVPlace(int from, int to){
@@ -380,8 +407,20 @@ void PlayerGUI::updateINVSlots(const sf::Vector2i& mousePosWindow){
 			if (this->player->getInventory()->hasItem(this->inventorySlots[j][i].inventoryID)) {
 				//je poun
 				this->inventorySlots[j][i].isFull = true;
+				if (this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID)->getType()) {
+					//prever ce ma item durability 1 = usable torej ga ma
+					this->inventorySlots[j][i].hasDurability = true;
+					Item* item = this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID);
+					if (Tool* temp = dynamic_cast<Tool*>(item)) {
+						std::string dur = std::to_string(temp->getDurability());
+						this->inventorySlots[j][i].durability.setString(dur);
+					}
+				}
 			}
-			else this->inventorySlots[j][i].isFull = false; //ni poun
+			else {
+				this->inventorySlots[j][i].isFull = false; //ni poun
+				this->inventorySlots[j][i].hasDurability = false;
+			}
 			//==============================================================//
 			//preveri ce je miska nad njim =================================//
 			if (this->inventorySlots[j][i].shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow))) {
@@ -525,6 +564,9 @@ void PlayerGUI::renderHB(sf::RenderTarget& target){
 			}
 			//narise
 			target.draw(this->inventorySlots[j][i].shape);
+			if (this->inventorySlots[j][i].hasDurability) {
+				target.draw(this->inventorySlots[j][i].durability);
+			}
 		}
 	}
 }
@@ -542,7 +584,13 @@ void PlayerGUI::renderINVSlots(sf::RenderTarget& target){
 				else this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
 			}
 			else {
-				if (this->inventorySlots[j][i].isFull)this->inventorySlots[j][i].shape.setFillColor(sf::Color::White);
+				if (this->inventorySlots[j][i].isFull) {
+					this->inventorySlots[j][i].shape.setFillColor(sf::Color::White);
+					if (this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID)->getType()) {
+						//dobi 1 kar pomen da je usable in ima durability
+						this->inventorySlots[j][i].hasDurability = true;
+					}
+				}
 				else this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
 			}
 			//========
@@ -556,6 +604,10 @@ void PlayerGUI::renderINVSlots(sf::RenderTarget& target){
 			}
 			
 			target.draw(this->inventorySlots[j][i].shape);
+			//ce ma durability
+			if (this->inventorySlots[j][i].hasDurability) {
+				target.draw(this->inventorySlots[j][i].durability);
+			}
 		}
 	}
 }
