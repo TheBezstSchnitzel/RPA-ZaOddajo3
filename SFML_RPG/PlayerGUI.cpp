@@ -157,6 +157,7 @@ void PlayerGUI::initPossible(sf::VideoMode& vm){
 	this->possible.setSize(sf::Vector2f(16.f, 16.f));
 	this->possible.setOutlineColor(sf::Color::Green);
 	this->possible.setOutlineThickness(0.5f);
+	this->isPlaceble = false;
 }
 
 void PlayerGUI::initMousRect(sf::VideoMode& vm){
@@ -585,10 +586,37 @@ void PlayerGUI::render(sf::RenderTarget & target){
 
 //tools
 
-void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture) {
-	//this->possible.setPosition(static_cast<sf::Vector2f>(mousePosWindow));
-	this->possible.setPosition(map->getPosOfRectWithMousOver(mousePosWindow));
-	this->possible.setTexture(texture);
+bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<int, Building*>* buildings) {
+	for (const auto& value : *buildings) {
+		if (value.second->getType() == buildingType) {
+			if (value.second->getPos() == pos) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture, std::string item, std::map<int,Building*>* buildings) {
+	sf::Vector2f temp = map->getPosOfRectWithMousOver(mousePosWindow);
+	if (item == "hoe") {
+		this->possible.setPosition(map->getPosOfRectWithMousOver(mousePosWindow));
+		this->possible.setTexture(texture);
+		if (checkBuild("farmland", temp, buildings)) {
+			this->possible.setFillColor(sf::Color(255,255,255,150));
+			this->possible.setOutlineColor(sf::Color::Green);
+			this->isPlaceble = true;
+		}
+		else {
+			this->possible.setFillColor(sf::Color(212, 23, 13, 200));
+			this->possible.setOutlineColor(sf::Color::Red);
+			this->isPlaceble = false;
+		}
+	}
+}
+
+bool PlayerGUI::getIsPlaceble(){
+	return this->isPlaceble;
 }
 
 void PlayerGUI::renderItemPossibles(sf::RenderTarget& target){

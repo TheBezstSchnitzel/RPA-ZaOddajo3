@@ -58,6 +58,9 @@
     <Filter Include="Item\Tools">
       <UniqueIdentifier>{424cde46-881a-409e-be85-85daae6f1da1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Buildings">
+      <UniqueIdentifier>{cef1e119-e1d6-4b15-a008-1c8f0d7b4e5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -191,6 +194,12 @@
     </ClCompile>
     <ClCompile Include="Hoe.cpp">
       <Filter>Item\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Farmland.cpp">
+      <Filter>Buildings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +340,12 @@
     </ClInclude>
     <ClInclude Include="Hoe.h">
       <Filter>Item\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Farmland.h">
+      <Filter>Buildings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

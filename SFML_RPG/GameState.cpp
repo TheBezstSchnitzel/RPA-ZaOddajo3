@@ -3,6 +3,10 @@
 #include "Game.h"
 #include <filesystem>
 
+void GameState::initBuildings(){
+	//iz save nalozi
+}
+
 void GameState::initVariables(){
 	this->isZoomedOut = false;
 }
@@ -91,8 +95,11 @@ void GameState::initTextures(){
 	if (!this->textures["HoeIcon"].loadFromFile("Resources/Images/Gui/hoeIcon.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_ICON_TEXTURE";
 	}
-	if (!this->textures["HoePosible"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
+	/*if (!this->textures["HoePosible"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_Posible_TEXTURE";
+	}*/
+	if (!this->textures["Farmland"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
 }
 
@@ -576,8 +583,23 @@ void GameState::updatePlayerInput(const float & dt){
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 		if (this->player->getDamageTimer()) {
-			if (!this->player->useItem)this->player->useItem = true;
+			if (!this->player->useItem) {
+				//uporabi item
+				this->player->useItem = true;
+				if (this->iteminHand == "hoe")this->useHoe();
+			}
 		}
+	}
+}
+
+void GameState::useHoe(){
+	if (this->playerGUI->getIsPlaceble()) {
+		int id = 0;
+		if (!this->farmlandIDs.empty()) {
+			id = this->farmlandIDs.back() + 1;
+		}
+		this->farmlandIDs.push_back(id);
+		this->buildings["farmland"][id] = new Farmland(&this->textures["Farmland"], this->tileMap->getPosOfRectWithMousOver(this->mousePosView), sf::Vector2f(16.f, 16.f));
 	}
 }
 
@@ -766,6 +788,22 @@ void GameState::update(const float& dt){
 
 		//updata inGametime
 		this->updateInGameTime();
+
+
+		//Items DEBUG =======================================
+
+		if (this->hasItemInHand) {
+			sf::Texture* possibleIcon = nullptr;
+			std::string buildingType = "";
+			if (this->iteminHand == "hoe") {
+				possibleIcon = &this->textures["Farmland"];
+				buildingType = "farmland";
+			}
+			this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap, possibleIcon, this->iteminHand,&this->buildings[buildingType]);
+		}
+
+		//===================================================
+
 	}
 	else{ //Pausan update
 		if (!this->isInventoryOpen) {
@@ -777,16 +815,6 @@ void GameState::update(const float& dt){
 			this->playerGUI->updateINV(this->mousePosWindow);
 		}
 	}
-
-	//Items DEBUG =======================================
-
-	if (this->hasItemInHand) {
-		sf::Texture* possibleIcon = nullptr;
-		if (this->iteminHand == "hoe")possibleIcon = &this->textures["HoePosible"];
-		this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap,possibleIcon);
-	}
-
-	//===================================================
 }
 
 void GameState::render(sf::RenderTarget* target){
@@ -818,6 +846,21 @@ void GameState::render(sf::RenderTarget* target){
 	}*/
 
 	this->tileMap->renderDeferred(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter());
+
+	//buildings =======================================
+
+	for (const auto& pair : this->buildings) {
+		//std::cout << "Key: " << pair.first << ", Values:";
+
+		// Iterate over the vector associated with the current key
+		for (const auto& value : pair.second) {
+			//std::cout << " " << value;
+			value.second->render(&this->renderTexture);
+		}
+		//std::cout << std::endl;
+	}
+
+	//==============================================
 
 	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), false); // ta zadna je za rendiranje hitboxa k je debug sam
 

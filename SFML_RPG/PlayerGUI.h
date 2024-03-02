@@ -3,6 +3,7 @@
 #include "PlayerGUITabs.h"
 #include "Inventory.h"
 #include "TileMap.h"
+#include "Building.h"
 
 class PlayerGUI{
 private:
@@ -81,6 +82,7 @@ private:
 
 	//items ==============================================================
 	sf::RectangleShape possible;
+	bool isPlaceble;
 
 	void initPossible(sf::VideoMode& vm);
 
@@ -114,6 +116,7 @@ public:
 	//Dostop
 	const bool getTabsOpen() const;
 	void toggleCharacterTab();
+	bool getIsPlaceble();
 
 	//Funkcije
 	void updateLevelBar();
@@ -140,7 +143,7 @@ public:
 
 
 	//tools
-	void updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map, sf::Texture* texture);
+	void updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map, sf::Texture* texture, std::string item, std::map<int, Building*>* buildings);
 	void renderItemPossibles(sf::RenderTarget& target);
 };
 

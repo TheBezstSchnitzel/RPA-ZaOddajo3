@@ -160,6 +160,7 @@
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="AttributeComponent.cpp" />
     <ClCompile Include="Bird1.cpp" />
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="CharacterTab.cpp" />
     <ClCompile Include="DefaultEditorMode.cpp" />
     <ClCompile Include="EditorMode.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="EnemyEditorMode.cpp" />
     <ClCompile Include="EnemySpawnerTile.cpp" />
     <ClCompile Include="EnemySystem.cpp" />
+    <ClCompile Include="Farmland.cpp" />
     <ClCompile Include="GraphicsSettings.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="EditorState.cpp" />
@@ -211,6 +213,7 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AttributeComponent.h" />
     <ClInclude Include="Bird1.h" />
+    <ClInclude Include="Building.h" />
     <ClInclude Include="CharacterTab.h" />
     <ClInclude Include="DefaultEditorMode.h" />
     <ClInclude Include="EditorMode.h" />
@@ -222,6 +225,7 @@
     <ClInclude Include="EnemySpawnerTile.h" />
     <ClInclude Include="EnemySystem.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Farmland.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Gui.h" />

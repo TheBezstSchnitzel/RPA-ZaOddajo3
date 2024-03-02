@@ -6,6 +6,8 @@
 #include "PlayerGUI.h"
 #include "Items.h"
 #include "TextTagSystem.h"
+#include "Building.h"
+#include "Farmland.h"
 
 class Game;
 
@@ -45,6 +47,12 @@ private:
 
 	//items
 	std::map<std::string, Item*> items;
+
+	//buildings
+	std::map<std::string, std::map<int, Building*>> buildings;
+	std::vector<int> farmlandIDs;
+
+	void initBuildings();  //za nardit se
 
 	bool hasItemInHand;
 	std::string iteminHand;
@@ -124,6 +132,8 @@ private:
 	sf::Clock minutesTimer;
 	float minutesTimerMax;
 	void updateHours_Minutes();
+
+	void useHoe();
 
 public:
 	GameState(StateData* state_data, Game* game, unsigned short save);
