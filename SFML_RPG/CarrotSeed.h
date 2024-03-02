@@ -1,18 +1,15 @@
 #pragma once
-#include "Tool.h"
-class Hoe : public Tool{
+#include "Items.h"
+
+
+class CarrotSeed : public Tool{
 private:
 	sf::Texture* invIcon;
 
+
 public:
-	Hoe(sf::Texture* icon, int durability, bool isBroken = false);
-	~Hoe();
-	
-	//Item* clone();
-
-	//dostop
-
-	//bool use();
+	CarrotSeed(sf::Texture* icon, int durability, bool isBroken);
+	~CarrotSeed();
 
 	void update();
 	sf::Texture* getTexture();
@@ -20,3 +17,4 @@ public:
 	void saveToFile(std::string savePath);
 	void loadFromSave(std::string savePath);
 };
+

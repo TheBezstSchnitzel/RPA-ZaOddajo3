@@ -61,6 +61,9 @@
     <Filter Include="Buildings">
       <UniqueIdentifier>{cef1e119-e1d6-4b15-a008-1c8f0d7b4e5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Item\Plants">
+      <UniqueIdentifier>{27251f98-81bf-42b2-96d8-9951070f13df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -199,6 +202,12 @@
       <Filter>Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Farmland.cpp">
+      <Filter>Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotSeed.cpp">
+      <Filter>Item\Plants</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotPlant.cpp">
       <Filter>Buildings</Filter>
     </ClCompile>
   </ItemGroup>
@@ -347,6 +356,15 @@
     <ClInclude Include="Farmland.h">
       <Filter>Buildings</Filter>
     </ClInclude>
+    <ClInclude Include="CarrotSeed.h">
+      <Filter>Item\Plants</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotPlant.h">
+      <Filter>Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Buildings.h">
+      <Filter>Buildings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_shader.frag">
@@ -375,5 +393,10 @@
     <Text Include="ToDo.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SFML_RPG.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

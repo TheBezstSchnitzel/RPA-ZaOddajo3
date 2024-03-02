@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "Tool.h"
 
-Tool::Tool(short unsigned type, int maxDurability, int durability, bool isEquipped, bool isBroken) : Item(type){
+Tool::Tool(short unsigned type, int maxDurability, int durability, bool isBroken) : Item(type){
 	this->maxDurability = maxDurability;
 	this->durabiltity = durability;
-	this->isEquipped = isEquipped;
 	this->isBroken = isBroken;
 }
 
@@ -38,9 +37,6 @@ int Tool::getDurability(){
 	return this->durabiltity;
 }
 
-bool Tool::getIsEquipped(){
-	return this->isEquipped;
-}
 
 bool Tool::getIsBrooken(){
 	return this->isBroken;

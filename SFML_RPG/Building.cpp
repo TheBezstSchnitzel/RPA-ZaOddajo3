@@ -9,10 +9,11 @@ void Building::initRect(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f siz
 }
 
 
-Building::Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, bool hasHitBox){
+Building::Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox ,bool hasHitBox){
 	this->initRect(texture, pos, size);
 	this->type = type;
 	this->hasHitBox = hasHitBox;
+	this->hitbox = hitbox;
 }
 
 Building::~Building(){
@@ -33,7 +34,7 @@ void Building::setPos(sf::Vector2f pos){
 
 void Building::checkCollisionPlayer(Entity* player, const float& dt){
 	if (hasHitBox) {
-		sf::FloatRect buildingBounds = sf::FloatRect(this->renderRect.getPosition(), this->renderRect.getSize());
+		sf::FloatRect buildingBounds = sf::FloatRect(this->hitbox.getPosition(), this->hitbox.getSize());
 		sf::FloatRect nextPositionBounds = player->getNextPositionBounds(dt);
 		if (buildingBounds.intersects(nextPositionBounds)) {
 			//player dol collision ,,,,, zgorna stran tila

@@ -161,6 +161,8 @@
     <ClCompile Include="AttributeComponent.cpp" />
     <ClCompile Include="Bird1.cpp" />
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="CarrotPlant.cpp" />
+    <ClCompile Include="CarrotSeed.cpp" />
     <ClCompile Include="CharacterTab.cpp" />
     <ClCompile Include="DefaultEditorMode.cpp" />
     <ClCompile Include="EditorMode.cpp" />
@@ -214,6 +216,9 @@
     <ClInclude Include="AttributeComponent.h" />
     <ClInclude Include="Bird1.h" />
     <ClInclude Include="Building.h" />
+    <ClInclude Include="Buildings.h" />
+    <ClInclude Include="CarrotPlant.h" />
+    <ClInclude Include="CarrotSeed.h" />
     <ClInclude Include="CharacterTab.h" />
     <ClInclude Include="DefaultEditorMode.h" />
     <ClInclude Include="EditorMode.h" />
@@ -267,6 +272,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ToDo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SFML_RPG.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

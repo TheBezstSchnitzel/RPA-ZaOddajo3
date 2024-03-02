@@ -648,12 +648,14 @@ float calculateDistance2D(sf::Vector2f pos1, sf::Vector2f pos2) {
 
 bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<int, Building*>* buildings) {
 	for (const auto& value : *buildings) {
-		if (value.second->getType() == buildingType) {
-			if (value.second->getPos() == pos) {
-				return false;
-			}
+		if (value.second->getPos() == pos && buildingType == "farmland") {
+			return false;
+		}
+		if (value.second->getPos() == pos && buildingType == "carrotPlant") {
+			return true;
 		}
 	}
+	if (buildingType == "carrotPlant")return false;
 	return true;
 }
 
@@ -664,6 +666,27 @@ void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap*
 			this->possible.setPosition(temp);
 			this->possible.setTexture(texture);
 			if (checkBuild("farmland", temp, buildings)) {
+				this->possible.setFillColor(sf::Color(255, 255, 255, 150));
+				this->possible.setOutlineColor(sf::Color::Green);
+				this->isPlaceble = true;
+			}
+			else {
+				this->possible.setFillColor(sf::Color(212, 23, 13, 200));
+				this->possible.setOutlineColor(sf::Color::Red);
+				this->isPlaceble = false;
+			}
+		}
+		else {
+			this->possible.setFillColor(sf::Color::Transparent);
+			this->possible.setOutlineColor(sf::Color::Transparent);
+			this->isPlaceble = false;
+		}
+	}
+	if (item == "carrotSeed") {
+		if (calculateDistance2D(mousePosWindow, player->getPosition()) < 32.f) {
+			this->possible.setPosition(temp);
+			this->possible.setTexture(texture);
+			if (checkBuild("carrotPlant", temp, buildings)) {
 				this->possible.setFillColor(sf::Color(255, 255, 255, 150));
 				this->possible.setOutlineColor(sf::Color::Green);
 				this->isPlaceble = true;

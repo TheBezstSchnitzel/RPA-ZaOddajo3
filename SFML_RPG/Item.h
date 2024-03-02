@@ -5,13 +5,10 @@
 
 
 enum ItemTypes { IT_UNUSABLE = 0, IT_USABLE };
-/*UNUSABLE: kt na foro pridelki kovanci kej kar ne vpliva na svet al pa kar kol
+/*UNUSABLE: kt na foro pridelki kej kar ne vpliva na svet al pa kar kol
 USUABLE pa nasprotnu ksna orodja itd*/
 class Item{
 private:
-	//static std::vector<int> takenIDs; //kolk je itemou narjenioh oziroma jih ze obstaja
-
-	//sf::Texture* inventoryIcon;
 
 	//inicializacija
 	void initVariables(short unsigned type);
@@ -31,7 +28,7 @@ public:
 	//int getID() const { return this->id;}
 
 	//Funkcije
-	virtual Item* clone() = 0;
+	//virtual Item* clone() = 0;
 	virtual sf::Texture* getTexture() = 0;
 	//virtual void use() = 0;
 

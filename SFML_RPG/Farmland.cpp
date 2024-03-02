@@ -2,7 +2,7 @@
 #include "Farmland.h"
 
 Farmland::Farmland(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size) :
-Building(texture,pos,size,"farmland") {
+Building(texture,pos,size,"farmland",sf::RectangleShape()) {
 
 }
 

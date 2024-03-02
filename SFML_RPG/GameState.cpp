@@ -75,30 +75,22 @@ void GameState::initFonts(){
 }
 
 void GameState::initTextures(){
-	/*if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET2.png")) {
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
-	}*/
+	//player
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/player_sheet.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
 	}
-	/*if (!this->textures["PLAYER_SHEET_HOE"].loadFromFile("Resources/Images/Sprites/Player/player_sheet_hoe.png")) { // \Resources\Images\Sprites\Player
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_HOE_TEXTURE";
-	}*/
-	/*
-	if(!this->textures["RAT1_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/rat1_60x64.png")){
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_RAT1_TEXTURE";
-	}
-
-	if (!this->textures["BIRD1_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/bird1_61x57.png")){
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_BIRD1_TEXTURE";
-	}*/
+	//items
 	if (!this->textures["HoeIcon"].loadFromFile("Resources/Images/Gui/hoeIcon.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_ICON_TEXTURE";
 	}
-	/*if (!this->textures["HoePosible"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_Posible_TEXTURE";
-	}*/
+	if (!this->textures["carrot_seed"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(0,0),sf::Vector2i(16,16)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_plants_all_TEXTURE";
+	}
+	//buildings
 	if (!this->textures["Farmland"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
+	}
+	if (!this->textures["CarrotPlant"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)))) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
 }
@@ -131,11 +123,13 @@ void GameState::initDebugText(){
 }
 
 void GameState::initTools(){
-	this->items["Hoe"] = new Hoe(&this->textures["HoeIcon"], 120, false, false);
+	this->items["Hoe"] = new Hoe(&this->textures["HoeIcon"], 120, false);
 	//if (this->items["Hoe"]->getTexture() == nullptr)std::cout << "lol" << std::endl;
 	//Hoe tmp = Hoe(&this->textures["HoeIcon"], 120, false, false);
 	this->player->getInventory()->add(this->items["Hoe"], 1);
 	//if(this->player->getInventory()->getItemIcon(0) == nullptr)std::cout << "lol1" << std::endl; ;
+	this->items["CarrotSeed"] = new CarrotSeed(&this->textures["carrot_seed"], 120, false);
+	this->player->getInventory()->add(this->items["CarrotSeed"], -1);
 }
 
 void GameState::initPlayers() {
@@ -260,7 +254,7 @@ void GameState::loadFromSave_items(){
 	while (saveIFile >> className) {
 		saveIFile >> i;
 		if (className == "hoe") {
-			this->items["Hoe" + std::to_string(i)] = new Hoe(&this->textures["HoeIcon"], 120, false, false);
+			this->items["Hoe" + std::to_string(i)] = new Hoe(&this->textures["HoeIcon"], 120, false);
 			this->items["Hoe" + std::to_string(i)]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
 			this->player->getInventory()->add(this->items["Hoe" + std::to_string(i)], i);
 		}
@@ -625,6 +619,7 @@ void GameState::updatePlayerInput(const float & dt){
 			if (!this->player->useItem) {
 				//uporabi item
 				if (this->iteminHand == "hoe")this->useHoe();
+				else if (this->iteminHand == "carrotSeed")this->useCarrotSeed();
 			}
 		}
 	}
@@ -650,6 +645,26 @@ void GameState::useHoe(){
 	}
 }
 
+void GameState::useCarrotSeed(){
+	Item* item = this->player->getInventory()->getHBSelectedItem();
+	Tool* tool = static_cast<Tool*>(item);
+	if (this->playerGUI->getIsPlaceble() && !tool->getIsBrooken()) {
+		//uporabi item ==============================
+		//this->player->useItem = true;
+		//dobi id
+		int id = 0;
+		if (!this->buildings["carrotPlant"].empty()) {
+			auto zadn = this->buildings["carrotPlant"].rbegin();
+			id = zadn->first + 1;
+		}
+		//doda v mapo
+		this->buildings["carrotPlant"][id] = new CarrotPlant(&this->textures["CarrotPlant"], this->tileMap->getPosOfRectWithMousOver(this->mousePosView), sf::Vector2f(16.f, 16.f));
+		//===========================================
+		//mu odbije durability =====
+		tool->damageDurability(1);
+	}
+}
+
 void GameState::updatePlayerGUI(const float & dt){
 	this->playerGUI->update(dt);
 	Item* equipedItem = this->player->getInventory()->getHBSelectedItem();
@@ -661,7 +676,13 @@ void GameState::updatePlayerGUI(const float & dt){
 			this->player->itemInHand = this->iteminHand;
 		}
 		else {
-			std::cout << "Dodelat gamestate usage" << std::endl;
+			if (CarrotSeed* temp = dynamic_cast<CarrotSeed*>(equipedItem)) {
+				this->iteminHand = "carrotSeed";
+				this->player->itemInHand = this->iteminHand;
+			}
+			else {
+				std::cout << "Dodelat gamestate usage" << std::endl;
+			}
 		}
 	}
 	else {
@@ -819,6 +840,14 @@ void GameState::updateBuildingsColl(const float& dt){
 	}
 }
 
+void GameState::updateBuildings(){
+	for (const auto& pair : this->buildings) {
+		for (const auto& value : pair.second) {
+			value.second->update();
+		}
+	}
+}
+
 void GameState::update(const float& dt){
 	this->updateMousePositions(&this->view);
 	this->updateKeytime(dt);
@@ -857,6 +886,10 @@ void GameState::update(const float& dt){
 				possibleIcon = &this->textures["Farmland"];
 				buildingType = "farmland";
 			}
+			if (this->iteminHand == "carrotSeed") {
+				possibleIcon = &this->textures["CarrotPlant"];
+				buildingType = "farmland";
+			}
 			this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap, possibleIcon, this->iteminHand,&this->buildings[buildingType]);
 		}
 
@@ -890,14 +923,6 @@ void GameState::render(sf::RenderTarget* target){
 		this->player->getCenter(),
 		false, this->isZoomedOut
 	);
-	
-	//Items DEBUG =======================================
-
-	if (this->hasItemInHand) {
-		this->playerGUI->renderItemPossibles(this->renderTexture);
-	}
-
-	//===================================================
 
 	/*for (auto* enemy : this->activeEnemies) {
 		enemy->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
@@ -907,13 +932,23 @@ void GameState::render(sf::RenderTarget* target){
 
 	//buildings =======================================
 
-	for (const auto& pair : this->buildings) {
-		for (const auto& value : pair.second) {
-			value.second->render(&this->renderTexture);
-		}
+	for (const auto& value : this->buildings["farmland"]) {
+		value.second->render(&this->renderTexture);
+	}
+	for (const auto& value : this->buildings["carrotPlant"]) {
+		value.second->render(&this->renderTexture);
 	}
 
 	//==============================================
+
+	//Items DEBUG =======================================
+
+	if (this->hasItemInHand) {
+		this->playerGUI->renderItemPossibles(this->renderTexture);
+	}
+
+	//===================================================
+
 
 	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), false); // ta zadna je za rendiranje hitboxa k je debug sam
 

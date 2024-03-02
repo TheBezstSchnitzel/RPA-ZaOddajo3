@@ -4,11 +4,10 @@ class Tool : public Item{
 private:
 	int maxDurability;
 	int durabiltity;
-	bool isEquipped;
 	bool isBroken;
 
 public:
-	Tool(short unsigned type, int maxDurability, int durability, bool isEquipped, bool isBroken = false);
+	Tool(short unsigned type, int maxDurability, int durability, bool isBroken = false);
 	~Tool();
 	
 	void damageDurability(int damage);
@@ -17,7 +16,6 @@ public:
 
 	//dostop
 	int getDurability();
-	bool getIsEquipped();
 	bool getIsBrooken();
 	void setIsBrooken(bool value);
 

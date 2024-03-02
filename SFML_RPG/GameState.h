@@ -6,8 +6,7 @@
 #include "PlayerGUI.h"
 #include "Items.h"
 #include "TextTagSystem.h"
-#include "Building.h"
-#include "Farmland.h"
+#include "Buildings.h"
 
 class Game;
 
@@ -136,6 +135,7 @@ private:
 	void updateHours_Minutes();
 
 	void useHoe();
+	void useCarrotSeed();
 
 public:
 	GameState(StateData* state_data, Game* game, unsigned short save);
@@ -157,6 +157,7 @@ public:
 	void updateDebugText(const float& dt);
 	void updateInGameTime();
 	void updateBuildingsColl(const float& dt);
+	void updateBuildings();
 	void update(const float& dt);
 
 	void render(sf::RenderTarget* target = NULL);

@@ -8,12 +8,13 @@ private:
 	std::string type;
 
 	bool hasHitBox;
+	sf::RectangleShape hitbox;
 
 	void initRect(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size);
 
 public:
 
-	Building(sf::Texture* texture,sf::Vector2f pos, sf::Vector2f size, std::string type, bool hasHitBox = false);
+	Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox , bool hasHitBox = false);
 	~Building();
 
 	sf::Vector2f getPos();
