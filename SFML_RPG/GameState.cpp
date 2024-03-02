@@ -90,7 +90,10 @@ void GameState::initTextures(){
 	if (!this->textures["Farmland"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
-	if (!this->textures["CarrotPlant"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)))) {
+	if (!this->textures["CarrotPlant"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(80, 16)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
+	}
+	if (!this->textures["CarrotPlantPosible"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)))) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
 }
@@ -877,6 +880,7 @@ void GameState::update(const float& dt){
 
 		//buildings
 		this->updateBuildingsColl(dt);
+		this->updateBuildings();
 
 		this->updatePlayer(dt);
 
@@ -902,7 +906,7 @@ void GameState::update(const float& dt){
 				buildingType = "farmland";
 			}
 			if (this->iteminHand == "carrotSeed") {
-				possibleIcon = &this->textures["CarrotPlant"];
+				possibleIcon = &this->textures["CarrotPlantPosible"];
 				buildingType = "farmland";
 			}
 			this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap, possibleIcon, this->iteminHand,&this->buildings[buildingType]);

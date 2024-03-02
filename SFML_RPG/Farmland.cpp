@@ -20,6 +20,7 @@ void Farmland::saveToFile(std::string file){
 	std::ofstream saveOFile(file);
 	sf::Vector2f tempPos = this->getPos();
 	saveOFile << tempPos.x << "  " << tempPos.y << std::endl;
+	saveOFile.close();
 }
 
 void Farmland::loadFromFile(std::string file){
@@ -28,4 +29,5 @@ void Farmland::loadFromFile(std::string file){
 	float y;
 	saveIFile >> x >> y;
 	this->setPos(sf::Vector2f(x,y));
+	saveIFile.close();
 }

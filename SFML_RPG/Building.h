@@ -4,7 +4,6 @@
 
 class Building{
 private:
-	sf::RectangleShape renderRect;
 	std::string type;
 
 	bool hasHitBox;
@@ -12,6 +11,8 @@ private:
 
 	void initRect(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size);
 
+protected:
+	sf::RectangleShape renderRect;
 public:
 
 	Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox , bool hasHitBox = false);
