@@ -123,12 +123,13 @@ void GameState::initDebugText(){
 }
 
 void GameState::initTools(){
+	//DEBUG
 	this->items["Hoe"] = new Hoe(&this->textures["HoeIcon"], 120, false);
 	//if (this->items["Hoe"]->getTexture() == nullptr)std::cout << "lol" << std::endl;
 	//Hoe tmp = Hoe(&this->textures["HoeIcon"], 120, false, false);
 	this->player->getInventory()->add(this->items["Hoe"], 1);
 	//if(this->player->getInventory()->getItemIcon(0) == nullptr)std::cout << "lol1" << std::endl; ;
-	this->items["CarrotSeed"] = new CarrotSeed(&this->textures["carrot_seed"], 120, false);
+	this->items["CarrotSeed"] = new CarrotSeed(&this->textures["carrot_seed"], 100, false);
 	this->player->getInventory()->add(this->items["CarrotSeed"], -1);
 }
 
@@ -257,10 +258,15 @@ void GameState::loadFromSave_items(){
 			this->items["Hoe" + std::to_string(i)] = new Hoe(&this->textures["HoeIcon"], 120, false);
 			this->items["Hoe" + std::to_string(i)]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
 			this->player->getInventory()->add(this->items["Hoe" + std::to_string(i)], i);
+			continue;
 		}
-		else {
-			std::cout << "mors popraut gamestate loadSaveItems" << std::endl;
+		if (className == "carrotSeed") {
+			this->items["CarrotSeed" + std::to_string(i)] = new CarrotSeed(&this->textures["carrot_seed"], 100, false);
+			this->items["CarrotSeed" + std::to_string(i)]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
+			this->player->getInventory()->add(this->items["CarrotSeed" + std::to_string(i)], i); 
+			continue;
 		}
+		std::cout << "mors popraut gamestate loadSaveItems" << std::endl;
 	}
 	saveIFile.close();
 	//this->playerGUI->updateINV(this->mousePosWindow);
@@ -276,10 +282,16 @@ void GameState::loadFromSave_buildings() {
 				this->buildings["farmland"][i] = new Farmland(&this->textures["Farmland"], sf::Vector2f(0.f, 0.f), sf::Vector2f(16.f, 16.f));
 				this->buildings["farmland"][i]->loadFromFile(this->savePath + "/game/buildings/" + buildingType + std::to_string(i) + ".txt");
 			}
+			continue;
 		}
-		else {
-			std::cout << "Popravt mors loadFromSave buildings" << std::endl;
+		if (buildingType == "carrotPlant") {
+			for (int i = 0; i < n; i++) {
+				this->buildings["carrotPlant"][i] = new CarrotPlant(&this->textures["CarrotPlant"], sf::Vector2f(0.f, 0.f), sf::Vector2f(16.f, 16.f));
+				this->buildings["carrotPlant"][i]->loadFromFile(this->savePath + "/game/buildings/" + buildingType + std::to_string(i) + ".txt");
+			}
+			continue;
 		}
+		std::cout << "Popravt mors loadFromSave buildings" << std::endl;
 	}
 	saveIFile.close();
 }
@@ -379,10 +391,13 @@ void GameState::save_items(){
 			inv->getItem(i)->saveToFile(tempSave);
 			if (Hoe* temp = dynamic_cast<Hoe*>(inv->getItem(i))) {
 				saveOFile << "hoe" << " " << std::to_string(i) << std::endl;
+				continue;
 			}
-			else{
-				std::cout << "Game state save mors popraut" << std::endl;
+			if (CarrotSeed* temp = dynamic_cast<CarrotSeed*>(inv->getItem(i))) {
+				saveOFile << "carrotSeed" << " " << std::to_string(i) << std::endl;
+				continue;
 			}
+			std::cout << "Game state save mors popraut" << std::endl;
 		}
 	}
 	saveOFile.close();

@@ -17,14 +17,12 @@ void Farmland::render(sf::RenderTarget* target){
 }
 
 void Farmland::saveToFile(std::string file){
-	//std::cout << file << std::endl;
 	std::ofstream saveOFile(file);
 	sf::Vector2f tempPos = this->getPos();
 	saveOFile << tempPos.x << "  " << tempPos.y << std::endl;
 }
 
 void Farmland::loadFromFile(std::string file){
-	//std::cout << file << std::endl;
 	std::ifstream saveIFile(file);
 	float x;
 	float y;
