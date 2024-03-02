@@ -811,6 +811,14 @@ void GameState::updateInGameTime(){
 	this->playerGUI->updateGameTimeDay(this->gameDaysElapsed);
 }
 
+void GameState::updateBuildingsColl(const float& dt){
+	for (const auto& pair : this->buildings) {
+		for (const auto& value : pair.second) {
+			value.second->checkCollisionPlayer(this->player, dt);
+		}
+	}
+}
+
 void GameState::update(const float& dt){
 	this->updateMousePositions(&this->view);
 	this->updateKeytime(dt);
@@ -822,6 +830,9 @@ void GameState::update(const float& dt){
 		this->updatePlayerInput(dt);
 
 		this->updateTileMap(dt);
+
+		//buildings
+		this->updateBuildingsColl(dt);
 
 		this->updatePlayer(dt);
 
@@ -897,14 +908,9 @@ void GameState::render(sf::RenderTarget* target){
 	//buildings =======================================
 
 	for (const auto& pair : this->buildings) {
-		//std::cout << "Key: " << pair.first << ", Values:";
-
-		// Iterate over the vector associated with the current key
 		for (const auto& value : pair.second) {
-			//std::cout << " " << value;
 			value.second->render(&this->renderTexture);
 		}
-		//std::cout << std::endl;
 	}
 
 	//==============================================

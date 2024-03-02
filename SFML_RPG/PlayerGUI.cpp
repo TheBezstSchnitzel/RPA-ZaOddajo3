@@ -638,6 +638,14 @@ void PlayerGUI::render(sf::RenderTarget & target){
 
 //tools
 
+float calculateDistance2D(sf::Vector2f pos1, sf::Vector2f pos2) {
+	float dx = pos2.x - pos1.x;
+	float dy = pos2.y - pos1.y;
+	dx = std::abs(dx);
+	dy = std::abs(dy);
+	return std::sqrt(dx * dx + dy * dy);
+}
+
 bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<int, Building*>* buildings) {
 	for (const auto& value : *buildings) {
 		if (value.second->getType() == buildingType) {
@@ -652,16 +660,23 @@ bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<int, Buildi
 void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture, std::string item, std::map<int,Building*>* buildings) {
 	sf::Vector2f temp = map->getPosOfRectWithMousOver(mousePosWindow);
 	if (item == "hoe") {
-		this->possible.setPosition(map->getPosOfRectWithMousOver(mousePosWindow));
-		this->possible.setTexture(texture);
-		if (checkBuild("farmland", temp, buildings)) {
-			this->possible.setFillColor(sf::Color(255,255,255,150));
-			this->possible.setOutlineColor(sf::Color::Green);
-			this->isPlaceble = true;
+		if (calculateDistance2D(mousePosWindow, player->getPosition()) < 32.f) {
+			this->possible.setPosition(temp);
+			this->possible.setTexture(texture);
+			if (checkBuild("farmland", temp, buildings)) {
+				this->possible.setFillColor(sf::Color(255, 255, 255, 150));
+				this->possible.setOutlineColor(sf::Color::Green);
+				this->isPlaceble = true;
+			}
+			else {
+				this->possible.setFillColor(sf::Color(212, 23, 13, 200));
+				this->possible.setOutlineColor(sf::Color::Red);
+				this->isPlaceble = false;
+			}
 		}
 		else {
-			this->possible.setFillColor(sf::Color(212, 23, 13, 200));
-			this->possible.setOutlineColor(sf::Color::Red);
+			this->possible.setFillColor(sf::Color::Transparent);
+			this->possible.setOutlineColor(sf::Color::Transparent);
 			this->isPlaceble = false;
 		}
 	}

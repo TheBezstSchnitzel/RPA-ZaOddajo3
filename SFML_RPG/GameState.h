@@ -156,6 +156,7 @@ public:
 	void updateCombat(Enemy* enemy, const int index, const float& dt);
 	void updateDebugText(const float& dt);
 	void updateInGameTime();
+	void updateBuildingsColl(const float& dt);
 	void update(const float& dt);
 
 	void render(sf::RenderTarget* target = NULL);
