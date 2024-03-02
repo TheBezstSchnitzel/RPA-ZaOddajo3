@@ -9,6 +9,8 @@ void Player::initVariables(){
 	//this->weapon->generate(1, 3);
 	this->sprite.setScale(sf::Vector2f(0.5f, 0.5f));
 	this->damageTimerMax = 500;
+	this->useItem = false;
+	this->lastStateUse = false;
 }
 
 void Player::initComponents(sf::Texture& texture_sheet){
@@ -28,6 +30,13 @@ void Player::initAnimations(){
 	this->animationComponent->addAnimation("WALK_LEFT", 5.0f, 0, 5, 8, 5, 64, 64);
 	this->animationComponent->addAnimation("WALK_RIGHT", 5.0f, 0, 7, 8, 7, 64, 64);
 	this->animationComponent->addAnimation("WALK_UP", 5.0f, 0, 4, 8, 4, 64, 64);
+	this->animationComponent->addAnimation("IDLE_HOE", 5.0f, 0, 14, 0, 14, 64, 64);
+	this->animationComponent->addAnimation("WALK_DOWN_HOE", 5.0f, 0, 18, 8, 18, 64, 64);
+	this->animationComponent->addAnimation("WALK_LEFT_HOE", 5.0f, 0, 17, 8, 17, 64, 64);
+	this->animationComponent->addAnimation("WALK_RIGHT_HOE", 5.0f, 0, 19, 8, 19, 64, 64);
+	this->animationComponent->addAnimation("WALK_UP_HOE", 5.0f, 0, 16, 8, 16, 64, 64);
+	this->animationComponent->addAnimation("USE_HOE", 10.0f, 0, 14, 7, 14, 64, 64);
+
 	//this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 64, 64);
 }
 
@@ -139,23 +148,47 @@ void Player::gainEXP(const int exp){
 }
 
 void Player::updateAnimation(const float & dt){
-	if (this->attacking){
-		
+	if (this->useItem){
+		if (this->itemInHand == "hoe") {
+			if (this->animationComponent->isDone("USE_HOE") && !this->lastStateUse) {
+				this->useItem = false;
+				this->lastStateUse = true;
+			}
+			else {
+				this->animationComponent->play("USE_HOE", dt, true);
+				this->lastStateUse = false;
+			}
+		}
 	}
 	if (this->movementComponent->getState(IDLE)){
-		this->animationComponent->play("IDLE", dt);
+		if (this->itemInHand == "hoe") {
+			this->animationComponent->play("IDLE_HOE", dt);
+		}
+		else this->animationComponent->play("IDLE", dt);
 	}
 	else if (this->movementComponent->getState(MOVING_LEFT)){
-		this->animationComponent->play("WALK_LEFT", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
+		if (this->itemInHand == "hoe") {
+			this->animationComponent->play("WALK_LEFT_HOE", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
+		}
+		else this->animationComponent->play("WALK_LEFT", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
 	}
 	else if (this->movementComponent->getState(MOVING_RIGHT)){
-		this->animationComponent->play("WALK_RIGHT", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
+		if (this->itemInHand == "hoe") {
+			this->animationComponent->play("WALK_RIGHT_HOE", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
+		}
+		else this->animationComponent->play("WALK_RIGHT", dt, this->movementComponent->getVelocity().x, this->movementComponent->getMaxVelocity());
 	}
 	else if (this->movementComponent->getState(MOVING_UP)){
-		this->animationComponent->play("WALK_UP", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
+		if (this->itemInHand == "hoe") {
+			this->animationComponent->play("WALK_UP_HOE", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
+		}
+		else this->animationComponent->play("WALK_UP", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
 	}
 	else if (this->movementComponent->getState(MOVING_DOWN)){
-		this->animationComponent->play("WALK_DOWN", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
+		if (this->itemInHand == "hoe") {
+			this->animationComponent->play("WALK_DOWN_HOE", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
+		}
+		else this->animationComponent->play("WALK_DOWN", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
 	}
 }
 

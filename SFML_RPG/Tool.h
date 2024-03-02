@@ -22,7 +22,6 @@ public:
 	void setIsBrooken(bool value);
 
 	//usage
-	virtual bool use() = 0;
 	virtual void update() = 0;
 };
 

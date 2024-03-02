@@ -22,10 +22,10 @@ Item* Hoe::clone(){
 	return this;
 }
 
-bool Hoe::use(){
+/*bool Hoe::use() {
 	this->damageDurability(2);
 	return true;
-}
+}*/
 
 void Hoe::update(){
 }

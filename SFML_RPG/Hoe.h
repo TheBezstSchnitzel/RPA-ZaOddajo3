@@ -14,7 +14,7 @@ public:
 
 	//dostop
 
-	bool use();
+	//bool use();
 
 	void update();
 	sf::Texture* getTexture();

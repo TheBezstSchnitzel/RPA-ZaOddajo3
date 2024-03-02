@@ -2,6 +2,7 @@
 
 #include "PlayerGUITabs.h"
 #include "Inventory.h"
+#include "TileMap.h"
 
 class PlayerGUI{
 private:
@@ -78,6 +79,11 @@ private:
 	
 	sf::Text moneySlot;
 
+	//items ==============================================================
+	sf::RectangleShape possible;
+
+	void initPossible(sf::VideoMode& vm);
+
 	void initMousRect(sf::VideoMode& vm);
 	void initINVSlots(sf::VideoMode& vm);
 	void initMoneySlot(sf::VideoMode& vm, sf::Font &font);
@@ -131,5 +137,10 @@ public:
 	void renderINV(sf::RenderTarget& target);
 
 	void render(sf::RenderTarget& target);
+
+
+	//tools
+	void updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map, sf::Texture* texture);
+	void renderItemPossibles(sf::RenderTarget& target);
 };
 

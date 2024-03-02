@@ -126,6 +126,14 @@ Item* Inventory::getItem(int place){
 	return nullptr;
 }
 
+Item* Inventory::getHBSelectedItem(){
+	//27 28 29 30 31 32 33 34 35
+	//0  1  2  3  4  5  6  7  8
+	int temp = 27 + this->getIDSelectedHB();
+	if (this->hasItem(temp))return this->inventory[temp];
+	else return nullptr;
+}
+
 void Inventory::saveToFile(const std::string fileName){
 	//std::cout << "Dela" << std::endl;
 	std::ofstream saveOFile(fileName, std::ios::out);

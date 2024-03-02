@@ -24,7 +24,11 @@ private:
 	void initAnimations();
 	void initInventory();
 
+	bool lastStateUse;
+
 public:
+	bool useItem;
+
 	Player(float x, float y, sf::Texture& texture_sheet,bool fromSave);
 	virtual ~Player();
 	
@@ -41,6 +45,7 @@ public:
 	const bool getDamageTimer();
 
 	Inventory* getInventory();
+	std::string itemInHand;
 
 	//const unsigned getDamage() const;
 

@@ -46,6 +46,9 @@ private:
 	//items
 	std::map<std::string, Item*> items;
 
+	bool hasItemInHand;
+	std::string iteminHand;
+
 	//in game time
 	int whenIsNightHour; //kdaj se dan spremeni u noc
 	int whenIsDayHour; //kdaj se noc spremeni u dan
@@ -59,6 +62,8 @@ private:
 	letniCasi currentSeason;
 
 	sf::Text debugText;
+
+	bool lastMouseStateR;
 
 	Player* player;
 	PlayerGUI* playerGUI;

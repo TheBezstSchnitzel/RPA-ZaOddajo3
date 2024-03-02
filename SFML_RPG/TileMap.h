@@ -53,6 +53,8 @@ public:
 	void updateTiles(Entity* entity, const float& dt, EnemySystem& enemySystem);
 	void update(Entity* entity, const float& dt);
 
+	sf::Vector2f getPosOfRectWithMousOver(const sf::Vector2f& mousePosWindow);
+	
 	void render(
 		sf::RenderTarget& target,
 		const sf::Vector2i& gridPosition,

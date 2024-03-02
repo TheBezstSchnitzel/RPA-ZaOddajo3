@@ -33,6 +33,7 @@ public:
 	//Funkcije
 	virtual Item* clone() = 0;
 	virtual sf::Texture* getTexture() = 0;
+	//virtual void use() = 0;
 
 	virtual void saveToFile(std::string savePath) = 0;
 	virtual void loadFromSave(std::string savePath) = 0;

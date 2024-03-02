@@ -430,6 +430,19 @@ void TileMap::update(Entity * entity, const float& dt){
 	
 }
 
+sf::Vector2f TileMap::getPosOfRectWithMousOver(const sf::Vector2f& mousePosWindow){
+	sf::FloatRect temp = sf::FloatRect(sf::Vector2f(mousePosWindow.x, mousePosWindow.y), sf::Vector2f(1.f, 1.f));
+	for (int x = this->fromX; x < this->toX; x++) {
+		for (int y = this->fromY; y < this->toY; y++) {
+			for (size_t k = 0; k < this->map[x][y][this->layer].size(); k++) {
+				if (this->map[x][y][this->layer][k]->intersects(temp)) {
+					return this->map[x][y][this->layer][k]->getPosition();
+				}
+			}
+		}
+	}
+}
+
 void TileMap::render
 (
 	sf::RenderTarget & target, 

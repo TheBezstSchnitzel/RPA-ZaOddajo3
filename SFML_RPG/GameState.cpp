@@ -5,7 +5,6 @@
 
 void GameState::initVariables(){
 	this->isZoomedOut = false;
-	this->i = 0;
 }
 
 //Inicializacija
@@ -75,9 +74,12 @@ void GameState::initTextures(){
 	/*if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET2.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
 	}*/
-	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Test/new_playerSpriteSheet_Osnova_beu.png")) {
+	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/player_sheet.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
 	}
+	/*if (!this->textures["PLAYER_SHEET_HOE"].loadFromFile("Resources/Images/Sprites/Player/player_sheet_hoe.png")) { // \Resources\Images\Sprites\Player
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_HOE_TEXTURE";
+	}*/
 	/*
 	if(!this->textures["RAT1_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/rat1_60x64.png")){
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_RAT1_TEXTURE";
@@ -88,6 +90,9 @@ void GameState::initTextures(){
 	}*/
 	if (!this->textures["HoeIcon"].loadFromFile("Resources/Images/Gui/hoeIcon.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_ICON_TEXTURE";
+	}
+	if (!this->textures["HoePosible"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_Posible_TEXTURE";
 	}
 }
 
@@ -430,6 +435,8 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->isInventoryOpen = false;
 	//this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
 	this->playerGUI->updateINV(this->mousePosWindow); //sam enkrat rabm za hb kazat
+	this->hasItemInHand = false;
+	this->lastMouseStateR = false;
 }
 
 GameState::~GameState(){
@@ -567,11 +574,31 @@ void GameState::updatePlayerInput(const float & dt){
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("HB9")))) {
 		this->player->getInventory()->setSelectedHB(8);
 	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+		if (this->player->getDamageTimer()) {
+			if (!this->player->useItem)this->player->useItem = true;
+		}
+	}
 }
 
 void GameState::updatePlayerGUI(const float & dt){
 	this->playerGUI->update(dt);
-
+	Item* equipedItem = this->player->getInventory()->getHBSelectedItem();
+	if (equipedItem != nullptr) {
+		this->hasItemInHand = true;
+		if (Hoe* temp = dynamic_cast<Hoe*>(equipedItem)) {
+			//item je class hoe
+			this->iteminHand = "hoe";
+			this->player->itemInHand = this->iteminHand;
+		}
+		else {
+			std::cout << "Dodelat gamestate usage" << std::endl;
+		}
+	}
+	else {
+		this->hasItemInHand = false;
+		this->player->itemInHand = "";
+	}
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_PLAYER_TAB_CHARACTER"))) && this->getKeyTime()) {
 		this->playerGUI->toggleCharacterTab();
 	}*/
@@ -720,10 +747,6 @@ void GameState::update(const float& dt){
 	this->updateKeytime(dt);
 	this->updateInput(dt);
 	//this->updateDebugText(dt); //DEBUG
-	if (this->i = 0) {
-		this->playerGUI->updateINV(this->mousePosWindow);
-		i++;
-	}
 	if (!this->paused){ //Unpausan update
 		this->updateView(dt);
 
@@ -754,6 +777,16 @@ void GameState::update(const float& dt){
 			this->playerGUI->updateINV(this->mousePosWindow);
 		}
 	}
+
+	//Items DEBUG =======================================
+
+	if (this->hasItemInHand) {
+		sf::Texture* possibleIcon = nullptr;
+		if (this->iteminHand == "hoe")possibleIcon = &this->textures["HoePosible"];
+		this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap,possibleIcon);
+	}
+
+	//===================================================
 }
 
 void GameState::render(sf::RenderTarget* target){
@@ -771,6 +804,14 @@ void GameState::render(sf::RenderTarget* target){
 		this->player->getCenter(),
 		false, this->isZoomedOut
 	);
+	
+	//Items DEBUG =======================================
+
+	if (this->hasItemInHand) {
+		this->playerGUI->renderItemPossibles(this->renderTexture);
+	}
+
+	//===================================================
 
 	/*for (auto* enemy : this->activeEnemies) {
 		enemy->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true);
@@ -778,7 +819,7 @@ void GameState::render(sf::RenderTarget* target){
 
 	this->tileMap->renderDeferred(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter());
 
-	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), true); // ta zadna je za rendiranje hitboxa k je debug sam
+	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), false); // ta zadna je za rendiranje hitboxa k je debug sam
 
 	this->tts->render(this->renderTexture);
 
@@ -803,5 +844,6 @@ void GameState::render(sf::RenderTarget* target){
 	this->renderTexture.display();
 	//this->renderSprite.setTexture(this->renderTexture.getTexture());
 	target->draw(this->renderSprite);
+
 
 }

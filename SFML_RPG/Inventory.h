@@ -40,6 +40,7 @@ public:
 	const bool add(Item* item, int place = -1);
 	const bool remove(int place);
 	Item* getItem(int place);
+	Item* getHBSelectedItem(); //tist k je zdej zbran
 
 	void saveToFile(const std::string fileName);
 	void loadFromFile(const std::string fileName);

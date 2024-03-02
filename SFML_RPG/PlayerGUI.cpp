@@ -151,6 +151,14 @@ void PlayerGUI::initHB(sf::VideoMode& vm){
 	this->hotbarRectSelected.setTexture(&this->hotbarTextSelected);
 }
 
+void PlayerGUI::initPossible(sf::VideoMode& vm){
+	this->possible.setFillColor(sf::Color(255,255,255,150));
+	this->possible.setPosition(sf::Vector2f(0.f, 0.f));
+	this->possible.setSize(sf::Vector2f(16.f, 16.f));
+	this->possible.setOutlineColor(sf::Color::Green);
+	this->possible.setOutlineThickness(0.5f);
+}
+
 void PlayerGUI::initMousRect(sf::VideoMode& vm){
 	this->mouseHasItem = false;
 	this->mouseRect.setFillColor(sf::Color::Transparent);
@@ -256,6 +264,8 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font) : vm(vm)
 	this->initHB(vm);
 	//inventory
 	this->initINV(vm,font);
+	//items
+	this->initPossible(vm);
 }
 
 PlayerGUI::~PlayerGUI(){
@@ -570,4 +580,17 @@ void PlayerGUI::render(sf::RenderTarget & target){
 	//this->renderPlayerTabs(target);
 	this->renderGameClock(target);
 	this->renderHB(target);
+}
+
+
+//tools
+
+void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture) {
+	//this->possible.setPosition(static_cast<sf::Vector2f>(mousePosWindow));
+	this->possible.setPosition(map->getPosOfRectWithMousOver(mousePosWindow));
+	this->possible.setTexture(texture);
+}
+
+void PlayerGUI::renderItemPossibles(sf::RenderTarget& target){
+	target.draw(this->possible);
 }
