@@ -275,6 +275,12 @@ void GameState::loadFromSave_items(){
 			this->player->getInventory()->add(this->items["CarrotSeed"][i], i);
 			continue;
 		}
+		if (className == "Carrot") {
+			this->items["Carrot"][i] = new Carrot(&this->textures["carrot"], 0);
+			this->items["Carrot"][i]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
+			this->player->getInventory()->add(this->items["Carrot"][i], i);
+			continue;
+		}
 		std::cout << "mors popraut gamestate loadSaveItems" << std::endl;
 	}
 	saveIFile.close();
@@ -404,6 +410,10 @@ void GameState::save_items(){
 			}
 			if (CarrotSeed* temp = dynamic_cast<CarrotSeed*>(inv->getItem(i))) {
 				saveOFile << "CarrotSeed" << " " << std::to_string(i) << std::endl;
+				continue;
+			}
+			if (Carrot* temp = dynamic_cast<Carrot*>(inv->getItem(i))) {
+				saveOFile << "Carrot" << " " << std::to_string(i) << std::endl;
 				continue;
 			}
 			std::cout << "Game state save mors popraut" << std::endl;

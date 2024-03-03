@@ -213,6 +213,9 @@
     <ClCompile Include="Carrot.cpp">
       <Filter>Item\Plants</Filter>
     </ClCompile>
+    <ClCompile Include="Market.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -370,6 +373,9 @@
     </ClInclude>
     <ClInclude Include="Carrot.h">
       <Filter>Item\Plants</Filter>
+    </ClInclude>
+    <ClInclude Include="Market.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

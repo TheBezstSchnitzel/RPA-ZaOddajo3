@@ -180,6 +180,7 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HitboxComponent.cpp" />
     <ClCompile Include="Hoe.cpp" />
+    <ClCompile Include="Market.cpp" />
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="GraphicsSettings.h" />
     <ClInclude Include="HitboxComponent.h" />
     <ClInclude Include="Hoe.h" />
+    <ClInclude Include="Market.h" />
     <ClInclude Include="Tool.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />

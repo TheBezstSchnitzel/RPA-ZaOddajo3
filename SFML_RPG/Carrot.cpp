@@ -57,9 +57,17 @@ int Carrot::getAmount(){
 }
 
 void Carrot::saveToFile(std::string savePath){
-	std::cout << "Shrani korencke" << std::endl;
+	//std::cout << "Shrani korencke" << std::endl;
+	std::ofstream saveOFile(savePath);
+	saveOFile << this->amount << std::endl;
+	saveOFile.close();
 }
 
 void Carrot::loadFromSave(std::string savePath){
-	std::cout << "Nalozi korencke" << std::endl;
+	//std::cout << "Nalozi korencke" << std::endl;
+	std::ifstream saveIFile(savePath);
+	saveIFile >> this->amount;
+	saveIFile.close();
+
+	this->initValue();
 }
