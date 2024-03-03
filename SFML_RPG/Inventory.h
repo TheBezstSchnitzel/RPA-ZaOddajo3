@@ -36,6 +36,7 @@ public:
 	//Funkcije
 	void clear();
 	const bool isEmpty() const;
+	bool isFull();
 
 	const bool add(Item* item, int place = -1);
 	const bool remove(int place);

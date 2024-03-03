@@ -45,13 +45,11 @@ private:
 	std::map<std::string, sf::Clock> keybindsTimes;
 
 	//items
-	std::map<std::string, Item*> items;
+	//std::map<std::string, Item*> items;
+	std::map<std::string, std::map<int, Item*>>items;
 
 	//buildings
 	std::map<std::string, std::map<int, Building*>> buildings;
-	std::vector<int> farmlandIDs;
-
-	void initBuildings();  //za nardit se
 
 	bool hasItemInHand;
 	std::string iteminHand;
@@ -134,8 +132,12 @@ private:
 	float minutesTimerMax;
 	void updateHours_Minutes();
 
+	//tools
 	void useHoe();
 	void useCarrotSeed();
+
+	//items
+	void addCarrots();
 
 public:
 	GameState(StateData* state_data, Game* game, unsigned short save);

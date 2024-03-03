@@ -8,6 +8,8 @@
 #include "CarrotSeed.h"
 
 
+#include "Carrot.h"
+
 
 //Weapons =========================
 

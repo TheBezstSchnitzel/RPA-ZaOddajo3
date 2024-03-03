@@ -143,7 +143,7 @@ public:
 
 
 	//tools
-	void updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map, sf::Texture* texture, std::string item, std::map<int, Building*>* buildings);
+	void updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map, sf::Texture* texture, std::string item, std::map<std::string, std::map<int, Building*>>* buildings);
 	void renderItemPossibles(sf::RenderTarget& target);
 };
 

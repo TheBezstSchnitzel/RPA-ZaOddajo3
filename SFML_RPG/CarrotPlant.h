@@ -12,13 +12,19 @@ private:
 
 	sf::IntRect textureRect;
 
+	sf::RectangleShape interactZone;
+
 	void initClock();
 	void initGrowStage();
 	void initTextureRect();
+	void initInteractZone();
 
 public:
 	CarrotPlant(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size);
 	~CarrotPlant();
+
+	//dostop
+	bool isPickable(Player* player);
 
 	void updateClock();
 	void updateTextureRect();

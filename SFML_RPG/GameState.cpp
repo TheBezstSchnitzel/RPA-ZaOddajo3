@@ -3,10 +3,6 @@
 #include "Game.h"
 #include <filesystem>
 
-void GameState::initBuildings(){
-	//iz save nalozi
-}
-
 void GameState::initVariables(){
 	this->isZoomedOut = false;
 }
@@ -62,6 +58,7 @@ void GameState::initKeybinds(){
 			this->keybinds[key] = this->supportedKeys->at(key2);
 			if(key == "ZOOM")this->keybindsTimes[key] = sf::Clock();
 			if (key == "INVENTORY")this->keybindsTimes[key] = sf::Clock();
+			if(key == "PICKUP")this->keybindsTimes[key] = sf::Clock();
 		}
 	}
 
@@ -84,6 +81,9 @@ void GameState::initTextures(){
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOE_ICON_TEXTURE";
 	}
 	if (!this->textures["carrot_seed"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(0,0),sf::Vector2i(16,16)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_plants_all_TEXTURE";
+	}
+	if (!this->textures["carrot"].loadFromFile("Resources/Images/Mixed/items.png", sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(16, 16)))) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_plants_all_TEXTURE";
 	}
 	//buildings
@@ -127,13 +127,20 @@ void GameState::initDebugText(){
 
 void GameState::initTools(){
 	//DEBUG
-	this->items["Hoe"] = new Hoe(&this->textures["HoeIcon"], 120, false);
-	//if (this->items["Hoe"]->getTexture() == nullptr)std::cout << "lol" << std::endl;
-	//Hoe tmp = Hoe(&this->textures["HoeIcon"], 120, false, false);
-	this->player->getInventory()->add(this->items["Hoe"], 1);
-	//if(this->player->getInventory()->getItemIcon(0) == nullptr)std::cout << "lol1" << std::endl; ;
-	this->items["CarrotSeed"] = new CarrotSeed(&this->textures["carrot_seed"], 100, false);
-	this->player->getInventory()->add(this->items["CarrotSeed"], -1);
+	int id = 0;
+	if (!this->items["Hoe"].empty()) {
+		id = this->items["Hoe"].end()->first + 1;
+	}
+	this->items["Hoe"][id] = new Hoe(&this->textures["HoeIcon"], 120, false);
+	this->player->getInventory()->add(this->items["Hoe"][id], 1);
+
+	id = 0;
+
+	if (!this->items["CarrotSeed"].empty()) {
+		id = this->items["CarrotSeed"].end()->first + 1;
+	}
+	this->items["CarrotSeed"][id] = new CarrotSeed(&this->textures["carrot_seed"], 100, false);
+	this->player->getInventory()->add(this->items["CarrotSeed"][id], -1);
 }
 
 void GameState::initPlayers() {
@@ -255,24 +262,23 @@ void GameState::loadFromSave_items(){
 	std::ifstream saveIFile(this->savePath + "/game/items/itemsList.txt");
 	std::string className = "";
 	int i = 0;
-	while (saveIFile >> className) {
-		saveIFile >> i;
-		if (className == "hoe") {
-			this->items["Hoe" + std::to_string(i)] = new Hoe(&this->textures["HoeIcon"], 120, false);
-			this->items["Hoe" + std::to_string(i)]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
-			this->player->getInventory()->add(this->items["Hoe" + std::to_string(i)], i);
+	while (saveIFile >> className >> i) {
+		if (className == "Hoe") {
+			this->items["Hoe"][i] = new Hoe(&this->textures["HoeIcon"], 120, false);
+			this->items["Hoe"][i]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
+			this->player->getInventory()->add(this->items["Hoe"][i], i);
 			continue;
 		}
-		if (className == "carrotSeed") {
-			this->items["CarrotSeed" + std::to_string(i)] = new CarrotSeed(&this->textures["carrot_seed"], 100, false);
-			this->items["CarrotSeed" + std::to_string(i)]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
-			this->player->getInventory()->add(this->items["CarrotSeed" + std::to_string(i)], i); 
+		if (className == "CarrotSeed") {
+			this->items["CarrotSeed"][i] = new CarrotSeed(&this->textures["carrot_seed"], 100, false);
+			this->items["CarrotSeed"][i]->loadFromSave(this->savePath + "/game/items/item" + std::to_string(i) + ".txt");
+			this->player->getInventory()->add(this->items["CarrotSeed"][i], i);
 			continue;
 		}
 		std::cout << "mors popraut gamestate loadSaveItems" << std::endl;
 	}
 	saveIFile.close();
-	//this->playerGUI->updateINV(this->mousePosWindow);
+	
 }
 
 void GameState::loadFromSave_buildings() {
@@ -393,11 +399,11 @@ void GameState::save_items(){
 			std::string tempSave = this->savePath + "/game/items/item" + std::to_string(i) + ".txt";
 			inv->getItem(i)->saveToFile(tempSave);
 			if (Hoe* temp = dynamic_cast<Hoe*>(inv->getItem(i))) {
-				saveOFile << "hoe" << " " << std::to_string(i) << std::endl;
+				saveOFile << "Hoe" << " " << std::to_string(i) << std::endl;
 				continue;
 			}
 			if (CarrotSeed* temp = dynamic_cast<CarrotSeed*>(inv->getItem(i))) {
-				saveOFile << "carrotSeed" << " " << std::to_string(i) << std::endl;
+				saveOFile << "CarrotSeed" << " " << std::to_string(i) << std::endl;
 				continue;
 			}
 			std::cout << "Game state save mors popraut" << std::endl;
@@ -577,6 +583,26 @@ void GameState::updateInput(const float & dt){
 	}
 }
 
+void GameState::addCarrots() {
+	int id = 0;
+	int a = std::rand() % 5 + 1;
+	if (!this->items["Carrot"].empty()) {
+		for (const auto& value : this->items["Carrot"]) {
+			if (Carrot* carr = static_cast<Carrot*>(value.second)) {
+				if (!carr->isFull()) {
+					a = carr->addAmount(a);
+					if (a == 0)break;
+				}
+			}
+			id++;
+		}
+	}
+	if (a != 0) {
+		this->items["Carrot"][id] = new Carrot(&this->textures["carrot"], a);
+		this->player->getInventory()->add(this->items["Carrot"][id]);
+	}
+}
+
 void GameState::updatePlayerInput(const float & dt){
 	//Updata player input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_LEFT"))))
@@ -638,6 +664,22 @@ void GameState::updatePlayerInput(const float & dt){
 				//uporabi item
 				if (this->iteminHand == "hoe")this->useHoe();
 				else if (this->iteminHand == "carrotSeed")this->useCarrotSeed();
+			}
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("PICKUP"))) &&
+		this->keybindsTimes.at("PICKUP").getElapsedTime().asSeconds() >= this->keyTimeMax) {
+		this->keybindsTimes.at("PICKUP").restart(); //da ne spemas
+		auto it = this->buildings["carrotPlant"].begin(); // Get the iterator to the beginning of the map
+		while (it != this->buildings["carrotPlant"].end()) { // Iterate through the map
+			CarrotPlant* tmp = static_cast<CarrotPlant*>(it->second);
+			if (tmp->isPickable(this->player) && !this->player->getInventory()->isFull()) {
+				delete it->second; // Delete the object
+				it = this->buildings["carrotPlant"].erase(it); // Remove the element from the map and advance the iterator
+				addCarrots();
+			}
+			else {
+				++it; // Move to the next element in the map
 			}
 		}
 	}
@@ -900,16 +942,13 @@ void GameState::update(const float& dt){
 
 		if (this->hasItemInHand) {
 			sf::Texture* possibleIcon = nullptr;
-			std::string buildingType = "";
 			if (this->iteminHand == "hoe") {
 				possibleIcon = &this->textures["Farmland"];
-				buildingType = "farmland";
 			}
 			if (this->iteminHand == "carrotSeed") {
 				possibleIcon = &this->textures["CarrotPlantPosible"];
-				buildingType = "farmland";
 			}
-			this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap, possibleIcon, this->iteminHand,&this->buildings[buildingType]);
+			this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap, possibleIcon, this->iteminHand,&this->buildings);
 		}
 
 		//===================================================

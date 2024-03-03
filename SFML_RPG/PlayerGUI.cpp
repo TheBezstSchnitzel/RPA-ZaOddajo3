@@ -407,14 +407,15 @@ void PlayerGUI::updateINVSlots(const sf::Vector2i& mousePosWindow){
 			if (this->player->getInventory()->hasItem(this->inventorySlots[j][i].inventoryID)) {
 				//je poun
 				this->inventorySlots[j][i].isFull = true;
-				if (this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID)->getType()) {
-					//prever ce ma item durability 1 = usable torej ga ma
-					this->inventorySlots[j][i].hasDurability = true;
-					Item* item = this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID);
-					if (Tool* temp = dynamic_cast<Tool*>(item)) {
-						std::string dur = std::to_string(temp->getDurability());
-						this->inventorySlots[j][i].durability.setString(dur);
-					}
+				this->inventorySlots[j][i].hasDurability = true; //ker majo usi sam enim je amount
+				Item* item = this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID);
+				if (Tool* temp = dynamic_cast<Tool*>(item)) {
+					std::string dur = std::to_string(temp->getDurability());
+					this->inventorySlots[j][i].durability.setString(dur);
+				}
+				if (Carrot* temp = dynamic_cast<Carrot*>(item)) {
+					std::string dur = std::to_string(temp->getAmount());
+					this->inventorySlots[j][i].durability.setString(dur);
 				}
 			}
 			else {
@@ -586,10 +587,8 @@ void PlayerGUI::renderINVSlots(sf::RenderTarget& target){
 			else {
 				if (this->inventorySlots[j][i].isFull) {
 					this->inventorySlots[j][i].shape.setFillColor(sf::Color::White);
-					if (this->player->getInventory()->getItem(this->inventorySlots[j][i].inventoryID)->getType()) {
-						//dobi 1 kar pomen da je usable in ima durability
-						this->inventorySlots[j][i].hasDurability = true;
-					}
+					//ubistvu majo usi sam da eni majo amount eni pa durability
+					this->inventorySlots[j][i].hasDurability = true;
 				}
 				else this->inventorySlots[j][i].shape.setFillColor(sf::Color::Transparent);
 			}
@@ -646,20 +645,27 @@ float calculateDistance2D(sf::Vector2f pos1, sf::Vector2f pos2) {
 	return std::sqrt(dx * dx + dy * dy);
 }
 
-bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<int, Building*>* buildings) {
-	for (const auto& value : *buildings) {
-		if (value.second->getPos() == pos && buildingType == "farmland") {
-			return false;
+bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<std::string, std::map<int, Building*>>* buildings) {
+	if (buildingType == "farmland") { //checka ce placas farmland
+		for (const auto& value : buildings->at("farmland")) { //prever da ne placa na se en farmland
+			if (value.second->getPos() == pos)return false;
 		}
-		if (value.second->getPos() == pos && buildingType == "carrotPlant") {
-			return true;
-		}
+		return true;
 	}
-	if (buildingType == "carrotPlant")return false;
-	return true;
+	if (buildingType == "carrotPlant") { //checka ce placas carrotPlant
+		for (const auto& value : buildings->at("farmland")) {
+			if (value.second->getPos() == pos) { //preveri da se placa na farmland
+				for (const auto& v : buildings->at("carrotPlant")) {
+					if (v.second->getPos() == pos)return false;//preveri da se ne placa na se en korencek
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
-void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture, std::string item, std::map<int,Building*>* buildings) {
+void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture, std::string item, std::map<std::string, std::map<int, Building*>>* buildings){
 	sf::Vector2f temp = map->getPosOfRectWithMousOver(mousePosWindow);
 	if (item == "hoe") {
 		if (calculateDistance2D(mousePosWindow, player->getPosition()) < 32.f) {

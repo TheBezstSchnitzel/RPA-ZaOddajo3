@@ -85,6 +85,10 @@ const bool Inventory::isEmpty() const{
 	return this->nrOfItems == 0;
 }
 
+bool Inventory::isFull(){
+	return (this->nrOfItems == this->capacity);
+}
+
 const bool Inventory::add(Item * item, int place){ //item plac od 0 (ce je negativn najde prvo frej mesto)
 	if (this->nrOfItems == this->capacity)return false;//ce je poun inventory
 	if (place < 0) {

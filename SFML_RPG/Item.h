@@ -17,7 +17,7 @@ private:
 protected:
 	//Lastnosti
 	short unsigned type;
-	int id;
+	//int id;
 
 public:
 	Item(short unsigned type);

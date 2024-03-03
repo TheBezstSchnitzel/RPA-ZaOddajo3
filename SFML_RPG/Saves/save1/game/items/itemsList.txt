@@ -1,2 +1,2 @@
-carrotSeed 28
-hoe 29
+Hoe 28
+CarrotSeed 29
