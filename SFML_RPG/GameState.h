@@ -9,6 +9,7 @@
 #include "Buildings.h"
 
 class Game;
+class Market;
 
 enum letniCasi {
 	pomlad = 1, // 12 ur dneva
@@ -50,6 +51,7 @@ private:
 
 	//buildings
 	std::map<std::string, std::map<int, Building*>> buildings;
+	Market* market;
 
 	bool hasItemInHand;
 	std::string iteminHand;
@@ -108,6 +110,8 @@ private:
 
 	void initInGameTime();
 	void initInGameTimers();
+
+	void initMarket();
 
 	//funkcije za nalaganje iz shrambe
 	void loadFromSave_misc();

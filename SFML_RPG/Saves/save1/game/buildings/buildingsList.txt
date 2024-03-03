@@ -1,4 +1,4 @@
 carrotPlant
-2
+1
 farmland
 9

@@ -64,7 +64,7 @@ void CarrotPlant::update(){
 }
 
 void CarrotPlant::render(sf::RenderTarget* target){
-	if(static_cast<int>(this->growStage) == 4)target->draw(this->interactZone); //DEBUG
+	//if(static_cast<int>(this->growStage) == 4)target->draw(this->interactZone); //DEBUG
 	this->renderRect.setTextureRect(this->textureRect);
 	Building::render(target);
 }

@@ -91,11 +91,18 @@ void GameState::initTextures(){
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
 	if (!this->textures["CarrotPlant"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(80, 16)))) {
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_CarrotPlant_TEXTURE";
 	}
 	if (!this->textures["CarrotPlantPosible"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)))) {
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_CarrotPlantPossible_TEXTURE";
 	}
+	if (!this->textures["Market"].loadFromFile("Resources/Images/Buildings/market.png")) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Market_TEXTURE";
+	}
+}
+
+void GameState::initMarket(){
+	this->market = new Market(&this->textures["Market"], sf::Vector2f(100.f, 100.f));
 }
 
 void GameState::initPauseMenu(){
@@ -500,17 +507,11 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->initTileMap();
 	this->initInGameTimers();
 	this->initSystems();
-	/*
-	this->theme.openFromFile("Resources/Audio/themeSong2.wav");
-	this->theme.setPitch(1.f);
-	this->theme.setVolume(40.f);
-	this->theme.setLoop(true);
-	this->theme.play();*/
 	this->isInventoryOpen = false;
-	//this->player->getInventory()->makeInventoryTexture(this->stateData->gfxSettings->resolution);
 	this->playerGUI->updateINV(this->mousePosWindow); //sam enkrat rabm za hb kazat
 	this->hasItemInHand = false;
 	this->lastMouseStateR = false;
+	this->initMarket();
 }
 
 GameState::~GameState(){
@@ -680,17 +681,26 @@ void GameState::updatePlayerInput(const float & dt){
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("PICKUP"))) &&
 		this->keybindsTimes.at("PICKUP").getElapsedTime().asSeconds() >= this->keyTimeMax) {
 		this->keybindsTimes.at("PICKUP").restart(); //da ne spemas
-		auto it = this->buildings["carrotPlant"].begin(); // Get the iterator to the beginning of the map
-		while (it != this->buildings["carrotPlant"].end()) { // Iterate through the map
-			CarrotPlant* tmp = static_cast<CarrotPlant*>(it->second);
-			if (tmp->isPickable(this->player) && !this->player->getInventory()->isFull()) {
-				delete it->second; // Delete the object
-				it = this->buildings["carrotPlant"].erase(it); // Remove the element from the map and advance the iterator
-				addCarrots();
+		//prever za market ==================
+		if (this->market->isInteractable(this->player)) {
+			std::cout << "Dela interaction" << std::endl;
+		}
+		// =============================
+		else {
+			//prever za pobrat carrote =======================================
+			auto it = this->buildings["carrotPlant"].begin(); // Get the iterator to the beginning of the map
+			while (it != this->buildings["carrotPlant"].end()) { // Iterate through the map
+				CarrotPlant* tmp = static_cast<CarrotPlant*>(it->second);
+				if (tmp->isPickable(this->player) && !this->player->getInventory()->isFull()) {
+					delete it->second; // Delete the object
+					it = this->buildings["carrotPlant"].erase(it); // Remove the element from the map and advance the iterator
+					addCarrots();
+				}
+				else {
+					++it; // Move to the next element in the map
+				}
 			}
-			else {
-				++it; // Move to the next element in the map
-			}
+			//======================================
 		}
 	}
 }
@@ -908,6 +918,7 @@ void GameState::updateBuildingsColl(const float& dt){
 			value.second->checkCollisionPlayer(this->player, dt);
 		}
 	}
+	this->market->checkCollisionPlayer(this->player, dt);
 }
 
 void GameState::updateBuildings(){
@@ -916,6 +927,7 @@ void GameState::updateBuildings(){
 			value.second->update();
 		}
 	}
+	this->market->update(static_cast<int>(this->currentSeason), this->isDay, this->player);
 }
 
 void GameState::update(const float& dt){
@@ -1006,6 +1018,7 @@ void GameState::render(sf::RenderTarget* target){
 	for (const auto& value : this->buildings["carrotPlant"]) {
 		value.second->render(&this->renderTexture);
 	}
+	if(!this->market->checkIfPlayerBehind(this->player))this->market->render(&this->renderTexture);
 
 	//==============================================
 
@@ -1021,6 +1034,8 @@ void GameState::render(sf::RenderTarget* target){
 	this->player->render(this->renderTexture, this->isDay ? &this->temp : &this->core_shader, this->player->getCenter(), false); // ta zadna je za rendiranje hitboxa k je debug sam
 
 	this->tts->render(this->renderTexture);
+
+	if (this->market->checkIfPlayerBehind(this->player))this->market->render(&this->renderTexture);
 
 	//Rendera GUI
 	this->renderTexture.setView(this->renderTexture.getDefaultView());

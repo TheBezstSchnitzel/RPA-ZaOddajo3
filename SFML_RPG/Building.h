@@ -21,6 +21,8 @@ public:
 	sf::Vector2f getPos();
 	std::string getType();
 
+	sf::RectangleShape* getHitbox();
+
 	void setPos(sf::Vector2f pos);
 
 	void checkCollisionPlayer(Entity* player, const float& dt);

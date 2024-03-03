@@ -28,6 +28,10 @@ std::string Building::getType(){
 	return this->type;
 }
 
+sf::RectangleShape* Building::getHitbox(){
+	return this->hasHitBox ? &this->hitbox : nullptr;
+}
+
 void Building::setPos(sf::Vector2f pos){
 	this->renderRect.setPosition(pos);
 }
