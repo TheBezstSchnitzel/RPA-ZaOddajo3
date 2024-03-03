@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Market.h"
 
-
-
 void Market::initHitbox(){
 	sf::RectangleShape* hitbox = this->getHitbox();
 	sf::Vector2f temp = this->getPos();
@@ -40,12 +38,16 @@ bool Market::checkIfPlayerBehind(Player* player){
 	sf::Vector2f playerPos = player->getPosition();
 	sf::Vector2f posHb = this->getHitbox()->getPosition();
 	sf::Vector2f sizeHb = this->getHitbox()->getSize();
+	sf::Vector2f pos = this->getPos();
 	if (playerPos.y < posHb.y) {
 		//ce je player nad tm hitboxom
-		if (playerPos.x < posHb.x + sizeHb.x) {
-			//prever da je desna stran notr
-			if (playerPos.x + 15.f > posHb.x) {
-				return true;
+		if (playerPos.y + 5.f >= pos.y) {
+			//prever da je tam ker bi ga tekstura motla od spodi
+			if (playerPos.x < posHb.x + sizeHb.x) {
+				//prever da je desna stran notr
+				if (playerPos.x + 15.f > posHb.x) {
+					return true;
+				}
 			}
 		}
 	}
@@ -119,7 +121,7 @@ void Market::update(int season, bool day, Player* player){
 
 void Market::render(sf::RenderTarget* target) {
 	//target->draw(*this->getHitbox());
-	target->draw(this->interactZone);
+	//target->draw(this->interactZone);
 	Building::render(target);
 }
 

@@ -98,6 +98,50 @@ private:
 
 	void renderINVSlots(sf::RenderTarget& target);
 	void renderMoney(sf::RenderTarget& target);
+
+	//Shop ===========================================================
+	sf::RectangleShape basicShopRect;
+	sf::Texture shopBasicTexture;
+
+	sf::RectangleShape siteShopRect;
+	
+	sf::Texture shopPlantsSite;
+	sf::Texture shopToolsSite;
+	sf::Texture shopBuildingPlansSite;
+
+	std::map<std::string, std::map<int, Item*>>* items;
+	std::map<std::string, sf::Texture>* textures;
+
+	enum ShopSite{Plants = 0,Tools,BuildingPlans};
+	ShopSite currShopSite;
+
+	std::map<std::string, gui::Button*>buttonsShop;
+	std::map<std::string, sf::Text>texts;
+
+	void initShopTextures();
+	void initButtons();
+	void initTexts(sf::VideoMode& vm, sf::Font& font);
+
+	void initShop(sf::VideoMode& vm, sf::Font& font);
+
+	void resetTexts();
+	std::string addOne(std::string id);
+	std::string removeOne(std::string id);
+
+	bool buy(std::string what, int amount, int price);
+	bool sell(std::string what, int amount, int price);
+
+	void updateButtons(const sf::Vector2i& mousePosWindow);
+	//void updateTexts();
+
+	void updateSites();
+
+	void renderButtons(sf::RenderTarget& target);
+	void renderTexts(sf::RenderTarget& target);
+
+	void renderSite(sf::RenderTarget& target);
+
+	// ===============================================================
 	//inicializacija
 	void initFont();
 	void initTextures();
@@ -110,7 +154,7 @@ private:
 	void initGameSeasonDisplay(sf::VideoMode& vm);
 	void initGameDayDisplay(sf::VideoMode& vm);
 public:
-	PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font);
+	PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font, std::map<std::string, std::map<int, Item*>>* items, std::map<std::string, sf::Texture>* textures);
 	virtual ~PlayerGUI();
 
 	//Dostop
@@ -129,6 +173,8 @@ public:
 	void updateHB();
 	void updateINV(const sf::Vector2i& mousePosWindow);
 
+	void updateShop(const sf::Vector2i& mousePosWindow);
+
 	void update(const float& dt);
 
 	void renderLevelBar(sf::RenderTarget & target);
@@ -138,6 +184,8 @@ public:
 	void renderGameClock(sf::RenderTarget& target);
 	void renderHB(sf::RenderTarget& target);
 	void renderINV(sf::RenderTarget& target);
+
+	void renderShop(sf::RenderTarget& target);
 
 	void render(sf::RenderTarget& target);
 

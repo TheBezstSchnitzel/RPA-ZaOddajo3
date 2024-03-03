@@ -1,6 +1,389 @@
 #include "stdafx.h"
 #include "PlayerGUI.h"
 
+void PlayerGUI::initShopTextures(){
+	if (!this->shopBasicTexture.loadFromFile("Resources/Images/Gui/shopBasic.png", sf::IntRect(sf::Vector2i(0, 3), sf::Vector2i(210, 124)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_ShopBasic_TEXTURE";
+	}
+	if (!this->shopPlantsSite.loadFromFile("Resources/Images/Gui/shopMenu_plants.png", sf::IntRect(sf::Vector2i(0, 3), sf::Vector2i(210, 124)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_shopPlants_TEXTURE";
+	}
+	if (!this->shopToolsSite.loadFromFile("Resources/Images/Gui/shopMenu_tools.png", sf::IntRect(sf::Vector2i(0, 3), sf::Vector2i(210, 124)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_shopPlants_TEXTURE";
+	}
+	if (!this->shopBuildingPlansSite.loadFromFile("Resources/Images/Gui/shopMenu_BuildingPlans.png", sf::IntRect(sf::Vector2i(0, 3), sf::Vector2i(210, 124)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_shopBPs_TEXTURE";
+	}
+}
+
+void PlayerGUI::initButtons(){
+	this->buttonsShop["DownSlide"] = new gui::Button(
+		gui::p2pX(28.5f, vm), gui::p2pY(13.f, vm),
+		gui::p2pX(4.2f, vm), gui::p2pY(9.4f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 0), sf::Color(255, 255, 255, 0), sf::Color(20, 20, 20, 0),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+	);
+	this->buttonsShop["UpSlide"] = new gui::Button(
+		gui::p2pX(67.f, vm), gui::p2pY(13.f, vm),
+		gui::p2pX(4.2f, vm), gui::p2pY(9.4f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+	);
+	this->buttonsShop["Plus1"] = new gui::Button(
+		gui::p2pX(30.9f, vm), gui::p2pY(31.9f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red,sf::Color::Red
+	);
+	this->buttonsShop["Plus2"] = new gui::Button(
+		gui::p2pX(30.9f, vm), gui::p2pY(43.8f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Plus3"] = new gui::Button(
+		gui::p2pX(30.9f, vm), gui::p2pY(56.3f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Plus4"] = new gui::Button(
+		gui::p2pX(55.8f, vm), gui::p2pY(31.9f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Plus5"] = new gui::Button(
+		gui::p2pX(55.8f, vm), gui::p2pY(43.8f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Plus6"] = new gui::Button(
+		gui::p2pX(55.8f, vm), gui::p2pY(56.3f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Minus1"] = new gui::Button(
+		gui::p2pX(38.8f, vm), gui::p2pY(31.9f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Minus2"] = new gui::Button(
+		gui::p2pX(38.8f, vm), gui::p2pY(43.8f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Minus3"] = new gui::Button(
+		gui::p2pX(38.8f, vm), gui::p2pY(56.3f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Minus4"] = new gui::Button(
+		gui::p2pX(63.6f, vm), gui::p2pY(31.9f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Minus5"] = new gui::Button(
+		gui::p2pX(63.6f, vm), gui::p2pY(43.8f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Minus6"] = new gui::Button(
+		gui::p2pX(63.6f, vm), gui::p2pY(56.3f, vm),
+		gui::p2pX(2.f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Buy1"] = new gui::Button(
+		gui::p2pX(41.3f, vm), gui::p2pY(29.3f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//,sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Sell1"] = new gui::Button(
+		gui::p2pX(41.3f, vm), gui::p2pY(33.9f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Buy2"] = new gui::Button(
+		gui::p2pX(41.3f, vm), gui::p2pY(41.3f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Sell2"] = new gui::Button(
+		gui::p2pX(41.3f, vm), gui::p2pY(45.9f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Buy3"] = new gui::Button(
+		gui::p2pX(41.3f, vm), gui::p2pY(54.1f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Sell3"] = new gui::Button(
+		gui::p2pX(41.3f, vm), gui::p2pY(58.7f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Buy4"] = new gui::Button(
+		gui::p2pX(66.3f, vm), gui::p2pY(29.3f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Sell4"] = new gui::Button(
+		gui::p2pX(66.3f, vm), gui::p2pY(33.9f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Buy5"] = new gui::Button(
+		gui::p2pX(66.3f, vm), gui::p2pY(41.3f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Sell5"] = new gui::Button(
+		gui::p2pX(66.3f, vm), gui::p2pY(45.9f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Buy6"] = new gui::Button(
+		gui::p2pX(66.3f, vm), gui::p2pY(54.1f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	this->buttonsShop["Sell6"] = new gui::Button(
+		gui::p2pX(66.3f, vm), gui::p2pY(58.7f, vm),
+		gui::p2pX(4.9f, vm), gui::p2pY(3.8f, vm),
+		&this->font, "", gui::calcCharSize(vm),
+		sf::Color(200, 200, 200, 200), sf::Color(255, 255, 255, 255), sf::Color(20, 20, 20, 50),
+		sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0), sf::Color(255, 255, 255, 0)
+		//, sf::Color::Red, sf::Color::Red
+	);
+	//66.3f
+}
+
+void PlayerGUI::initTexts(sf::VideoMode& vm, sf::Font& font){
+	this->texts["Amount1"].setCharacterSize(gui::calcCharSize(vm, 45U));
+	this->texts["Amount1"].setPosition(sf::Vector2f(gui::p2pX(34.f,vm), gui::p2pY(29.8f,vm)));
+	this->texts["Amount1"].setFont(font);
+	this->texts["Amount1"].setFillColor(sf::Color::White);
+	this->texts["Amount1"].setString("00");
+	this->texts["Amount1"].setStyle(sf::Text::Bold);
+
+	this->texts["Amount2"].setCharacterSize(gui::calcCharSize(vm, 45U));
+	this->texts["Amount2"].setPosition(sf::Vector2f(gui::p2pX(34.f, vm), gui::p2pY(41.8f, vm)));
+	this->texts["Amount2"].setFont(font);
+	this->texts["Amount2"].setFillColor(sf::Color::White);
+	this->texts["Amount2"].setString("00");
+	this->texts["Amount2"].setStyle(sf::Text::Bold);
+
+	this->texts["Amount3"].setCharacterSize(gui::calcCharSize(vm, 45U));
+	this->texts["Amount3"].setPosition(sf::Vector2f(gui::p2pX(34.f, vm), gui::p2pY(54.5f, vm)));
+	this->texts["Amount3"].setFont(font);
+	this->texts["Amount3"].setFillColor(sf::Color::White);
+	this->texts["Amount3"].setString("00");
+	this->texts["Amount3"].setStyle(sf::Text::Bold);
+
+	this->texts["Amount4"].setCharacterSize(gui::calcCharSize(vm, 45U));
+	this->texts["Amount4"].setPosition(sf::Vector2f(gui::p2pX(59.f, vm), gui::p2pY(29.8f, vm)));
+	this->texts["Amount4"].setFont(font);
+	this->texts["Amount4"].setFillColor(sf::Color::White);
+	this->texts["Amount4"].setString("00");
+	this->texts["Amount4"].setStyle(sf::Text::Bold);
+
+	this->texts["Amount5"].setCharacterSize(gui::calcCharSize(vm, 45U));
+	this->texts["Amount5"].setPosition(sf::Vector2f(gui::p2pX(59.f, vm), gui::p2pY(41.8f, vm)));
+	this->texts["Amount5"].setFont(font);
+	this->texts["Amount5"].setFillColor(sf::Color::White);
+	this->texts["Amount5"].setString("00");
+	this->texts["Amount5"].setStyle(sf::Text::Bold);
+
+	this->texts["Amount6"].setCharacterSize(gui::calcCharSize(vm, 45U));
+	this->texts["Amount6"].setPosition(sf::Vector2f(gui::p2pX(59.f, vm), gui::p2pY(54.5f, vm)));
+	this->texts["Amount6"].setFont(font);
+	this->texts["Amount6"].setFillColor(sf::Color::White);
+	this->texts["Amount6"].setString("00");
+	this->texts["Amount6"].setStyle(sf::Text::Bold);
+
+	this->texts["Price1"].setCharacterSize(gui::calcCharSize(vm, 100U));
+	this->texts["Price1"].setPosition(sf::Vector2f(gui::p2pX(47.f, vm), gui::p2pY(31.8f, vm)));
+	this->texts["Price1"].setFont(font);
+	this->texts["Price1"].setFillColor(sf::Color::White);
+	this->texts["Price1"].setString("00");
+	this->texts["Price1"].setStyle(sf::Text::Bold);
+}
+
+void PlayerGUI::initShop(sf::VideoMode& vm, sf::Font& font){
+	this->initShopTextures();
+	this->basicShopRect.setFillColor(sf::Color::White);
+	this->basicShopRect.setTexture(&this->shopBasicTexture);
+	this->basicShopRect.setSize(sf::Vector2f(gui::p2pX(55.f, vm), gui::p2pY(60.f, vm)));
+	this->basicShopRect.setPosition(sf::Vector2f(gui::p2pX(22.5f,vm), gui::p2pY(10.f,vm)));
+	this->currShopSite = Plants;
+	this->initButtons();
+	this->siteShopRect = sf::RectangleShape(this->basicShopRect);
+	this->initTexts(vm,font);
+}
+
+void PlayerGUI::resetTexts(){
+	this->texts["Amount1"].setString("00");
+	this->texts["Amount2"].setString("00");
+	this->texts["Amount3"].setString("00");
+	this->texts["Amount4"].setString("00");
+	this->texts["Amount5"].setString("00");
+	this->texts["Amount6"].setString("00");
+}
+
+std::string PlayerGUI::addOne(std::string id){
+	//std::string temp = this->texts[id].getString().toAnsiString();
+	int i = std::stoi(this->texts[id].getString().toAnsiString());
+	//int i = std::stoi(temp);
+	std::string temp = "";
+	if(i != 60)i++;
+	if (i < 10) {
+		temp = "0" + std::to_string(i);
+	}
+	else temp = std::to_string(i);
+	return temp;
+}
+
+std::string PlayerGUI::removeOne(std::string id){
+	int i = std::stoi(this->texts[id].getString().toAnsiString());
+	std::string temp = "";
+	if (i != 0)i--;
+	if (i < 10) {
+		temp = "0" + std::to_string(i);
+	}
+	else temp = std::to_string(i);
+	return temp;
+}
+
+bool PlayerGUI::buy(std::string what, int amount, int price){
+	if (this->player->getInventory()->hasEnoughMoney(price)) {
+		this->player->getInventory()->takeMoney(price);
+		int id = 0;
+		int a = amount;
+		if (what == "Carrot") {
+			std::map<int, Item*>& carrots = (*this->items)[what];
+			if (!carrots.empty()) {
+				for (const auto& value : carrots) {
+					if (Carrot* carr = static_cast<Carrot*>(value.second)) {
+						if (!carr->isFull()) {
+							a = carr->addAmount(a);
+							if (a == 0)break;
+						}
+					}
+					id++;
+				}
+			}
+			if (a != 0) {
+				if (what == "Carrot") {
+					this->items->at("Carrot")[id] = new Carrot(&this->textures->at("carrot"), a);
+					this->player->getInventory()->add(this->items->at("Carrot")[id]);
+				}
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
+bool PlayerGUI::sell(std::string what, int amount, int price){
+	//checka ce ma player zadost teh itemou
+	int a = amount;
+	int has = 0;
+	if (what == "Carrot") {
+		Inventory* inv = this->player->getInventory();
+		for (int i = 0; i < inv->maxSize(); i++) {
+			if (inv->hasItem(i)) {
+				if (Carrot* carrot = static_cast<Carrot*>(inv->getItem(i))) {
+					has += carrot->getAmount();
+					if (has >= a)break;
+				}
+			}
+		}
+		if (has >= a) {
+			for (int i = 0; i < inv->maxSize(); i++) {
+				if(inv->hasItem(i)) {
+					if (Carrot* carrot = static_cast<Carrot*>(inv->getItem(i))) {
+						a = carrot->removeAmount(a);
+						if (a == 0) {
+							inv->addMoney(price);
+							return true;
+						}
+					}
+				}
+			}
+		}
+		else return false;
+	}
+	return false;
+}
+
 void PlayerGUI::initFont(){
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 }
@@ -258,9 +641,10 @@ void PlayerGUI::initINV(sf::VideoMode& vm, sf::Font &font){
 	this->initMoneySlot(vm,font);
 }
 
-PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font) : vm(vm){
+PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font, std::map<std::string, std::map<int, Item*>>* items, std::map<std::string, sf::Texture>* textures) : vm(vm){
 	this->player = player;
-
+	this->items = items;
+	this->textures = textures;
 	this->initTextures();
 	this->initFont();
 	//this->initLevelBar();
@@ -279,6 +663,8 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font) : vm(vm)
 	this->initINV(vm,font);
 	//items
 	this->initPossible(vm);
+	//shop
+	this->initShop(vm,font);
 }
 
 PlayerGUI::~PlayerGUI(){
@@ -513,6 +899,147 @@ void PlayerGUI::updateINV(const sf::Vector2i& mousePosWindow){
 	this->updateINVSlots(mousePosWindow);
 }
 
+void PlayerGUI::updateButtons(const sf::Vector2i& mousePosWindow){
+	for (const auto& pair : this->buttonsShop) {
+		pair.second->update(mousePosWindow);
+	}
+	if (this->buttonsShop["DownSlide"]->isPressed()) {
+		this->buttonsShop["DownSlide"]->makeSound();
+		if (static_cast<int>(this->currShopSite) == 0)this->currShopSite = BuildingPlans;
+		else this->currShopSite = static_cast<ShopSite>(static_cast<int>(this->currShopSite)-1);
+		this->resetTexts();
+	}
+	if (this->buttonsShop["UpSlide"]->isPressed()) {
+		this->buttonsShop["UpSlide"]->makeSound();
+		if (static_cast<int>(this->currShopSite) == 2)this->currShopSite = Plants;
+		else this->currShopSite = static_cast<ShopSite>(static_cast<int>(this->currShopSite) + 1);
+		this->resetTexts();
+	}
+	if (this->buttonsShop["Plus1"]->isPressed()) {
+		this->buttonsShop["Plus1"]->makeSound();
+		this->texts["Amount1"].setString(this->addOne("Amount1"));
+		this->texts["Price1"].setString(this->addOne("Price1"));
+		this->texts["Price1"].setString(this->addOne("Price1"));
+	}
+	if (this->buttonsShop["Plus2"]->isPressed()) {
+		this->buttonsShop["Plus2"]->makeSound();
+		this->texts["Amount2"].setString(this->addOne("Amount2"));
+	}
+	if (this->buttonsShop["Plus3"]->isPressed()) {
+		this->buttonsShop["Plus3"]->makeSound();
+		this->texts["Amount3"].setString(this->addOne("Amount3"));
+	}
+	if (this->buttonsShop["Plus4"]->isPressed()) {
+		this->buttonsShop["Plus4"]->makeSound();
+		this->texts["Amount4"].setString(this->addOne("Amount4"));
+	}
+	if (this->buttonsShop["Plus5"]->isPressed()) {
+		this->buttonsShop["Plus5"]->makeSound();
+		this->texts["Amount5"].setString(this->addOne("Amount5"));
+	}
+	if (this->buttonsShop["Plus6"]->isPressed()) {
+		this->buttonsShop["Plus6"]->makeSound();
+		this->texts["Amount6"].setString(this->addOne("Amount6"));
+	}
+	if (this->buttonsShop["Minus1"]->isPressed()) {
+		this->buttonsShop["Minus1"]->makeSound();
+		this->texts["Amount1"].setString(this->removeOne("Amount1"));
+		this->texts["Price1"].setString(this->removeOne("Price1"));
+		this->texts["Price1"].setString(this->removeOne("Price1"));
+	}
+	if (this->buttonsShop["Minus2"]->isPressed()) {
+		this->buttonsShop["Minus2"]->makeSound();
+		this->texts["Amount2"].setString(this->removeOne("Amount2"));
+	}
+	if (this->buttonsShop["Minus3"]->isPressed()) {
+		this->buttonsShop["Minus3"]->makeSound();
+		this->texts["Amount3"].setString(this->removeOne("Amount3"));
+	}
+	if (this->buttonsShop["Minus4"]->isPressed()) {
+		this->buttonsShop["Minus4"]->makeSound();
+		this->texts["Amount4"].setString(this->removeOne("Amount4"));
+	}
+	if (this->buttonsShop["Minus5"]->isPressed()) {
+		this->buttonsShop["Minus5"]->makeSound();
+		this->texts["Amount5"].setString(this->removeOne("Amount5"));
+	}
+	if (this->buttonsShop["Minus6"]->isPressed()) {
+		this->buttonsShop["Minus6"]->makeSound();
+		this->texts["Amount6"].setString(this->removeOne("Amount6"));
+	}
+	if (this->buttonsShop["Buy1"]->isPressed()) {
+		this->buttonsShop["Buy1"]->makeSound();
+		if (this->currShopSite == Plants) {
+			if (this->buy("Carrot",
+				std::stoi(this->texts["Amount1"].getString().toAnsiString()),
+				std::stoi(this->texts["Price1"].getString().toAnsiString()))) {
+				this->texts["Amount1"].setString("00");
+				this->texts["Price1"].setString("00");
+			}
+		}
+	}
+	if (this->buttonsShop["Sell1"]->isPressed()) {
+		this->buttonsShop["Sell1"]->makeSound();
+		if (this->currShopSite == Plants) {
+			if (this->sell("Carrot",
+				std::stoi(this->texts["Amount1"].getString().toAnsiString()),
+				std::stoi(this->texts["Price1"].getString().toAnsiString()))) {
+				this->texts["Amount1"].setString("00");
+				this->texts["Price1"].setString("00");
+			}
+		}
+	}
+	if (this->buttonsShop["Buy2"]->isPressed()) {
+		this->buttonsShop["Buy2"]->makeSound();
+	}
+	if (this->buttonsShop["Sell2"]->isPressed()) {
+		this->buttonsShop["Sell2"]->makeSound();
+	}
+	if (this->buttonsShop["Buy3"]->isPressed()) {
+		this->buttonsShop["Buy3"]->makeSound();
+	}
+	if (this->buttonsShop["Sell3"]->isPressed()) {
+		this->buttonsShop["Sell3"]->makeSound();
+	}
+	if (this->buttonsShop["Buy4"]->isPressed()) {
+		this->buttonsShop["Buy4"]->makeSound();
+	}
+	if (this->buttonsShop["Sell4"]->isPressed()) {
+		this->buttonsShop["Sell4"]->makeSound();
+	}
+	if (this->buttonsShop["Buy5"]->isPressed()) {
+		this->buttonsShop["Buy5"]->makeSound();
+	}
+	if (this->buttonsShop["Sell5"]->isPressed()) {
+		this->buttonsShop["Sell5"]->makeSound();
+	}
+	if (this->buttonsShop["Buy6"]->isPressed()) {
+		this->buttonsShop["Buy6"]->makeSound();
+	}
+	if (this->buttonsShop["Sell6"]->isPressed()) {
+		this->buttonsShop["Sell6"]->makeSound();
+	}
+}
+
+void PlayerGUI::updateSites(){
+	switch (this->currShopSite) {
+	case Plants:
+		this->siteShopRect.setTexture(&this->shopPlantsSite);
+		break;
+	case Tools:
+		this->siteShopRect.setTexture(&this->shopToolsSite);
+		break;
+	case BuildingPlans:
+		this->siteShopRect.setTexture(&this->shopBuildingPlansSite);
+		break;
+	}
+}
+
+void PlayerGUI::updateShop(const sf::Vector2i& mousePosWindow){
+	this->updateButtons(mousePosWindow);
+	this->updateSites();
+}
+
 void PlayerGUI::update(const float & dt){
 	//this->updateLevelBar();
 	//this->updateEXPBar();
@@ -596,6 +1123,7 @@ void PlayerGUI::renderINVSlots(sf::RenderTarget& target){
 			//Ce ma item doda teksturo
 			if (this->inventorySlots[j][i].isFull) {
 				sf::Texture* tmp = this->player->getInventory()->getItemIcon(this->inventorySlots[j][i].inventoryID);
+				std::cout << j << "  " << i << std::endl;
 				this->inventorySlots[j][i].shape.setTexture(tmp);
 			}
 			else {
@@ -623,6 +1151,29 @@ void PlayerGUI::renderINV(sf::RenderTarget& target){
 	target.draw(this->mouseRect);
 	this->renderINVSlots(target);
 	this->renderMoney(target);
+}
+
+void PlayerGUI::renderButtons(sf::RenderTarget& target){
+	for (const auto& pair : this->buttonsShop) {
+		pair.second->render(target);
+	}
+}
+
+void PlayerGUI::renderTexts(sf::RenderTarget& target){
+	for (const auto& pair : this->texts) {
+		target.draw(pair.second);
+	}
+}
+
+void PlayerGUI::renderSite(sf::RenderTarget& target){
+	target.draw(this->siteShopRect);
+}
+
+void PlayerGUI::renderShop(sf::RenderTarget& target){
+	target.draw(this->basicShopRect);
+	this->renderButtons(target);
+	this->renderSite(target);
+	this->renderTexts(target);
 }
 
 void PlayerGUI::render(sf::RenderTarget & target){

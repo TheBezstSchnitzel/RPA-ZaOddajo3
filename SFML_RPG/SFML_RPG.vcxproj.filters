@@ -214,7 +214,7 @@
       <Filter>Item\Plants</Filter>
     </ClCompile>
     <ClCompile Include="Market.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Buildings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -375,7 +375,7 @@
       <Filter>Item\Plants</Filter>
     </ClInclude>
     <ClInclude Include="Market.h">
-      <Filter>Header Files</Filter>
+      <Filter>Buildings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

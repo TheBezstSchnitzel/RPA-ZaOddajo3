@@ -155,7 +155,7 @@ void GameState::initPlayers() {
 }
 
 void GameState::initPlayerGUI(){
-	this->playerGUI = new PlayerGUI(this->player, this->stateData->gfxSettings->resolution, this->font);
+	this->playerGUI = new PlayerGUI(this->player, this->stateData->gfxSettings->resolution, this->font,&this->items,&this->textures);
 }
 
 void GameState::initEnemySystem(){
@@ -512,6 +512,7 @@ GameState::GameState(StateData* state_data,Game*game, unsigned short save) : Sta
 	this->hasItemInHand = false;
 	this->lastMouseStateR = false;
 	this->initMarket();
+	this->isShopOpen = false;
 }
 
 GameState::~GameState(){
@@ -578,6 +579,7 @@ void GameState::updateInput(const float & dt){
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeytime()) {
 			if (!this->paused)this->pauseState();
 			else this->unpauseState();
+			this->isShopOpen = false;
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("CLOSE"))) && this->getKeytime() && this->isInventoryOpen) {
@@ -586,7 +588,7 @@ void GameState::updateInput(const float & dt){
 	}
 	//inventory
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("INVENTORY"))) &&
-		this->keybindsTimes.at("INVENTORY").getElapsedTime().asSeconds() >= this->keyTimeMax) {
+		this->keybindsTimes.at("INVENTORY").getElapsedTime().asSeconds() >= this->keyTimeMax && !this->isShopOpen) {
 		this->keybindsTimes.at("INVENTORY").restart();
 		//odpre inventory
 		this->isInventoryOpen = !this->isInventoryOpen;
@@ -683,7 +685,11 @@ void GameState::updatePlayerInput(const float & dt){
 		this->keybindsTimes.at("PICKUP").restart(); //da ne spemas
 		//prever za market ==================
 		if (this->market->isInteractable(this->player,this->isDay)) {
-			std::cout << "Dela interaction" << std::endl;
+			//std::cout << "Dela interaction" << std::endl;
+			this->isShopOpen = true;
+			//std::cout << "Dela" << std::endl;
+			this->paused = true;
+			
 		}
 		// =============================
 		else {
@@ -930,6 +936,19 @@ void GameState::updateBuildings(){
 	this->market->update(static_cast<int>(this->currentSeason), this->isDay, this->player);
 }
 
+void GameState::updateItems(){
+	int id = 0;
+	for (const auto& pair : this->items) {
+		for (const auto& value : pair.second) {
+			if (Tool* temp = static_cast<Tool*>(value.second)) {
+				if (temp->getIsBrooken()) {
+					//DEBUG
+				}
+			}
+		}
+	}
+}
+
 void GameState::update(const float& dt){
 	this->updateMousePositions(&this->view);
 	this->updateKeytime(dt);
@@ -977,13 +996,14 @@ void GameState::update(const float& dt){
 
 	}
 	else{ //Pausan update
-		if (!this->isInventoryOpen) {
+		if (!this->isInventoryOpen && !this->isShopOpen) {
 			this->pmenu->update(this->mousePosWindow, dt);
 			this->updatePauseMenuButtons();
 		}
 		else {
 			//this->player->getInventory()->updateINV();
-			this->playerGUI->updateINV(this->mousePosWindow);
+			if(this->isInventoryOpen)this->playerGUI->updateINV(this->mousePosWindow);
+			if (this->isShopOpen)this->playerGUI->updateShop(this->mousePosWindow);
 		}
 	}
 }
@@ -1045,8 +1065,11 @@ void GameState::render(sf::RenderTarget* target){
 		//this->player->getInventory()->renderINV(this->renderTexture);
 		this->playerGUI->renderINV(this->renderTexture);
 	}
-	
-	if (this->paused && !this->isInventoryOpen){
+	if (this->isShopOpen) {
+		//std::cout << "Rendira shop" << std::endl;
+		this->playerGUI->renderShop(this->renderTexture);
+	}
+	if (this->paused && !this->isInventoryOpen && !this->isShopOpen){
 		//this->renderTexture.setView(this->renderTexture.getDefaultView());
 		this->pmenu->render(this->renderTexture);
 	}

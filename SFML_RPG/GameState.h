@@ -56,6 +56,8 @@ private:
 	bool hasItemInHand;
 	std::string iteminHand;
 
+	bool isShopOpen;
+
 	//in game time
 	int whenIsNightHour; //kdaj se dan spremeni u noc
 	int whenIsDayHour; //kdaj se noc spremeni u dan
@@ -164,6 +166,7 @@ public:
 	void updateInGameTime();
 	void updateBuildingsColl(const float& dt);
 	void updateBuildings();
+	void updateItems();
 	void update(const float& dt);
 
 	void render(sf::RenderTarget* target = NULL);
