@@ -16,7 +16,7 @@ public:
 	~Market();
 
 	bool checkIfPlayerBehind(Player* player);
-	bool isInteractable(Player* player);
+	bool isInteractable(Player* player, bool day);
 
 	void updateTextureRect(int season, bool day,Player* player);
 

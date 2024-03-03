@@ -682,7 +682,7 @@ void GameState::updatePlayerInput(const float & dt){
 		this->keybindsTimes.at("PICKUP").getElapsedTime().asSeconds() >= this->keyTimeMax) {
 		this->keybindsTimes.at("PICKUP").restart(); //da ne spemas
 		//prever za market ==================
-		if (this->market->isInteractable(this->player)) {
+		if (this->market->isInteractable(this->player,this->isDay)) {
 			std::cout << "Dela interaction" << std::endl;
 		}
 		// =============================

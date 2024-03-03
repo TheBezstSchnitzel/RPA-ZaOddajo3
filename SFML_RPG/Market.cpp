@@ -52,11 +52,13 @@ bool Market::checkIfPlayerBehind(Player* player){
 	return false;
 }
 
-bool Market::isInteractable(Player* player){
-	sf::FloatRect playerPos = player->getGlobalBounds();
-	sf::FloatRect pos = this->interactZone.getGlobalBounds();
-	if (pos.intersects(playerPos)) {
-		return true;
+bool Market::isInteractable(Player* player, bool day){
+	if (day) {
+		sf::FloatRect playerPos = player->getGlobalBounds();
+		sf::FloatRect pos = this->interactZone.getGlobalBounds();
+		if (pos.intersects(playerPos)) {
+			return true;
+		}
 	}
 	return false;
 }
