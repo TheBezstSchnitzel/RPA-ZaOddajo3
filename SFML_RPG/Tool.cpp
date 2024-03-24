@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Tool.h"
 
-Tool::Tool(short unsigned type, int maxDurability, int durability, bool isBroken) : Item(type){
+Tool::Tool(short unsigned type, int maxDurability, int durability, bool isBroken) : Item(type,"DEBUG") {
 	this->maxDurability = maxDurability;
 	this->durabiltity = durability;
 	this->isBroken = isBroken;

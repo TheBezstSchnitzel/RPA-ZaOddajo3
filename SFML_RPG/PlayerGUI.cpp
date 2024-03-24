@@ -360,16 +360,17 @@ bool PlayerGUI::sell(std::string what, int amount, int price){
 		Inventory* inv = this->player->getInventory();
 		for (int i = 0; i < inv->maxSize(); i++) {
 			if (inv->hasItem(i)) {
-				if (Carrot* carrot = static_cast<Carrot*>(inv->getItem(i))) {
-					has += carrot->getAmount();
-					if (has >= a)break;
+				if (inv->getItem(i)->getID() == "ITEM_VEGISE_CARROT") {
+					Carrot* car = static_cast<Carrot*>(inv->getItem(i));
+					has += car->getAmount();
 				}
 			}
 		}
 		if (has >= a) {
 			for (int i = 0; i < inv->maxSize(); i++) {
 				if(inv->hasItem(i)) {
-					if (Carrot* carrot = static_cast<Carrot*>(inv->getItem(i))) {
+					if (inv->getItem(i)->getID() == "ITEM_VEGISE_CARROT") {
+						Carrot* carrot = static_cast<Carrot*>(inv->getItem(i));
 						a = carrot->removeAmount(a);
 						if (a == 0) {
 							inv->addMoney(price);
@@ -377,7 +378,7 @@ bool PlayerGUI::sell(std::string what, int amount, int price){
 						}
 					}
 				}
-			}
+			} 
 		}
 		else return false;
 	}
@@ -984,6 +985,7 @@ void PlayerGUI::updateButtons(const sf::Vector2i& mousePosWindow){
 			if (this->sell("Carrot",
 				std::stoi(this->texts["Amount1"].getString().toAnsiString()),
 				std::stoi(this->texts["Price1"].getString().toAnsiString()))) {
+				this->updateINVSlots(mousePosWindow);
 				this->texts["Amount1"].setString("00");
 				this->texts["Price1"].setString("00");
 			}
@@ -1123,13 +1125,16 @@ void PlayerGUI::renderINVSlots(sf::RenderTarget& target){
 			//Ce ma item doda teksturo
 			if (this->inventorySlots[j][i].isFull) {
 				sf::Texture* tmp = this->player->getInventory()->getItemIcon(this->inventorySlots[j][i].inventoryID);
-				std::cout << j << "  " << i << std::endl;
+				//std::cout << j << "  " << i << std::endl;
 				this->inventorySlots[j][i].shape.setTexture(tmp);
+				//if(tmp == nullptr)std::cout << "kako prosim" << std::endl;
 			}
 			else {
 				this->inventorySlots[j][i].shape.setTexture(nullptr);
+				//std::cout << "grdo" << std::endl;
 			}
 			
+			//std::cout << this->inventorySlots[j][i].shape.getPosition().x << std::endl;
 			target.draw(this->inventorySlots[j][i].shape);
 			//ce ma durability
 			if (this->inventorySlots[j][i].hasDurability) {

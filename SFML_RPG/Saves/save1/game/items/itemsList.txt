@@ -1,3 +1,3 @@
-Carrot 0
-Hoe 28
+Hoe 0
+Carrot 1
 CarrotSeed 29

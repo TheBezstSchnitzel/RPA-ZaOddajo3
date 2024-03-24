@@ -5,7 +5,7 @@ void Carrot::initValue(){
 	this->value = this->amount * 2;
 }
 
-Carrot::Carrot(sf::Texture* texture, int amount) : Item(0) {
+Carrot::Carrot(sf::Texture* texture, int amount) : Item(0,"ITEM_VEGISE_CARROT") {
 	this->invIcon = texture;
 	this->amount = amount;
 	this->maxAmount = 60;
@@ -48,6 +48,7 @@ int Carrot::removeAmount(int amount){
 		int off = amount - this->amount;
 		this->amount = 0;
 		this->value = 0;
+		std::cout << off << std::endl;
 		return off;
 	}
 }

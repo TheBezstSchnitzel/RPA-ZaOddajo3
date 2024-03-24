@@ -17,15 +17,17 @@ private:
 protected:
 	//Lastnosti
 	short unsigned type;
+	std::string id;
 	//int id;
 
 public:
-	Item(short unsigned type);
+	Item(short unsigned type, std::string id);
 	~Item();
 
 	//Dostop
 	const short unsigned& getType() const { return this->type;}
 	//int getID() const { return this->id;}
+	std::string getID() { return this->id; }
 
 	//Funkcije
 	//virtual Item* clone() = 0;
