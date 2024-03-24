@@ -21,5 +21,5 @@ void CarrotPlant::update(){
 
 void CarrotPlant::render(sf::RenderTarget* target){
 	this->renderRect.setTextureRect(this->textureRect);
-	Building::render(target);
+	Structure::render(target);
 }

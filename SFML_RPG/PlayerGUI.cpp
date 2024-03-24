@@ -1201,7 +1201,7 @@ float calculateDistance2D(sf::Vector2f pos1, sf::Vector2f pos2) {
 	return std::sqrt(dx * dx + dy * dy);
 }
 
-bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<std::string, std::map<int, Building*>>* buildings) {
+bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<std::string, std::map<int, Structure*>>* buildings) {
 	if (buildingType == "farmland") { //checka ce placas farmland
 		for (const auto& value : buildings->at("farmland")) { //prever da ne placa na se en farmland
 			if (value.second->getPos() == pos)return false;
@@ -1221,7 +1221,7 @@ bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<std::string
 	}
 }
 
-void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture, std::string item, std::map<std::string, std::map<int, Building*>>* buildings){
+void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap* map,sf::Texture* texture, std::string item, std::map<std::string, std::map<int, Structure*>>* buildings){
 	sf::Vector2f temp = map->getPosOfRectWithMousOver(mousePosWindow);
 	if (item == "hoe") {
 		if (calculateDistance2D(mousePosWindow, player->getPosition()) < 32.f) {

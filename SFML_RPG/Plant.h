@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Building.h"
+#include "Structure.h"
 
 enum GrowStage { Seed = 0, LowMid, Mid, HighMid, Grown };
 
-class Plant : public Building{
+class Plant : public Structure{
 private:
 	sf::Clock growClock;
 	int randomGrowTimeMax; //v minutah

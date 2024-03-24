@@ -66,7 +66,7 @@ bool Market::isInteractable(Player* player, bool day){
 }
 
 Market::Market(sf::Texture* texture, sf::Vector2f pos) :
-	Building(texture,pos,sf::Vector2f(94.f,76.f),"Market",sf::RectangleShape(),true) {
+	Structure(texture,pos,sf::Vector2f(94.f,76.f),"Market",sf::RectangleShape(),true) {
 	this->initHitbox();
 	this->initTextureRect();
 	this->initInteractZone();
@@ -122,7 +122,7 @@ void Market::update(int season, bool day, Player* player){
 void Market::render(sf::RenderTarget* target) {
 	//target->draw(*this->getHitbox());
 	//target->draw(this->interactZone);
-	Building::render(target);
+	Structure::render(target);
 }
 
 void Market::saveToFile(std::string file){

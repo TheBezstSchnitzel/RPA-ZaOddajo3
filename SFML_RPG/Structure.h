@@ -2,7 +2,7 @@
 
 #include "Player.h"
 
-class Building{
+class Structure{
 private:
 	std::string type;
 
@@ -15,8 +15,8 @@ protected:
 	sf::RectangleShape renderRect;
 public:
 
-	Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox , bool hasHitBox = false);
-	~Building();
+	Structure(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox , bool hasHitBox = false);
+	~Structure();
 
 	sf::Vector2f getPos();
 	std::string getType();

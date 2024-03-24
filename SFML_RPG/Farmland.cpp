@@ -2,7 +2,7 @@
 #include "Farmland.h"
 
 Farmland::Farmland(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size) :
-Building(texture,pos,size,"farmland",sf::RectangleShape()) {
+Structure(texture,pos,size,"farmland",sf::RectangleShape()) {
 
 }
 
@@ -13,7 +13,7 @@ void Farmland::update(){
 }
 
 void Farmland::render(sf::RenderTarget* target){
-	Building::render(target);
+	Structure::render(target);
 }
 
 void Farmland::saveToFile(std::string file){

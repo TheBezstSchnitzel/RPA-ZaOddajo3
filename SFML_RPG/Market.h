@@ -1,8 +1,8 @@
 #pragma once
-#include "Buildings.h"
+#include "Structures.h"
 
 
-class Market : public Building{
+class Market : public Structure{
 private:
 
 	sf::RectangleShape interactZone;

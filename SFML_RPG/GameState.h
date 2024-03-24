@@ -6,7 +6,7 @@
 #include "PlayerGUI.h"
 #include "Items.h"
 #include "TextTagSystem.h"
-#include "Buildings.h"
+#include "Structures.h"
 
 class Game;
 class Market;
@@ -50,7 +50,7 @@ private:
 	std::map<std::string, std::map<int, Item*>>items;
 
 	//buildings
-	std::map<std::string, std::map<int, Building*>> buildings;
+	std::map<std::string, std::map<int, Structure*>> buildings;
 	Market* market;
 
 	bool hasItemInHand;

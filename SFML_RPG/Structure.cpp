@@ -1,42 +1,42 @@
 #include "stdafx.h"
-#include "Building.h"
+#include "Structure.h"
 
 
-void Building::initRect(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size){
+void Structure::initRect(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size){
 	this->renderRect.setTexture(texture);
 	this->renderRect.setPosition(pos);
 	this->renderRect.setSize(size);
 }
 
 
-Building::Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox ,bool hasHitBox){
+Structure::Structure(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox ,bool hasHitBox){
 	this->initRect(texture, pos, size);
 	this->type = type;
 	this->hasHitBox = hasHitBox;
 	this->hitbox = hitbox;
 }
 
-Building::~Building(){
+Structure::~Structure(){
 
 }
 
-sf::Vector2f Building::getPos(){
+sf::Vector2f Structure::getPos(){
 	return this->renderRect.getPosition();
 }
 
-std::string Building::getType(){
+std::string Structure::getType(){
 	return this->type;
 }
 
-sf::RectangleShape* Building::getHitbox(){
+sf::RectangleShape* Structure::getHitbox(){
 	return this->hasHitBox ? &this->hitbox : nullptr;
 }
 
-void Building::setPos(sf::Vector2f pos){
+void Structure::setPos(sf::Vector2f pos){
 	this->renderRect.setPosition(pos);
 }
 
-void Building::checkCollisionPlayer(Entity* player, const float& dt){
+void Structure::checkCollisionPlayer(Entity* player, const float& dt){
 	if (hasHitBox) {
 		sf::FloatRect buildingBounds = sf::FloatRect(this->hitbox.getPosition(), this->hitbox.getSize());
 		sf::FloatRect nextPositionBounds = player->getNextPositionBounds(dt);
@@ -77,9 +77,9 @@ void Building::checkCollisionPlayer(Entity* player, const float& dt){
 	}
 }
 
-void Building::update(){
+void Structure::update(){
 }
 
-void Building::render(sf::RenderTarget* target){
+void Structure::render(sf::RenderTarget* target){
 	target->draw(this->renderRect);
 }

@@ -24,7 +24,7 @@ void Plant::updateTextureRect(){
 }
 
 Plant::Plant(sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox, bool hasHitBox) :
-	Building(textureSheet, pos, size, type, hitbox, hasHitBox){
+	Structure(textureSheet, pos, size, type, hitbox, hasHitBox){
 	this->initClock();
 	this->initGrowStage();
 	this->initInteractZone();

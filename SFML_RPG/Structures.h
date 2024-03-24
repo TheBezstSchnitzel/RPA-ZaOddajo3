@@ -2,7 +2,7 @@
 
 #include "Plants.h"
 
-#include "Building.h"
+#include "Structure.h"
 
 #include "Farmland.h"
 

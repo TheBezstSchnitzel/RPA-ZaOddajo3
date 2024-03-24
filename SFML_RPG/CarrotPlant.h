@@ -1,5 +1,5 @@
 #pragma once
-#include "Buildings.h"
+#include "Structures.h"
 
 class CarrotPlant : public Plant{
 private:

@@ -1,6 +1,7 @@
 #pragma once
-#include "Building.h"
-class Farmland : public Building{
+#include "Structures.h"
+
+class Farmland : public Structure{
 private:
 	
 

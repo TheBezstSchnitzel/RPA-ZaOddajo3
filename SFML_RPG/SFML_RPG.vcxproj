@@ -160,7 +160,7 @@
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="AttributeComponent.cpp" />
     <ClCompile Include="Bird1.cpp" />
-    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="Structure.cpp" />
     <ClCompile Include="Carrot.cpp" />
     <ClCompile Include="CarrotPlant.cpp" />
     <ClCompile Include="CarrotSeed.cpp" />
@@ -218,8 +218,8 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AttributeComponent.h" />
     <ClInclude Include="Bird1.h" />
-    <ClInclude Include="Building.h" />
-    <ClInclude Include="Buildings.h" />
+    <ClInclude Include="Structure.h" />
+    <ClInclude Include="Structures.h" />
     <ClInclude Include="Carrot.h" />
     <ClInclude Include="CarrotPlant.h" />
     <ClInclude Include="CarrotSeed.h" />

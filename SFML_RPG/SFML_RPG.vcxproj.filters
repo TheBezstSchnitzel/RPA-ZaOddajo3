@@ -201,7 +201,7 @@
     <ClCompile Include="Hoe.cpp">
       <Filter>Item\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Building.cpp">
+    <ClCompile Include="Structure.cpp">
       <Filter>Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Farmland.cpp">
@@ -362,7 +362,7 @@
     <ClInclude Include="Hoe.h">
       <Filter>Item\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Building.h">
+    <ClInclude Include="Structure.h">
       <Filter>Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Farmland.h">
@@ -371,7 +371,7 @@
     <ClInclude Include="CarrotSeed.h">
       <Filter>Item\Vegise</Filter>
     </ClInclude>
-    <ClInclude Include="Buildings.h">
+    <ClInclude Include="Structures.h">
       <Filter>Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Carrot.h">
