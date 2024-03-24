@@ -102,7 +102,7 @@ private:
 	void initKeyTime();
 	void initDebugText();
 
-	void initTools();
+	void initTools(); //DEBUG
 
 	void initPlayers();
 	void initPlayerGUI();

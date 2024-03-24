@@ -90,9 +90,6 @@ void GameState::initTextures(){
 	if (!this->textures["Farmland"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
-	if (!this->textures["CarrotPlantPosible"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)))) {
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_CarrotPlantPossible_TEXTURE";
-	}
 	if (!this->textures["Market"].loadFromFile("Resources/Images/Buildings/market.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Market_TEXTURE";
 	}
@@ -100,6 +97,11 @@ void GameState::initTextures(){
 	Plant::textureSheet = new sf::Texture();
 	if (!Plant::textureSheet->loadFromFile("Resources/Images/Mixed/crops_all.png")){
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_plants_texture_sheet_TEXTURE";
+	}
+	//carrot
+	CarrotPlant::possible = new sf::Texture();
+	if (!CarrotPlant::possible->loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)))) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_CarrotPlantPossible_TEXTURE";
 	}
 }
 
@@ -310,7 +312,7 @@ void GameState::loadFromSave_buildings() {
 		}
 		if (buildingType == "carrotPlant") {
 			for (int i = 0; i < n; i++) {
-				this->buildings["carrotPlant"][i] = new CarrotPlant(&this->textures["CarrotPlant"], sf::Vector2f(0.f, 0.f), sf::Vector2f(16.f, 16.f));
+				this->buildings["carrotPlant"][i] = new CarrotPlant(sf::Vector2f(0.f, 0.f), sf::Vector2f(16.f, 16.f));
 				this->buildings["carrotPlant"][i]->loadFromFile(this->savePath + "/game/buildings/" + buildingType + std::to_string(i) + ".txt");
 			}
 			continue;
@@ -527,6 +529,8 @@ GameState::~GameState(){
 	/*for (size_t i = 0; i < this->activeEnemies.size(); i++) {
 		delete this->activeEnemies[i];
 	}*/
+	delete Plant::textureSheet;
+	delete CarrotPlant::possible;
 	this->theme.stop();
 	//preverjanje za audio izven gamea
 	std::ifstream saveIFile("Config/audio.ini");
@@ -738,7 +742,6 @@ void GameState::useCarrotSeed(){
 	Tool* tool = static_cast<Tool*>(item);
 	if (this->playerGUI->getIsPlaceble() && !tool->getIsBrooken()) {
 		//uporabi item ==============================
-		//this->player->useItem = true;
 		//dobi id
 		int id = 0;
 		if (!this->buildings["carrotPlant"].empty()) {
@@ -746,7 +749,7 @@ void GameState::useCarrotSeed(){
 			id = zadn->first + 1;
 		}
 		//doda v mapo
-		this->buildings["carrotPlant"][id] = new CarrotPlant(&this->textures["CarrotPlant"], this->tileMap->getPosOfRectWithMousOver(this->mousePosView), sf::Vector2f(16.f, 16.f));
+		this->buildings["carrotPlant"][id] = new CarrotPlant(this->tileMap->getPosOfRectWithMousOver(this->mousePosView), sf::Vector2f(16.f, 16.f));
 		//===========================================
 		//mu odbije durability =====
 		tool->damageDurability(1);
@@ -777,9 +780,6 @@ void GameState::updatePlayerGUI(const float & dt){
 		this->hasItemInHand = false;
 		this->player->itemInHand = "";
 	}
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_PLAYER_TAB_CHARACTER"))) && this->getKeyTime()) {
-		this->playerGUI->toggleCharacterTab();
-	}*/
 }
 
 void GameState::updatePauseMenuButtons(){
@@ -989,7 +989,7 @@ void GameState::update(const float& dt){
 				possibleIcon = &this->textures["Farmland"];
 			}
 			if (this->iteminHand == "carrotSeed") {
-				possibleIcon = &this->textures["CarrotPlantPosible"];
+				possibleIcon = CarrotPlant::possible;
 			}
 			this->playerGUI->updateItemPossibles(this->mousePosView, this->tileMap, possibleIcon, this->iteminHand,&this->buildings);
 		}
