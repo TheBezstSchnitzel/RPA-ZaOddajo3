@@ -181,6 +181,7 @@
     <ClCompile Include="HitboxComponent.cpp" />
     <ClCompile Include="Hoe.cpp" />
     <ClCompile Include="Market.cpp" />
+    <ClCompile Include="Plant.cpp" />
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -241,6 +242,8 @@
     <ClInclude Include="HitboxComponent.h" />
     <ClInclude Include="Hoe.h" />
     <ClInclude Include="Market.h" />
+    <ClInclude Include="Plant.h" />
+    <ClInclude Include="Plants.h" />
     <ClInclude Include="Tool.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />

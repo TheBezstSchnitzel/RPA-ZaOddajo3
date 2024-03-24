@@ -90,14 +90,16 @@ void GameState::initTextures(){
 	if (!this->textures["Farmland"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
-	if (!this->textures["CarrotPlant"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(80, 16)))) {
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_CarrotPlant_TEXTURE";
-	}
 	if (!this->textures["CarrotPlantPosible"].loadFromFile("Resources/Images/Mixed/crops_all.png", sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)))) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_CarrotPlantPossible_TEXTURE";
 	}
 	if (!this->textures["Market"].loadFromFile("Resources/Images/Buildings/market.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Market_TEXTURE";
+	}
+	//plants
+	Plant::textureSheet = new sf::Texture();
+	if (!Plant::textureSheet->loadFromFile("Resources/Images/Mixed/crops_all.png")){
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_plants_texture_sheet_TEXTURE";
 	}
 }
 

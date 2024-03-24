@@ -61,7 +61,10 @@
     <Filter Include="Buildings">
       <UniqueIdentifier>{cef1e119-e1d6-4b15-a008-1c8f0d7b4e5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Item\Plants">
+    <Filter Include="Buildings\Plants">
+      <UniqueIdentifier>{0a0672f1-4c3e-44a6-bcc5-da90c87a0067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item\Vegise">
       <UniqueIdentifier>{27251f98-81bf-42b2-96d8-9951070f13df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -205,16 +208,19 @@
       <Filter>Buildings</Filter>
     </ClCompile>
     <ClCompile Include="CarrotSeed.cpp">
-      <Filter>Item\Plants</Filter>
-    </ClCompile>
-    <ClCompile Include="CarrotPlant.cpp">
-      <Filter>Buildings</Filter>
+      <Filter>Item\Vegise</Filter>
     </ClCompile>
     <ClCompile Include="Carrot.cpp">
-      <Filter>Item\Plants</Filter>
+      <Filter>Item\Vegise</Filter>
     </ClCompile>
     <ClCompile Include="Market.cpp">
       <Filter>Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Plant.cpp">
+      <Filter>Buildings\Plants</Filter>
+    </ClCompile>
+    <ClCompile Include="CarrotPlant.cpp">
+      <Filter>Buildings\Plants</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,19 +369,25 @@
       <Filter>Buildings</Filter>
     </ClInclude>
     <ClInclude Include="CarrotSeed.h">
-      <Filter>Item\Plants</Filter>
-    </ClInclude>
-    <ClInclude Include="CarrotPlant.h">
-      <Filter>Buildings</Filter>
+      <Filter>Item\Vegise</Filter>
     </ClInclude>
     <ClInclude Include="Buildings.h">
       <Filter>Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Carrot.h">
-      <Filter>Item\Plants</Filter>
+      <Filter>Item\Vegise</Filter>
     </ClInclude>
     <ClInclude Include="Market.h">
       <Filter>Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Plant.h">
+      <Filter>Buildings\Plants</Filter>
+    </ClInclude>
+    <ClInclude Include="CarrotPlant.h">
+      <Filter>Buildings\Plants</Filter>
+    </ClInclude>
+    <ClInclude Include="Plants.h">
+      <Filter>Buildings\Plants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
