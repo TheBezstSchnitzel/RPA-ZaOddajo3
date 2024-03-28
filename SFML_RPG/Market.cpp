@@ -34,6 +34,7 @@ void Market::initInteractZone(){
 	this->interactZone.setOutlineThickness(1.f);
 }
 
+/*
 bool Market::checkIfPlayerBehind(Player* player){
 	sf::Vector2f playerPos = player->getPosition();
 	sf::Vector2f posHb = this->getHitbox()->getPosition();
@@ -63,10 +64,10 @@ bool Market::isInteractable(Player* player, bool day){
 		}
 	}
 	return false;
-}
+}*/
 
 Market::Market(sf::Texture* texture, sf::Vector2f pos) :
-	Structure(texture,pos,sf::Vector2f(94.f,76.f),"Market",sf::RectangleShape(),true) {
+	Building(texture,pos,sf::Vector2f(94.f,76.f),"Market",sf::RectangleShape(),true) {
 	this->initHitbox();
 	this->initTextureRect();
 	this->initInteractZone();
@@ -76,6 +77,7 @@ Market::~Market(){
 
 }
 
+/*
 void Market::updateTextureRect(int season, bool day, Player* player){
 	sf::RectangleShape* hitbox = this->getHitbox();
 	sf::Vector2f size = hitbox->getSize();
@@ -85,7 +87,7 @@ void Market::updateTextureRect(int season, bool day, Player* player){
 	else {
 		this->textureRect.top = this->textureRect.height;
 	}
-	switch (season){
+	switch (season) {
 	case 1:
 		this->textureRect.left = 0;
 		size.x = 91.f;
@@ -95,11 +97,11 @@ void Market::updateTextureRect(int season, bool day, Player* player){
 		size.x = 91.f;
 		break;
 	case 3:
-		this->textureRect.left = this->textureRect.width*2;
+		this->textureRect.left = this->textureRect.width * 2;
 		size.x = 91.f;
 		break;
 	case 4:
-		this->textureRect.left = this->textureRect.width*3;
+		this->textureRect.left = this->textureRect.width * 3;
 		size.x = 94.f;
 		break;
 	default:
@@ -113,15 +115,17 @@ void Market::updateTextureRect(int season, bool day, Player* player){
 		this->renderRect.setFillColor(sf::Color(255, 255, 255, 255));
 	}
 }
+*/
 
 void Market::update(int season, bool day, Player* player){
-	this->updateTextureRect(season, day,player);
-	this->renderRect.setTextureRect(this->textureRect);
+	if (day)this->isAvailable = true; //tu se razlikuje pr usakmu buildingu
+	else this->isAvailable = false; 
+	//this->updateTextureRect(season, day,player);
+	//this->renderRect.setTextureRect(this->textureRect);
+	Building::update(season,day,player);
 }
 
 void Market::render(sf::RenderTarget* target) {
-	//target->draw(*this->getHitbox());
-	//target->draw(this->interactZone);
 	Structure::render(target);
 }
 

@@ -15,7 +15,7 @@ protected:
 	sf::RectangleShape renderRect;
 public:
 
-	Structure(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox , bool hasHitBox = false);
+	Structure(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox = sf::RectangleShape(), bool hasHitBox = false);
 	~Structure();
 
 	sf::Vector2f getPos();
