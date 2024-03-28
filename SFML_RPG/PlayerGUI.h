@@ -153,6 +153,9 @@ private:
 	void initGameClockNumbers(sf::VideoMode& vm);
 	void initGameSeasonDisplay(sf::VideoMode& vm);
 	void initGameDayDisplay(sf::VideoMode& vm);
+
+	bool checkBuild(std::string buildingType, std::map<std::string, std::map<int, Structure*>>* buildings);
+
 public:
 	PlayerGUI(Player* player, sf::VideoMode& vm, sf::Font &font, std::map<std::string, std::map<int, Item*>>* items, std::map<std::string, sf::Texture>* textures);
 	virtual ~PlayerGUI();

@@ -1,4 +1,4 @@
 carrotPlant
 0
 farmland
-10
+12

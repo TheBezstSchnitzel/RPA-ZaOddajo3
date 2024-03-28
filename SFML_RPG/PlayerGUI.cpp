@@ -1201,18 +1201,20 @@ float calculateDistance2D(sf::Vector2f pos1, sf::Vector2f pos2) {
 	return std::sqrt(dx * dx + dy * dy);
 }
 
-bool checkBuild(std::string buildingType, sf::Vector2f pos, std::map<std::string, std::map<int, Structure*>>* buildings) {
+bool PlayerGUI::checkBuild(std::string buildingType, std::map<std::string, std::map<int, Structure*>>* buildings) {
+	sf::FloatRect marketBounds = sf::FloatRect(buildings->at("Market")[0]->getHitbox()->getPosition(), buildings->at("Market")[0]->getHitbox()->getSize());
+	if (marketBounds.intersects(this->possible.getGlobalBounds()))return false; //prever da ni market tam bo treba popravt da bo za vse buildinge
 	if (buildingType == "farmland") { //checka ce placas farmland
 		for (const auto& value : buildings->at("farmland")) { //prever da ne placa na se en farmland
-			if (value.second->getPos() == pos)return false;
+			if (value.second->getPos() == this->possible.getPosition())return false;
 		}
 		return true;
 	}
 	if (buildingType == "carrotPlant") { //checka ce placas carrotPlant
 		for (const auto& value : buildings->at("farmland")) {
-			if (value.second->getPos() == pos) { //preveri da se placa na farmland
+			if (value.second->getPos() == this->possible.getPosition()) { //preveri da se placa na farmland
 				for (const auto& v : buildings->at("carrotPlant")) {
-					if (v.second->getPos() == pos)return false;//preveri da se ne placa na se en korencek
+					if (v.second->getPos() == this->possible.getPosition())return false;//preveri da se ne placa na se en korencek
 				}
 				return true;
 			}
@@ -1227,7 +1229,7 @@ void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap*
 		if (calculateDistance2D(mousePosWindow, player->getPosition()) < 32.f) {
 			this->possible.setPosition(temp);
 			this->possible.setTexture(texture);
-			if (checkBuild("farmland", temp, buildings)) {
+			if (checkBuild("farmland", buildings)) {
 				this->possible.setFillColor(sf::Color(255, 255, 255, 150));
 				this->possible.setOutlineColor(sf::Color::Green);
 				this->isPlaceble = true;
@@ -1248,7 +1250,7 @@ void PlayerGUI::updateItemPossibles(const sf::Vector2f& mousePosWindow, TileMap*
 		if (calculateDistance2D(mousePosWindow, player->getPosition()) < 32.f) {
 			this->possible.setPosition(temp);
 			this->possible.setTexture(texture);
-			if (checkBuild("carrotPlant", temp, buildings)) {
+			if (checkBuild("carrotPlant", buildings)) {
 				this->possible.setFillColor(sf::Color(255, 255, 255, 150));
 				this->possible.setOutlineColor(sf::Color::Green);
 				this->isPlaceble = true;
