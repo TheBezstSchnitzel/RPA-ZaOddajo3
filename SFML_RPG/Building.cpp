@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "Building.h"
 
-Building::Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox, bool hasHitBox) :
-	Structure(texture, pos, size, type, hitbox, true){
+sf::Texture* Building::textureSheet = nullptr;
+
+Building::Building(sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox, bool hasHitBox) :
+	Structure(textureSheet, pos, size, type, hitbox, true){
 	this->isAvailable = false;
 }
 

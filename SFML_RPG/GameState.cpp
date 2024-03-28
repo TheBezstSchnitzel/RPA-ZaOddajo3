@@ -90,8 +90,9 @@ void GameState::initTextures(){
 	if (!this->textures["Farmland"].loadFromFile("Resources/Images/Buildings/farmland.png")) {
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Farmland_TEXTURE";
 	}
-	if (!this->textures["Market"].loadFromFile("Resources/Images/Buildings/market.png")) {
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Market_TEXTURE";
+	Building::textureSheet = new sf::Texture();
+	if (!Building::textureSheet->loadFromFile("Resources/Images/Buildings/market.png")) {
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_Building_TEXTURE_sheet";
 	}
 	//plants
 	Plant::textureSheet = new sf::Texture();
@@ -106,7 +107,7 @@ void GameState::initTextures(){
 }
 
 void GameState::initMarket(){
-	this->market = new Market(&this->textures["Market"], sf::Vector2f(100.f, 100.f));
+	this->market = new Market(sf::Vector2f(100.f, 100.f));
 }
 
 void GameState::initPauseMenu(){

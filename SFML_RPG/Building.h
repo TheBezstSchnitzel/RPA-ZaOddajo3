@@ -14,7 +14,7 @@ protected:
 public:
 	static sf::Texture* textureSheet;
 
-	Building(sf::Texture* texture, sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox, bool hasHitBox);
+	Building(sf::Vector2f pos, sf::Vector2f size, std::string type, sf::RectangleShape hitbox, bool hasHitBox);
 	~Building();
 
 	bool checkIfPlayerBehind(Player* player);
