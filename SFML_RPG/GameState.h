@@ -51,7 +51,7 @@ private:
 
 	//buildings
 	std::map<std::string, std::map<int, Structure*>> buildings;
-	Market* market;
+	//Market* market;
 
 	bool hasItemInHand;
 	std::string iteminHand;

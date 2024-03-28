@@ -107,7 +107,8 @@ void GameState::initTextures(){
 }
 
 void GameState::initMarket(){
-	this->market = new Market(sf::Vector2f(100.f, 100.f));
+	//this->market = new Market(sf::Vector2f(100.f, 100.f));
+	this->buildings["Market"][0] = new Market(sf::Vector2f(100.f, 100.f));
 }
 
 void GameState::initPauseMenu(){
@@ -438,6 +439,7 @@ void GameState::save_buildings(){
 	std::ofstream saveOFile(this->savePath + "/game/buildings/buildingsList.txt");
 	int id = 0;
 	for (const auto& pair : this->buildings) {
+		if (pair.first == "Market")continue;
 		saveOFile << pair.first << std::endl;
 		for (const auto& value : pair.second) {
 			value.second->saveToFile(this->savePath + "/game/buildings/"+ pair.first + std::to_string(id) +".txt");
@@ -691,7 +693,7 @@ void GameState::updatePlayerInput(const float & dt){
 		this->keybindsTimes.at("PICKUP").getElapsedTime().asSeconds() >= this->keyTimeMax) {
 		this->keybindsTimes.at("PICKUP").restart(); //da ne spemas
 		//prever za market ==================
-		if (this->market->isInteractable(this->player,this->isDay)) {
+		if (static_cast<Market*>(this->buildings["Market"][0])->isInteractable(this->player,this->isDay)) {
 			//std::cout << "Dela interaction" << std::endl;
 			this->isShopOpen = true;
 			//std::cout << "Dela" << std::endl;
@@ -923,20 +925,24 @@ void GameState::updateInGameTime(){
 
 void GameState::updateBuildingsColl(const float& dt){
 	for (const auto& pair : this->buildings) {
+		if (pair.first == "Market")continue;
 		for (const auto& value : pair.second) {
 			value.second->checkCollisionPlayer(this->player, dt);
 		}
 	}
-	this->market->checkCollisionPlayer(this->player, dt);
+	//this->market->checkCollisionPlayer(this->player, dt);
+	this->buildings["Market"][0]->checkCollisionPlayer(this->player, dt);
 }
 
-void GameState::updateBuildings(){
+void GameState::updateBuildings() {
 	for (const auto& pair : this->buildings) {
+		if (pair.first == "Market")continue;
 		for (const auto& value : pair.second) {
 			value.second->update();
 		}
 	}
-	this->market->update(static_cast<int>(this->currentSeason), this->isDay, this->player);
+	//this->market->update(static_cast<int>(this->currentSeason), this->isDay, this->player);
+	static_cast<Market*>(this->buildings["Market"][0])->update(static_cast<int>(this->currentSeason), this->isDay, this->player);
 }
 
 void GameState::updateItems(){
@@ -1041,7 +1047,7 @@ void GameState::render(sf::RenderTarget* target){
 	for (const auto& value : this->buildings["carrotPlant"]) {
 		value.second->render(&this->renderTexture);
 	}
-	if(!this->market->checkIfPlayerBehind(this->player))this->market->render(&this->renderTexture);
+	if(!static_cast<Market*>(this->buildings["Market"][0])->checkIfPlayerBehind(this->player))static_cast<Market*>(this->buildings["Market"][0])->render(&this->renderTexture);
 
 	//==============================================
 
@@ -1058,7 +1064,7 @@ void GameState::render(sf::RenderTarget* target){
 
 	this->tts->render(this->renderTexture);
 
-	if (this->market->checkIfPlayerBehind(this->player))this->market->render(&this->renderTexture);
+	if (static_cast<Market*>(this->buildings["Market"][0])->checkIfPlayerBehind(this->player))static_cast<Market*>(this->buildings["Market"][0])->render(&this->renderTexture);
 
 	//Rendera GUI
 	this->renderTexture.setView(this->renderTexture.getDefaultView());
